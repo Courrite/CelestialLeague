@@ -121,7 +121,7 @@ namespace CelestialLeague.Shared.Utils
         }
 
         // token management
-        public static string GenerateToken(int length = 32)
+        public static string GenerateToken(int length = SecurityConstants.SecureTokenLength)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
             using var rng = RandomNumberGenerator.Create();
@@ -160,6 +160,26 @@ namespace CelestialLeague.Shared.Utils
 
                 return requests.Count < maxRequests;
             }
+        }
+
+        public static bool CheckLoginRateLimit(string identifier)
+        {
+            return CheckRateLimit(identifier, SecurityConstants.MaxLoginAttemptsPerMinute, TimeSpan.FromMinutes(1));
+        }
+
+        public static bool CheckChatRateLimit(string identifier)
+        {
+            return CheckRateLimit(identifier, SecurityConstants.MaxChatMessagesPerMinute, TimeSpan.FromMinutes(1));
+        }
+
+        public static bool CheckMatchmakingRateLimit(string identifier)
+        {
+            return CheckRateLimit(identifier, SecurityConstants.MaxMatchmakingRequestsPerMinute, TimeSpan.FromMinutes(1));
+        }
+
+        public static bool CheckFriendRequestRateLimit(string identifier)
+        {
+            return CheckRateLimit(identifier, SecurityConstants.MaxFriendRequestsPerHour, TimeSpan.FromHours(1));
         }
 
         public static void RecordRequest(string identifier)
@@ -210,8 +230,8 @@ namespace CelestialLeague.Shared.Utils
 
             sanitized = sanitized.Trim();
 
-            if (sanitized.Length > 1000)
-                sanitized = sanitized.Substring(0, 1000);
+            if (sanitized.Length > SecurityConstants.MaxReportReasonLength)
+                sanitized = sanitized.Substring(0, SecurityConstants.MaxReportReasonLength);
 
             return sanitized;
         }

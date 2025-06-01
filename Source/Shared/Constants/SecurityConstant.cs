@@ -17,7 +17,6 @@ public static class SecurityConstants
     public const int MaxFriendRequestsPerHour = 20;
     
     // token security
-    public const int JwtExpirationHours = 24;
     public const int RefreshTokenExpirationDays = 30;
     public const int SecureTokenLength = 32;
     

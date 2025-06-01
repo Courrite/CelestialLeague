@@ -4,11 +4,13 @@ public static class NetworkConstants
     public const int DefaultPort = 7777;
     public const int MinPort = 1024;
     public const int MaxPort = 65535;
-    public const int ConnectionTimeout = 10000; // ms
+    public const int HeartbeatInterval = 30000; // ms
+    public const int ConnectionTimeout = 60000; // ms
     public const int PingTimeout = 5000; // ms
+    public const int MaxReconnectAttempts = 3;
     
     // packets
-    public const int MaxPacketSize = 1024; // bytes
+    public const int MaxPacketSize = 4096; // bytes
     public const int PacketHeaderSize = 13; // bytes
     public const int CompressionThreshold = 512; // bytes
     

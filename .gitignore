@@ -13,6 +13,7 @@ UITest.zip
 *.user
 *.userosscache
 *.sln.docstates
+.github commit stuff
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

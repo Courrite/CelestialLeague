@@ -3,9 +3,9 @@ using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Shared.Utils
 {
-    public static class NetworkPacket
+    public static class NetworkPacketSerializer
     {
-        public static byte[] Create<T>(T packet) where T : Packet
+        public static byte[] Create<T>(T packet) where T : BasePacket
         {
             var data = PacketSerializer.Serialize(packet);
             ValidateSize(data);

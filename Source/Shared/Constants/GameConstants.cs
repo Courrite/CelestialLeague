@@ -1,4 +1,4 @@
-public static class GameConstants
+﻿public static class GameConstants
 {
     // ranking system
     public const int StartingMMR = 1000;
@@ -22,9 +22,6 @@ public static class GameConstants
     public const int MaxUsernameLength = 20;
     public const int MinUsernameLength = 3;
 
-    // achievements
-    public const int MaxAchievementProgress = 100;
-
     // replays
     public const int MaxReplayDurationMinutes = 15;
     public const int MaxReplaysPerPlayer = 50;
@@ -33,7 +30,11 @@ public static class GameConstants
     // seasons
     public static readonly TimeSpan SeasonDuration = TimeSpan.FromDays(90);
     public static readonly DateTime FirstSeasonStart = new DateTime(2099, 12, 12, 12, 12, 12, DateTimeKind.Utc);
+    public const float SeasonResetPercentage = 0.8f; // 80% of current MMR
 
-    // chat
-    public static readonly string[] Profanity = { };
+    // filtering
+    public static readonly string[] ProfanityList = {
+            "badword1",
+            "badword2"
+        };
 }

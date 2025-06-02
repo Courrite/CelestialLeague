@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using CelestialLeague.Shared;
 
 namespace CelestialLeague.Shared.Utils
 {
@@ -74,7 +75,7 @@ namespace CelestialLeague.Shared.Utils
         // basic text utilities
         public static bool ContainsBannedWords(string text)
         {
-            return GameConstants.Profanity.Any(word => text.Contains(word, StringComparison.OrdinalIgnoreCase));
+            return GameConstants.ProfanityList.Any(word => text.Contains(word, StringComparison.OrdinalIgnoreCase));
         }
         
         public static int GetWordCount(string text)

@@ -1,6 +1,6 @@
 namespace CelestialLeague.Shared.Packets
 {
-    public abstract class Packet
+    public abstract class BasePacket
     {
         public abstract PacketType Type { get; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
@@ -14,7 +14,5 @@ namespace CelestialLeague.Shared.Packets
             Timestamp != default &&
             Timestamp <= DateTime.UtcNow.AddMinutes(5); // swim clock skew
         }
-
-        
     }
 }

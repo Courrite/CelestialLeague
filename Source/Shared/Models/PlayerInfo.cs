@@ -4,7 +4,8 @@ namespace CelestialLeague.Shared.Models
     {
         // credential and profile
         public required string Name { get; set; }
-        public required string Password { get; set; }
+        public required string PasswordHash { get; set; } = string.Empty;
+        public required string PasswordSalt { get; set; } = string.Empty;
         public required DateTime CreatedAt { get; set; }
         public required DateTime LastSeen { get; set; }
 
@@ -23,5 +24,7 @@ namespace CelestialLeague.Shared.Models
 
         // social
         public PlayerStatus PlayerStatus { get; set; } = PlayerStatus.Offline;
+        public List<(int PlayerId, DateTime FriendsSince)> Friends { get; set; } = new();
+        public List<(int PlayerId, DateTime BlockedSince)> Blocked { get; set; } = new();
     }
 }

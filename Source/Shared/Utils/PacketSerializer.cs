@@ -4,7 +4,7 @@ namespace CelestialLeague.Shared.Utils
 {
     public static class PacketSerializer
     {
-        public static byte[] Serialize<T>(T packet) where T : Packet
+        public static byte[] Serialize<T>(T packet) where T : BasePacket
         {
             Validate(packet);
             
@@ -12,7 +12,7 @@ namespace CelestialLeague.Shared.Utils
             return ShouldCompress(data) ? Compression.Compress(data) : data;
         }
 
-        public static T? Deserialize<T>(byte[] data) where T : Packet
+        public static T? Deserialize<T>(byte[] data) where T : BasePacket
         {
             if (!IsValidSize(data)) return null;
             
@@ -20,7 +20,7 @@ namespace CelestialLeague.Shared.Utils
             return packet?.IsValid() == true ? packet : null;
         }
 
-        private static void Validate<T>(T packet) where T : Packet
+        private static void Validate<T>(T packet) where T : BasePacket
         {
             if (packet?.IsValid() != true)
                 throw new ArgumentException("Invalid packet", nameof(packet));

@@ -20,15 +20,15 @@ namespace CelestialLeague.Shared.Utils
             JsonSerializer.FromBytes<T>(Compression.Decompress(data));
         
         // packets
-        public static byte[] SerializePacket<T>(T packet) where T : Packet => 
+        public static byte[] SerializePacket<T>(T packet) where T : BasePacket => 
             PacketSerializer.Serialize(packet);
-        public static T? DeserializePacket<T>(byte[] data) where T : Packet => 
+        public static T? DeserializePacket<T>(byte[] data) where T : BasePacket => 
             PacketSerializer.Deserialize<T>(data);
         
         // network packets
-        public static byte[] SerializeNetworkPacket<T>(T packet) where T : Packet => 
-            NetworkPacket.Create(packet);
+        public static byte[] SerializeNetworkPacket<T>(T packet) where T : BasePacket => 
+            NetworkPacketSerializer.Create(packet);
         public static (PacketType Type, byte[] Data)? DeserializeNetworkPacket(byte[] data) => 
-            NetworkPacket.Parse(data);
+            NetworkPacketSerializer.Parse(data);
     }
 }

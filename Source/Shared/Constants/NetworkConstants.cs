@@ -1,4 +1,4 @@
-public static class NetworkConstants
+﻿public static class NetworkConstants
 {
     // connection
     public const int DefaultPort = 7777;

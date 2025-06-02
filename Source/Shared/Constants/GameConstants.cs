@@ -22,10 +22,6 @@ public static class GameConstants
     public const int MaxUsernameLength = 20;
     public const int MinUsernameLength = 3;
 
-    // seasons
-    public const int SeasonLengthDays = 90;
-    public const float SeasonResetPercentage = 0.8f; // 80% of current MMR
-
     // achievements
     public const int MaxAchievementProgress = 100;
 

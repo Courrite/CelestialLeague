@@ -1,15 +1,15 @@
 public enum MatchResult
 {
-    // Player-specific results
-    Victory,        // Player won
-    Defeat,         // Player lost
-    Draw,           // Tie
+    // player-specific results
+    Victory,        // player won
+    Defeat,         // player lost
+    Draw,           // tie
 
-    // Abandonment results
-    Forfeit,        // Player surrendered
-    Disconnect,     // Player disconnected
-    Timeout,        // Player timed out
+    // abandonment results
+    Forfeit,        // player surrendered
+    Disconnect,     // player disconnected
+    Timeout,        // player timed out
 
-    // System results
-    Cancelled       // Match was cancelled
+    // system results
+    Cancelled       // match was cancelled
 }

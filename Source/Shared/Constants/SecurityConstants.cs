@@ -20,7 +20,7 @@ public static class SecurityConstants
     public const int RefreshTokenExpirationDays = 30;
     public const int SecureTokenLength = 32;
     
-    // CLAW
+    // anticheat
     public const int MaxInputsPerSecond = 60;
     public const int SuspiciousInputThreshold = 100;
     public const double MaxAllowedTimeDrift = 0.1; // seconds

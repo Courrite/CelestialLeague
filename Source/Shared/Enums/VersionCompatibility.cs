@@ -1,10 +1,10 @@
  public enum VersionCompatibility
     {
-        Perfect,                // Exact match with current version
-        Compatible,             // Older but still supported
-        UpdateRequired,         // Too old, update recommended
-        ForceUpdateRequired,    // Critically old, must update
-        TooNew,                 // Newer than server supports
-        InvalidFormat,          // Invalid version string
-        Unknown                 // Unexpected state
+        Perfect, // exact match with current version
+        Compatible, // older but still supported
+        UpdateRequired, // too old, update recommended
+        ForceUpdateRequired, // critically old, must update
+        TooNew, // newer than server supports
+        InvalidFormat, // invalid version string
+        Unknown // unexpected state
     }

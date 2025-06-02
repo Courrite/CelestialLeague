@@ -1,8 +1,8 @@
 public enum MatchOutcome
 {
-    InProgress,     // Match is still running
-    Completed,      // Normal finish with winner/loser
-    Draw,           // Tie game
-    Abandoned,      // Someone left/disconnected/forfeited
-    Cancelled       // Match cancelled before starting
+    InProgress, // match is still running
+    Completed, // normal finish with winner/loser
+    Draw, // tie game
+    Abandoned, // someone left/disconnected/forfeited
+    Cancelled // match cancelled before starting
 }

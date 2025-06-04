@@ -1,9 +1,12 @@
-public enum ConnectionQuality
+namespace CelestialLeague.Shared.Enums
 {
-    Disconnected,
-    VeryPoor,
-    Poor,
-    Fair,
-    Good,
-    Excellent
+    public enum ConnectionQuality
+    {
+        Disconnected,
+        VeryPoor,
+        Poor,
+        Fair,
+        Good,
+        Excellent
+    }
 }

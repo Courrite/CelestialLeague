@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Shared.Models
 {
@@ -26,7 +25,7 @@ namespace CelestialLeague.Shared.Models
         public int Player2MMRAfter { get; set; }
 
         // match state and results
-        public MatchState State { get; set; } = MatchState.Created;
+        public MatchState State { get; set; } = MatchState.WaitingForPlayers;
         public int WinnerId { get; set; }
         public int LoserId { get; set; }
         public MatchResult LossReason { get; set; }
@@ -38,7 +37,7 @@ namespace CelestialLeague.Shared.Models
         public TimeSpan Duration => EndTime - StartTime;
 
         // match outcome
-        public MatchOutcome Outcome { get; set; } = MatchOutcome.InProgress;
+        public MatchResult Outcome { get; set; } = MatchResult.InProgress;
         public string? Message { get; set; }
 
         // metadata

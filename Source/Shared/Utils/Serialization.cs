@@ -1,7 +1,3 @@
-using System.IO.Compression;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using CelestialLeague.Shared.Packets;
 using CelestialLeague.Shared.Enums;
 

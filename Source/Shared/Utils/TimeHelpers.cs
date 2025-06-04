@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-
 namespace CelestialLeague.Shared.Utils
 {
     public class TimeHelpers

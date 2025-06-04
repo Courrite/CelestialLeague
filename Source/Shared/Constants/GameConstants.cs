@@ -22,6 +22,10 @@
     public const int MaxUsernameLength = 20;
     public const int MinUsernameLength = 3;
 
+    // chat
+    public const int MaxChatMessageLength = 500;
+    public const int MaxPrivateMessageLength = 1000;
+
     // replays
     public const int MaxReplayDurationMinutes = 15;
     public const int MaxReplaysPerPlayer = 50;
@@ -34,7 +38,7 @@
 
     // filtering
     public static readonly string[] ProfanityList = {
-            "badword1",
-            "badword2"
-        };
+        "badword1",
+        "badword2"
+    };
 }

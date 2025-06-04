@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using CelestialLeague.Shared;
+using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Shared.Utils
 {

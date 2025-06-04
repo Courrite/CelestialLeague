@@ -1,12 +1,15 @@
-public enum GameState
+namespace CelestialLeague.Shared.Enums
 {
-    MainMenu,
-    InQueue,
-    MatchFound,
-    Loading,
-    InGame,
-    Paused,
-    MatchComplete,
-    Spectating,
-    Disconnected,
+    public enum GameState
+    {
+        MainMenu = 1,
+        InQueue = 2,
+        MatchFound = 3,
+        Loading = 4,
+        InGame = 5,
+        Paused = 6,
+        MatchComplete = 7,
+        Spectating = 8,
+        Disconnected = 9,
+    }
 }

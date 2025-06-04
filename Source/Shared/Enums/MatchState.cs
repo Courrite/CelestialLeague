@@ -1,8 +1,11 @@
-public enum MatchState
+namespace CelestialLeague.Shared.Enums
 {
-    Created,
-    WaitingForPlayers,
-    Started,
-    Ended,
-    Aborted
+    public enum MatchState
+    {
+        WaitingForPlayers = 0,
+        Starting = 1,
+        InProgress = 2,
+        Paused = 3,
+        Ended = 4
+    }
 }

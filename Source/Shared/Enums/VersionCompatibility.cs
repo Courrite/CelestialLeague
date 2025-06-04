@@ -1,10 +1,13 @@
- public enum VersionCompatibility
+namespace CelestialLeague.Shared.Enums
+{
+    public enum VersionCompatibility
     {
-        Perfect, // exact match with current version
-        Compatible, // older but still supported
-        UpdateRequired, // too old, update recommended
-        ForceUpdateRequired, // critically old, must update
-        TooNew, // newer than server supports
-        InvalidFormat, // invalid version string
-        Unknown // unexpected state
+        Perfect = 1, // exact match with current version
+        Compatible = 2, // older but still supported
+        UpdateRequired = 3, // too old, update recommended
+        ForceUpdateRequired = 4, // critically old, must update
+        TooNew = 5, // newer than server supports
+        InvalidFormat = 6, // invalid version string
+        Unknown = 7 // unexpected state
     }
+}

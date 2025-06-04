@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 using CelestialLeague.Shared.Enums;
 
@@ -58,40 +57,6 @@ namespace CelestialLeague.Shared.Utils
         public static bool IsRateLimited(int currentCount, int maxRequests)
         {
             return currentCount >= maxRequests;
-        }
-
-        // security helpers
-        public static string GenerateSessionToken()
-        {
-            using var rng = RandomNumberGenerator.Create();
-            var bytes = new byte[32];
-            rng.GetBytes(bytes);
-
-            return Convert.ToBase64String(bytes);
-        }
-
-        public static string HashPassword(string password, string salt)
-        {
-            using var pbkdf2 = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000, HashAlgorithmName.SHA256);
-            var hash = pbkdf2.GetBytes(32);
-
-            return Convert.ToBase64String(hash);
-        }
-
-        public static bool ValidateSessionToken(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-                return false;
-
-            try
-            {
-                var bytes = Convert.FromBase64String(token);
-                return bytes.Length == 32;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         // endpoint validation

@@ -4,6 +4,16 @@ public static class SecurityConstants
     public const int SessionTokenLength = 64;
     public const int SessionTimeoutMinutes = 30;
     public const int MaxConcurrentSessions = 3;
+
+    // session timing
+    public const int SessionDurationHours = 24;
+    public const int SessionRenewalThresholdHours = 2;
+    public const int MaxSessionDurationDays = 7;
+    public const int ActivityExtensionHours = 24;
+
+    // renewal checking
+    public const int RenewalCheckIntervalMinutes = 30;
+    public const int HeartbeatIntervalSeconds = 60;
     
     // password requirements
     public const int MinPasswordLength = 8;

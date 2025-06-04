@@ -1,4 +1,5 @@
 using System.Numerics;
+using CelestialLeague.Shared;
 using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Shared.Utils

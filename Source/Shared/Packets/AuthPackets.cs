@@ -1,10 +1,9 @@
-using CelestialLeague.Shared.Constants;
+using CelestialLeague.Shared.Enums;
 using CelestialLeague.Shared.Models;
 using CelestialLeague.Shared.Utils;
 
 namespace CelestialLeague.Shared.Packets
 {
-    // login
     public class LoginRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.LoginRequest;
@@ -13,7 +12,6 @@ namespace CelestialLeague.Shared.Packets
         public required string Password { get; set; }
         public string ClientVersion { get; set; } = VersionConstants.CURRENT_CLIENT_VERSION;
         public bool RememberMe { get; set; } = false;
-        public new string? CorrelationId { get; set; }
 
         public LoginRequestPacket(string username, string password, bool rememberMe = false, string? clientVersion = null)
         {
@@ -21,63 +19,44 @@ namespace CelestialLeague.Shared.Packets
             Password = password;
             RememberMe = rememberMe;
             ClientVersion = clientVersion ?? VersionConstants.CURRENT_CLIENT_VERSION;
-            CorrelationId = Guid.NewGuid().ToString();
             TimeStamp = DateTime.UtcNow;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(Username) &&
+            return base.IsValid() &&
+                   !string.IsNullOrWhiteSpace(Username) &&
                    !string.IsNullOrWhiteSpace(Password) &&
-                   Username.Length >= 3 &&
-                   Username.Length <= 20 &&
+                   Username.Length >= GameConstants.MinUsernameLength &&
+                   Username.Length <= GameConstants.MaxUsernameLength &&
                    Password.Length >= 6 &&
                    VersionUtils.IsValidVersionFormat(ClientVersion);
         }
     }
 
-    public class LoginResponsePacket : BasePacket
+    public class LoginResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.LoginResponse;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public bool Success { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? ErrorCode { get; set; }
         public PlayerInfo? Player { get; set; }
         public string? SessionToken { get; set; }
         public string ServerVersion { get; set; } = VersionConstants.CURRENT_SERVER_VERSION;
         public string? MessageOfTheDay { get; set; }
         public int OnlinePlayerCount { get; set; }
-        public new string? CorrelationId { get; set; }
 
-        public LoginResponsePacket(string? correlationId = null, bool success = true)
+        public LoginResponsePacket(bool success = true)
         {
-            CorrelationId = correlationId ?? Guid.NewGuid().ToString();
             Success = success;
-            TimeStamp = DateTime.UtcNow;
         }
 
-        public override bool IsValid()
+        protected override bool ValidateSuccessResponse()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
-                return false;
-
-            if (!VersionUtils.IsValidVersionFormat(ServerVersion))
-                return false;
-
-            if (Success)
-            {
-                return Player is not null &&
-                       !string.IsNullOrWhiteSpace(SessionToken) &&
-                       OnlinePlayerCount >= 0;
-            }
-
-            return !string.IsNullOrWhiteSpace(ErrorMessage) &&
-                   !string.IsNullOrWhiteSpace(ErrorCode);
+            return Player is not null &&
+                   !string.IsNullOrWhiteSpace(SessionToken) &&
+                   OnlinePlayerCount >= 0 &&
+                   VersionUtils.IsValidVersionFormat(ServerVersion);
         }
     }
 
-    // register
     public class RegisterRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.RegisterRequest;
@@ -86,173 +65,121 @@ namespace CelestialLeague.Shared.Packets
         public required string Password { get; set; }
         public string? Email { get; set; }
         public string ClientVersion { get; set; } = VersionConstants.CURRENT_CLIENT_VERSION;
-        public new string? CorrelationId { get; set; }
 
-        public RegisterRequestPacket(string username, string password, string? clientVersion = null)
+        public RegisterRequestPacket(string username, string password, string? email = null, string? clientVersion = null)
         {
             Username = username;
             Password = password;
+            Email = email;
             ClientVersion = clientVersion ?? VersionConstants.CURRENT_CLIENT_VERSION;
-            CorrelationId = Guid.NewGuid().ToString();
             TimeStamp = DateTime.UtcNow;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(Username) &&
+            return base.IsValid() &&
+                   !string.IsNullOrWhiteSpace(Username) &&
                    !string.IsNullOrWhiteSpace(Password) &&
-                   Username.Length >= 3 &&
-                   Username.Length <= 20 &&
-                   Password.Length >= 6;
+                   Username.Length >= GameConstants.MinUsernameLength &&
+                   Username.Length <= GameConstants.MaxUsernameLength &&
+                   Password.Length >= 6 &&
+                   Validation.IsValidUsername(Username) &&
+                   (string.IsNullOrEmpty(Email) || Validation.IsValidEmail(Email)) &&
+                   VersionUtils.IsValidVersionFormat(ClientVersion);
         }
     }
 
-    public class RegisterResponsePacket : BasePacket
+    public class RegisterResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.RegisterResponse;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public bool Success { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? ErrorCode { get; set; }
         public PlayerInfo? Player { get; set; }
         public string? SessionToken { get; set; }
         public string ServerVersion { get; set; } = VersionConstants.CURRENT_SERVER_VERSION;
         public string? WelcomeMessage { get; set; }
-        public new string? CorrelationId { get; set; }
 
-        public RegisterResponsePacket(string? correlationId = null, bool success = true)
+        public RegisterResponsePacket(bool success = true)
         {
-            CorrelationId = correlationId ?? Guid.NewGuid().ToString();
             Success = success;
-            TimeStamp = DateTime.UtcNow;
         }
 
-        public override bool IsValid()
+        protected override bool ValidateSuccessResponse()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
-                return false;
-
-            if (!VersionUtils.IsValidVersionFormat(ServerVersion))
-                return false;
-
-            if (Success)
-            {
-                return Player is not null &&
-                       !string.IsNullOrWhiteSpace(SessionToken);
-            }
-
-            return !string.IsNullOrWhiteSpace(ErrorMessage) &&
-                   !string.IsNullOrWhiteSpace(ErrorCode);
+            return Player is not null &&
+                   !string.IsNullOrWhiteSpace(SessionToken) &&
+                   VersionUtils.IsValidVersionFormat(ServerVersion);
         }
     }
 
-    // logout
     public class LogoutRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.LogoutRequest;
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
         public required string SessionToken { get; set; }
-        public new string? CorrelationId { get; set; }
 
         public LogoutRequestPacket(string sessionToken)
         {
             SessionToken = sessionToken;
-            CorrelationId = Guid.NewGuid().ToString();
             TimeStamp = DateTime.UtcNow;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid() &&
+                   !string.IsNullOrWhiteSpace(SessionToken);
         }
     }
 
-    public class LogoutResponsePacket : BasePacket
+    public class LogoutResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.LogoutResponse;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public bool Success { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? ErrorCode { get; set; }
-        public new string? CorrelationId { get; set; }
 
-        public LogoutResponsePacket(string? correlationId = null, bool success = true)
+        public LogoutResponsePacket(bool success = true)
         {
-            CorrelationId = correlationId ?? Guid.NewGuid().ToString();
             Success = success;
-            TimeStamp = DateTime.UtcNow;
         }
 
-        public override bool IsValid()
+        protected override bool ValidateSuccessResponse()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
-                return false;
-
-            if (!Success)
-            {
-                return !string.IsNullOrWhiteSpace(ErrorMessage) &&
-                       !string.IsNullOrWhiteSpace(ErrorCode);
-            }
-
             return true;
         }
     }
 
-    // session validation
     public class ValidateSessionRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.ValidateSessionRequest;
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
         public required string SessionToken { get; set; }
-        public new string? CorrelationId { get; set; }
 
         public ValidateSessionRequestPacket(string sessionToken)
         {
             SessionToken = sessionToken;
-            CorrelationId = Guid.NewGuid().ToString();
             TimeStamp = DateTime.UtcNow;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid() &&
+                   !string.IsNullOrWhiteSpace(SessionToken);
         }
     }
 
-    public class ValidateSessionResponsePacket : BasePacket
+    public class ValidateSessionResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.ValidateSessionResponse;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public bool IsValidSession { get; set; }
         public PlayerInfo? Player { get; set; }
         public DateTime? ExpiresAt { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? ErrorCode { get; set; }
-        public new string? CorrelationId { get; set; }
 
-        public ValidateSessionResponsePacket(string? correlationId = null, bool isValid = true)
+        public ValidateSessionResponsePacket(bool success = true)
         {
-            CorrelationId = correlationId ?? Guid.NewGuid().ToString();
-            IsValidSession = isValid;
-            TimeStamp = DateTime.UtcNow;
+            Success = success;
         }
 
-        public override bool IsValid()
+        protected override bool ValidateSuccessResponse()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
-                return false;
-
-            if (IsValidSession)
-            {
-                return Player is not null && ExpiresAt.HasValue;
-            }
-
-            return !string.IsNullOrWhiteSpace(ErrorMessage) &&
-                   !string.IsNullOrWhiteSpace(ErrorCode);
+            return Player is not null && ExpiresAt.HasValue;
         }
     }
 
-    // password change 
     public class ChangePasswordRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.ChangePasswordRequest;
@@ -260,20 +187,19 @@ namespace CelestialLeague.Shared.Packets
         public required string SessionToken { get; set; }
         public required string CurrentPassword { get; set; }
         public required string NewPassword { get; set; }
-        public new string? CorrelationId { get; set; }
 
         public ChangePasswordRequestPacket(string sessionToken, string currentPassword, string newPassword)
         {
             SessionToken = sessionToken;
             CurrentPassword = currentPassword;
             NewPassword = newPassword;
-            CorrelationId = Guid.NewGuid().ToString();
             TimeStamp = DateTime.UtcNow;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken) &&
+            return base.IsValid() &&
+                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    !string.IsNullOrWhiteSpace(CurrentPassword) &&
                    !string.IsNullOrWhiteSpace(NewPassword) &&
                    NewPassword.Length >= 6 &&
@@ -281,34 +207,54 @@ namespace CelestialLeague.Shared.Packets
         }
     }
 
-    public class ChangePasswordResponsePacket : BasePacket
+    public class ChangePasswordResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.ChangePasswordResponse;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public bool Success { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? ErrorCode { get; set; }
-        public new string? CorrelationId { get; set; }
 
-        public ChangePasswordResponsePacket(string? correlationId = null, bool success = true)
+        public ChangePasswordResponsePacket(bool success = true)
         {
-            CorrelationId = correlationId ?? Guid.NewGuid().ToString();
             Success = success;
-            TimeStamp = DateTime.UtcNow;
+        }
+
+        protected override bool ValidateSuccessResponse()
+        {
+            return true;
+        }
+    }
+
+    public class SessionRenewRequestPacket : BasePacket
+    {
+        public override PacketType Type => PacketType.SessionRenewRequest;
+        public required string SessionToken { get; set; }
+
+        public SessionRenewRequestPacket(string sessionToken)
+        {
+            SessionToken = sessionToken;
         }
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
-                return false;
+            return base.IsValid() &&
+                   !string.IsNullOrWhiteSpace(SessionToken);
+        }
+    }
 
-            if (!Success)
-            {
-                return !string.IsNullOrWhiteSpace(ErrorMessage) &&
-                       !string.IsNullOrWhiteSpace(ErrorCode);
-            }
+    public class SessionRenewResponsePacket : BaseResponse
+    {
+        public override PacketType Type => PacketType.SessionRenewResponse;
+        public string? NewSessionToken { get; set; }
+        public DateTime? ExpiresAt { get; set; }
 
-            return true;
+        public SessionRenewResponsePacket(bool success = true)
+        {
+            Success = success;
+        }
+
+        protected override bool ValidateSuccessResponse()
+        {
+            return !string.IsNullOrWhiteSpace(NewSessionToken) &&
+                   ExpiresAt.HasValue &&
+                   ExpiresAt.Value > DateTime.UtcNow;
         }
     }
 }

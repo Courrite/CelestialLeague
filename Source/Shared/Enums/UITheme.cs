@@ -1,6 +1,9 @@
-public enum UITheme
+namespace CelestialLeague.Shared.Enums
 {
-    // Standard themes
-    Light,
-    Dark,
+    public enum UITheme
+    {
+        // standard themes
+        Light = 1,
+        Dark = 2,
+    }
 }

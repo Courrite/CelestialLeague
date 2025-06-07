@@ -19,7 +19,7 @@ namespace CelestialLeague.Shared.Packets
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
+            if (CorrelationId < 0)
                 return false;
 
             if (!Success)
@@ -45,7 +45,7 @@ namespace CelestialLeague.Shared.Packets
                 ErrorCode == ResponseErrorCode.InvalidCredentials ||
                 ErrorCode == ResponseErrorCode.AccountNotFound ||
                 ErrorCode == ResponseErrorCode.SessionExpired ||
-                ErrorCode == ResponseErrorCode.SessionInvalid
+                ErrorCode == ResponseErrorCode.InvalidSession
             );
         }
 
@@ -80,7 +80,7 @@ namespace CelestialLeague.Shared.Packets
         }
 
         // factory methods for common error responses
-        public static T CreateError<T>(string correlationId, string errorMessage, ResponseErrorCode errorCode)
+        public static T CreateError<T>(uint correlationId, string errorMessage, ResponseErrorCode errorCode)
             where T : BaseResponse, new()
         {
             return new T()
@@ -93,31 +93,31 @@ namespace CelestialLeague.Shared.Packets
             };
         }
 
-        public static T CreateAuthError<T>(string correlationId, string message = "Authentication failed")
+        public static T CreateAuthError<T>(uint correlationId, string message = "Authentication failed")
             where T : BaseResponse, new()
         {
             return CreateError<T>(correlationId, message, ResponseErrorCode.InvalidCredentials);
         }
 
-        public static T CreateServerError<T>(string correlationId, string message = "Internal server error")
+        public static T CreateServerError<T>(uint correlationId, string message = "Internal server error")
             where T : BaseResponse, new()
         {
             return CreateError<T>(correlationId, message, ResponseErrorCode.ServerError);
         }
 
-        public static T CreateValidationError<T>(string correlationId, string message = "Invalid request data")
+        public static T CreateValidationError<T>(uint correlationId, string message = "Invalid request data")
             where T : BaseResponse, new()
         {
             return CreateError<T>(correlationId, message, ResponseErrorCode.InvalidRequest);
         }
 
-        public static T CreateNotFoundError<T>(string correlationId, string message = "Resource not found")
+        public static T CreateNotFoundError<T>(uint correlationId, string message = "Resource not found")
             where T : BaseResponse, new()
         {
             return CreateError<T>(correlationId, message, ResponseErrorCode.AccountNotFound);
         }
 
-        public static T CreateRateLimitError<T>(string correlationId, string message = "Rate limit exceeded")
+        public static T CreateRateLimitError<T>(uint correlationId, string message = "Rate limit exceeded")
             where T : BaseResponse, new()
         {
             return CreateError<T>(correlationId, message, ResponseErrorCode.RateLimited);

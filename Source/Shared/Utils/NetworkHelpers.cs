@@ -14,8 +14,7 @@ namespace CelestialLeague.Shared.Utils
             try
             {
                 using var ping = new Ping();
-                var reply = await ping.SendPingAsync(hostname, NetworkConstants.PingTimeout);
-
+                var reply = await ping.SendPingAsync(hostname, NetworkConstants.PingTimeoutMs);
                 return reply.Status == IPStatus.Success ? (int)reply.RoundtripTime : -1;
             }
             catch
@@ -29,23 +28,29 @@ namespace CelestialLeague.Shared.Utils
             return ping switch
             {
                 < 0 => ConnectionQuality.Disconnected,
-                <= 50 => ConnectionQuality.Excellent,
-                <= 100 => ConnectionQuality.Good,
-                <= 150 => ConnectionQuality.Fair,
-                <= 250 => ConnectionQuality.Poor,
+                <= NetworkConstants.GoodPingThresholdMs => ConnectionQuality.Excellent,
+                <= NetworkConstants.FairPingThresholdMs => ConnectionQuality.Good,
+                <= NetworkConstants.PoorPingThresholdMs => ConnectionQuality.Fair,
+                <= (NetworkConstants.PoorPingThresholdMs + 50) => ConnectionQuality.Poor,
                 _ => ConnectionQuality.VeryPoor
             };
         }
 
         // packet size validation methods
-        public static bool IsValidPacketSized(byte[] data)
+        public static bool IsValidPacketSize(byte[] data)
         {
             return data?.Length > 0 && data.Length <= NetworkConstants.MaxPacketSize;
         }
 
+        public static bool IsValidVoicePacketSize(byte[] data)
+        {
+            return data?.Length > 0 && data.Length <= NetworkConstants.MaxVoicePacketSize;
+        }
+
         public static bool IsValidMessageLength(string message)
         {
-            return !string.IsNullOrEmpty(message) && Encoding.UTF8.GetByteCount(message) <= NetworkConstants.MaxMessageLength;
+            return !string.IsNullOrEmpty(message) && 
+                   Encoding.UTF8.GetByteCount(message) <= NetworkConstants.MaxMessageLength;
         }
 
         // rate limiting helpers
@@ -57,6 +62,23 @@ namespace CelestialLeague.Shared.Utils
         public static bool IsRateLimited(int currentCount, int maxRequests)
         {
             return currentCount >= maxRequests;
+        }
+
+        public static bool IsPositionUpdateRateLimited(DateTime lastUpdate)
+        {
+            var timeSince = (DateTime.UtcNow - lastUpdate).TotalMilliseconds;
+            return timeSince < NetworkConstants.PositionUpdateIntervalMs;
+        }
+
+        public static bool IsPacketFloodDetected(int packetsPerSecond, PacketType packetType)
+        {
+            return packetType switch
+            {
+                PacketType.PlayerPosition => packetsPerSecond > NetworkConstants.MaxPositionUpdatesPerSecond,
+                PacketType.GameEvent => packetsPerSecond > NetworkConstants.MaxGameEventsPerSecond,
+                PacketType.ChatMessage => packetsPerSecond > (NetworkConstants.MaxMessagesPerMinute / 60),
+                _ => packetsPerSecond > NetworkConstants.MaxUdpPacketsPerSecond
+            };
         }
 
         // endpoint validation
@@ -79,29 +101,64 @@ namespace CelestialLeague.Shared.Utils
         public static byte[] CreatePacketHeader(PacketType type, int dataLength)
         {
             var header = new byte[NetworkConstants.PacketHeaderSize];
-            header[0] = (byte)type;
-            BitConverter.GetBytes(dataLength).CopyTo(header, 1);
-
-            BitConverter.GetBytes(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()).CopyTo(header, 5);
+            
+            // magic header for packet validation
+            var magicBytes = Encoding.ASCII.GetBytes(NetworkConstants.MagicHeader);
+            magicBytes.CopyTo(header, 0);
+            
+            // protocol version
+            header[4] = NetworkConstants.ProtocolVersion;
+            
+            // packet type
+            header[5] = (byte)type;
+            
+            // data length
+            BitConverter.GetBytes(dataLength).CopyTo(header, 6);
+            
+            // timestamp
+            BitConverter.GetBytes(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()).CopyTo(header, 10);
+            
             return header;
         }
 
-        public static (PacketType type, int length, long timestamp) ParsePacketHeader(byte[] header)
+        public static (PacketType type, int length, long timestamp, bool isValid) ParsePacketHeader(byte[] header)
         {
-            if (header!.Length != NetworkConstants.PacketHeaderSize)
+            if (header?.Length != NetworkConstants.PacketHeaderSize)
             {
-                throw new ArgumentException("Invalid packet header size.");
+                return (PacketType.Error, 0, 0, false);
             }
 
-            var type = (PacketType)header[0];
-            var length = BitConverter.ToInt32(header, 1);
-            var timestamp = BitConverter.ToInt64(header, 5);
+            // validate magic header
+            var magicBytes = new byte[4];
+            Array.Copy(header, 0, magicBytes, 0, 4);
+            var magic = Encoding.ASCII.GetString(magicBytes);
+            
+            if (magic != NetworkConstants.MagicHeader)
+            {
+                return (PacketType.Error, 0, 0, false);
+            }
 
-            return (type, length, timestamp);
+            // validate protocol version
+            if (header[4] != NetworkConstants.ProtocolVersion)
+            {
+                return (PacketType.Error, 0, 0, false);
+            }
+
+            var type = (PacketType)header[5];
+            var length = BitConverter.ToInt32(header, 6);
+            var timestamp = BitConverter.ToInt64(header, 10);
+
+            // validate packet size
+            if (length > NetworkConstants.MaxPacketSize || length < 0)
+            {
+                return (PacketType.Error, 0, 0, false);
+            }
+
+            return (type, length, timestamp, true);
         }
 
         // retry logic
-        public static async Task<T> RetryAsync<T>(Func<Task<T>> operation, int maxRetries = 3, int delayMs = 1000)
+        public static async Task<T> RetryAsync<T>(Func<Task<T>> operation, int maxRetries = NetworkConstants.MaxReconnectAttempts, int baseDelayMs = NetworkConstants.ConnectionRetryDelayMs)
         {
             for (int i = 0; i < maxRetries; i++)
             {
@@ -111,20 +168,18 @@ namespace CelestialLeague.Shared.Utils
                 }
                 catch when (i < maxRetries - 1)
                 {
-                    await Task.Delay(delayMs * i + 1); // exponential backoff
+                    await Task.Delay(baseDelayMs * (i + 1)); // exponential backoff
                 }
             }
-
             return await operation();
         }
 
-        // bandwith estimation
-        public static double CalculateBandwith(long bytesTransferred, TimeSpan duration)
+        // bandwidth estimation
+        public static double CalculateBandwidth(long bytesTransferred, TimeSpan duration)
         {
             if (duration.TotalSeconds == 0)
                 return 0;
-
-            return bytesTransferred * 8 / duration.TotalSeconds;
+            return bytesTransferred * 8 / duration.TotalSeconds; // bits per second
         }
 
         // network state helpers
@@ -138,16 +193,35 @@ namespace CelestialLeague.Shared.Utils
             foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
             {
                 if (ni.OperationalStatus == OperationalStatus.Up &&
-                ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                    ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                     return ni.NetworkInterfaceType;
             }
-
             return NetworkInterfaceType.Unknown;
         }
 
         public static bool ShouldCompress(byte[] data)
         {
-            return data?.Length > NetworkConstants.CompressionThreshold;
+            return NetworkConstants.EnableCompression && 
+                   data?.Length > NetworkConstants.CompressionThreshold;
+        }
+
+        // buffer management
+        public static int CalculateOptimalBufferSize(int dataSize)
+        {
+            if (dataSize <= NetworkConstants.MinBufferSize)
+                return NetworkConstants.MinBufferSize;
+                
+            if (dataSize >= NetworkConstants.MaxBufferSize)
+                return NetworkConstants.MaxBufferSize;
+                
+            // round up to next power of 2
+            int bufferSize = NetworkConstants.MinBufferSize;
+            while (bufferSize < dataSize)
+            {
+                bufferSize *= NetworkConstants.BufferGrowthFactor;
+            }
+            
+            return Math.Min(bufferSize, NetworkConstants.MaxBufferSize);
         }
 
         // timeout helpers
@@ -155,32 +229,72 @@ namespace CelestialLeague.Shared.Utils
         {
             return operation switch
             {
-                NetworkOperation.Connect => TimeSpan.FromSeconds(10),
-                NetworkOperation.Authenticate => TimeSpan.FromSeconds(5),
-                NetworkOperation.Matchmaking => TimeSpan.FromMinutes(2),
-                NetworkOperation.GameData => TimeSpan.FromSeconds(1),
-                NetworkOperation.Chat => TimeSpan.FromSeconds(3),
-                _ => TimeSpan.FromSeconds(5),
+                NetworkOperation.Connect => TimeSpan.FromMilliseconds(NetworkConstants.ConnectionTimeoutMs),
+                NetworkOperation.Authenticate => TimeSpan.FromMilliseconds(NetworkConstants.SocketTimeoutMs),
+                NetworkOperation.Matchmaking => TimeSpan.FromMilliseconds(NetworkConstants.MatchmakingTimeoutMs),
+                NetworkOperation.GameData => TimeSpan.FromMilliseconds(NetworkConstants.PingTimeoutMs),
+                NetworkOperation.Chat => TimeSpan.FromMilliseconds(NetworkConstants.SocketTimeoutMs / 2),
+                _ => TimeSpan.FromMilliseconds(NetworkConstants.SocketTimeoutMs),
             };
         }
 
-        // error handling 
+        // connection quality assessment
+        public static bool IsConnectionStable(int ping, int packetLoss)
+        {
+            return ping <= NetworkConstants.FairPingThresholdMs && 
+                   packetLoss <= NetworkConstants.PacketLossThresholdPercent;
+        }
+
+        public static bool IsHighLatencyConnection(int ping)
+        {
+            return ping > NetworkConstants.PoorPingThresholdMs;
+        }
+
+        // security helpers
+        public static bool IsSuspiciousActivity(int packetsPerSecond)
+        {
+            return packetsPerSecond > NetworkConstants.SuspiciousActivityThreshold;
+        }
+
+        public static bool ShouldAutoDisconnect(int packetsPerSecond)
+        {
+            return packetsPerSecond > NetworkConstants.AutoDisconnectThreshold;
+        }
+
+        // error handling
         public static bool IsRetryableError(Exception ex)
         {
             return ex is TimeoutException or
-            SocketException or
-            HttpRequestException;
+                   SocketException or
+                   HttpRequestException;
         }
 
         public static string GetFriendlyErrorMessage(Exception ex)
         {
             return ex switch
             {
-                TimeoutException => "Connection timed out.",
-                SocketException => "Network connection failed.",
-                UnauthorizedAccessException => "Authentication failed.",
-                _ => "An unexpected network error occured"
+                TimeoutException => "connection timed out",
+                SocketException => "network connection failed",
+                UnauthorizedAccessException => "authentication failed",
+                _ => "an unexpected network error occurred"
             };
+        }
+
+        // packet queue management
+        public static bool IsPacketQueueOverloaded(int queueSize)
+        {
+            return queueSize > NetworkConstants.PacketQueueWarningThreshold;
+        }
+
+        public static bool ShouldDropPackets(int queueSize)
+        {
+            return queueSize > NetworkConstants.PacketDropThreshold;
+        }
+
+        // network congestion detection
+        public static bool IsNetworkCongested(double utilizationPercent)
+        {
+            return utilizationPercent > NetworkConstants.NetworkCongestionThreshold;
         }
     }
 }

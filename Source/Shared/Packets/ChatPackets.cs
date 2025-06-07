@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Shared.Packets
@@ -5,24 +6,22 @@ namespace CelestialLeague.Shared.Packets
     public class ChatMessagePacket : BasePacket
     {
         public override PacketType Type => PacketType.ChatMessage;
-        public required string SessionToken { get; set; }
         public required string Message { get; set; }
         public ChatChannelType ChannelType { get; set; } = ChatChannelType.General;
         public string? MatchId { get; set; }
 
-        public ChatMessagePacket(string sessionToken, string message, ChatChannelType channelType = ChatChannelType.General)
+        public ChatMessagePacket(string message, ChatChannelType channelType = ChatChannelType.General)
         {
-            SessionToken = sessionToken;
             Message = message;
             ChannelType = channelType;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    !string.IsNullOrWhiteSpace(Message) &&
-                   Message.Length <= GameConstants.MaxChatMessageLength &&
+                   Message.Length <= ChatConstants.MaxMessageLength &&
                    Enum.IsDefined(typeof(ChatChannelType), ChannelType) &&
                    ValidateChannelAccess();
         }
@@ -31,14 +30,12 @@ namespace CelestialLeague.Shared.Packets
         {
             if (ChannelType == ChatChannelType.Announcements)
                 return false;
-
             if (ChannelType == ChatChannelType.Match ||
                 ChannelType == ChatChannelType.Spectator ||
                 ChannelType == ChatChannelType.PostMatch)
             {
                 return !string.IsNullOrWhiteSpace(MatchId);
             }
-
             return true;
         }
     }
@@ -53,6 +50,7 @@ namespace CelestialLeague.Shared.Packets
         public string? MatchId { get; set; }
         public UserRole SenderRole { get; set; } = UserRole.None;
 
+        [SetsRequiredMembers]
         public ChatMessageBroadcastPacket(string messageId, string username, string message, ChatChannelType channelType)
         {
             MessageId = messageId;
@@ -77,9 +75,11 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.ChatResponse;
 
-        public ChatResponsePacket(bool success = true)
+        public ChatResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -91,24 +91,22 @@ namespace CelestialLeague.Shared.Packets
     public class PrivateMessagePacket : BasePacket
     {
         public override PacketType Type => PacketType.PrivateMessage;
-        public required string SessionToken { get; set; }
         public required int TargetUserId { get; set; }
         public required string Message { get; set; }
 
-        public PrivateMessagePacket(string sessionToken, int targetUserId, string message)
+        public PrivateMessagePacket(int targetUserId, string message)
         {
-            SessionToken = sessionToken;
             TargetUserId = targetUserId;
             Message = message;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    TargetUserId > 0 &&
                    !string.IsNullOrWhiteSpace(Message) &&
-                   Message.Length <= GameConstants.MaxPrivateMessageLength;
+                   Message.Length <= ChatConstants.MaxPrivateMessageLength;
         }
     }
 
@@ -120,6 +118,7 @@ namespace CelestialLeague.Shared.Packets
         public required string Message { get; set; }
         public bool IsDelivered { get; set; }
 
+        [SetsRequiredMembers]
         public PrivateMessageBroadcastPacket(string messageId, string senderUsername, string message)
         {
             MessageId = messageId;
@@ -142,9 +141,11 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.PrivateMessageResponse;
 
-        public PrivateMessageResponsePacket(bool success = true)
+        public PrivateMessageResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -156,13 +157,11 @@ namespace CelestialLeague.Shared.Packets
     public class ChatJoinChannelPacket : BasePacket
     {
         public override PacketType Type => PacketType.ChatJoinChannel;
-        public required string SessionToken { get; set; }
         public ChatChannelType ChannelType { get; set; }
         public string? MatchId { get; set; }
 
-        public ChatJoinChannelPacket(string sessionToken, ChatChannelType channelType, string? matchId = null)
+        public ChatJoinChannelPacket(ChatChannelType channelType, string? matchId = null)
         {
-            SessionToken = sessionToken;
             ChannelType = channelType;
             MatchId = matchId;
         }
@@ -170,7 +169,6 @@ namespace CelestialLeague.Shared.Packets
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    Enum.IsDefined(typeof(ChatChannelType), ChannelType) &&
                    ValidateChannelJoin();
         }
@@ -183,10 +181,8 @@ namespace CelestialLeague.Shared.Packets
             {
                 return !string.IsNullOrWhiteSpace(MatchId);
             }
-
             if (ChannelType == ChatChannelType.Private)
                 return false;
-
             return true;
         }
     }
@@ -194,13 +190,11 @@ namespace CelestialLeague.Shared.Packets
     public class ChatLeaveChannelPacket : BasePacket
     {
         public override PacketType Type => PacketType.ChatLeaveChannel;
-        public required string SessionToken { get; set; }
         public ChatChannelType ChannelType { get; set; }
         public string? MatchId { get; set; }
 
-        public ChatLeaveChannelPacket(string sessionToken, ChatChannelType channelType, string? matchId = null)
+        public ChatLeaveChannelPacket(ChatChannelType channelType, string? matchId = null)
         {
-            SessionToken = sessionToken;
             ChannelType = channelType;
             MatchId = matchId;
         }
@@ -208,7 +202,6 @@ namespace CelestialLeague.Shared.Packets
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    Enum.IsDefined(typeof(ChatChannelType), ChannelType) &&
                    ChannelType != ChatChannelType.Private;
         }
@@ -217,17 +210,15 @@ namespace CelestialLeague.Shared.Packets
     public class ChatChannelListRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.ChatChannelList;
-        public required string SessionToken { get; set; }
 
-        public ChatChannelListRequestPacket(string sessionToken)
+        public ChatChannelListRequestPacket()
         {
-            SessionToken = sessionToken;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -237,9 +228,11 @@ namespace CelestialLeague.Shared.Packets
         public List<string> AvailableChannels { get; set; } = new();
         public List<string> JoinedChannels { get; set; } = new();
 
-        public ChatChannelListResponsePacket(bool success = true)
+        public ChatChannelListResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -251,21 +244,19 @@ namespace CelestialLeague.Shared.Packets
     public class ChatUserListRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.ChatUserList;
-        public required string SessionToken { get; set; }
         public ChatChannelType ChannelType { get; set; }
         public string? MatchId { get; set; }
 
-        public ChatUserListRequestPacket(string sessionToken, ChatChannelType channelType, string? matchId = null)
+        public ChatUserListRequestPacket(ChatChannelType channelType, string? matchId = null)
         {
-            SessionToken = sessionToken;
             ChannelType = channelType;
             MatchId = matchId;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    Enum.IsDefined(typeof(ChatChannelType), ChannelType);
         }
     }
@@ -274,18 +265,20 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.ChatUserListResponse;
         public ChatChannelType ChannelType { get; set; }
-        public List<string> Usernames { get; set; } = new();
-        public int TotalUsers { get; set; }
+        public List<string> Users { get; set; } = new();
+        public Dictionary<string, UserRole> UserRoles { get; set; } = new();
 
-        public ChatUserListResponsePacket(bool success = true)
+        public ChatUserListResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
         {
-            return Usernames != null &&
-                   TotalUsers >= 0 &&
+            return Users != null &&
+                   UserRoles != null &&
                    Enum.IsDefined(typeof(ChatChannelType), ChannelType);
         }
     }

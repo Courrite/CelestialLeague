@@ -1,23 +1,25 @@
 namespace CelestialLeague.Shared.Enums
 {
     public enum ResponseErrorCode
-
     {
         // general (1-99)
         Unknown = 1,
-        InvalidRequest = 1,
-        InvalidPacket = 2,
+        InvalidRequest = 2,
+        InvalidPacket = 3,
         RateLimited = 4,
-        ServerError = 5,
+        InternalError = 5,
+        ServerError = 6,
 
         // auth (100-199)
         InvalidCredentials = 100,
         AccountNotFound = 101,
-        AccountAlreadyExists = 102,
-        SessionExpired = 103,
-        SessionInvalid = 104,
-        UsernameInvalid = 105,
-        EmailInvalid = 106,
+        UsernameExists = 102,
+        AccountAlreadyExists = 103,
+        SessionExpired = 104,
+        InvalidSession = 105,
+        NotAuthenticated = 106,
+        UsernameInvalid = 107,
+        EmailInvalid = 108,
 
         // matchmaking (200-299)
         AlreadyInQueue = 200,
@@ -34,17 +36,20 @@ namespace CelestialLeague.Shared.Enums
         PlayerNotInGame = 303,
         InvalidGameAction = 304,
 
-        // chat
+        // chat (400-499)
         MessageTooLong = 400,
         ChannelNotFound = 401,
         NotInChannel = 402,
         InsufficientPermissions = 403,
         PlayerMuted = 404,
+        MessageFiltered = 405,
+        UserNotFound = 406,
 
         // network (500-599)
         ConnectionLost = 500,
         Timeout = 501,
         InvalidVersion = 502,
-        ServerMaintenance = 503
+        ServerMaintenance = 503,
+        InvalidOperation = 504,
     }
 }

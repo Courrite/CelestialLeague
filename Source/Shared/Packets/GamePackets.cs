@@ -6,23 +6,21 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerPositionPacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerPosition;
-        public required string SessionToken { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
         public float VelocityX { get; set; }
         public float VelocityY { get; set; }
         public byte StateFlags { get; set; }
 
-        public PlayerPositionPacket(string sessionToken, float x, float y)
+        public PlayerPositionPacket(float x, float y)
         {
-            SessionToken = sessionToken;
             X = x;
             Y = y;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -46,23 +44,20 @@ namespace CelestialLeague.Shared.Packets
     public class GameEventPacket : BasePacket
     {
         public override PacketType Type => PacketType.GameEvent;
-        public required string SessionToken { get; set; }
         public EventType EventType { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
         public int TimeMs { get; set; }
         public Dictionary<string, object> EventData { get; set; } = new();
 
-        public GameEventPacket(string sessionToken, EventType eventType)
+        public GameEventPacket(EventType eventType)
         {
-            SessionToken = sessionToken;
             EventType = eventType;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken) &&
-                   Enum.IsDefined(typeof(EventType), EventType);
+            return Enum.IsDefined(typeof(EventType), EventType);
         }
     }
 
@@ -91,21 +86,19 @@ namespace CelestialLeague.Shared.Packets
     public class JoinGameRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.JoinGameRequest;
-        public required string SessionToken { get; set; }
         public required string MatchId { get; set; }
         public GameRole JoinAs { get; set; } = GameRole.Player;
 
-        public JoinGameRequestPacket(string sessionToken, string matchId, GameRole joinAs = GameRole.Player)
+        public JoinGameRequestPacket(string matchId, GameRole joinAs = GameRole.Player)
         {
-            SessionToken = sessionToken;
             MatchId = matchId;
             JoinAs = joinAs;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    !string.IsNullOrWhiteSpace(MatchId) &&
                    Enum.IsDefined(typeof(GameRole), JoinAs);
         }
@@ -119,9 +112,11 @@ namespace CelestialLeague.Shared.Packets
         public GameRole AssignedRole { get; set; }
         public Dictionary<string, object> GameInfo { get; set; } = new();
 
-        public JoinGameResponsePacket(bool success = true)
+        public JoinGameResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -134,18 +129,16 @@ namespace CelestialLeague.Shared.Packets
     public class GamePausePacket : BasePacket
     {
         public override PacketType Type => PacketType.GamePause;
-        public required string SessionToken { get; set; }
         public bool Pause { get; set; }
 
-        public GamePausePacket(string sessionToken, bool pause)
+        public GamePausePacket(bool pause)
         {
-            SessionToken = sessionToken;
             Pause = pause;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -171,15 +164,13 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerStateChangePacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerStateChange;
-        public required string SessionToken { get; set; }
         public required string MatchId { get; set; }
         public required int PlayerId { get; set; }
         public PlayerMatchState State { get; set; }
         public Dictionary<string, object> StateData { get; set; } = new();
 
-        public PlayerStateChangePacket(string sessionToken, string matchId, int playerId, PlayerMatchState state)
+        public PlayerStateChangePacket(string matchId, int playerId, PlayerMatchState state)
         {
-            SessionToken = sessionToken;
             MatchId = matchId;
             PlayerId = playerId;
             State = state;
@@ -188,7 +179,6 @@ namespace CelestialLeague.Shared.Packets
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    !string.IsNullOrWhiteSpace(MatchId) &&
                    PlayerId > 0 &&
                    Enum.IsDefined(typeof(PlayerMatchState), State);

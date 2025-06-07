@@ -22,9 +22,7 @@ public static class SecurityConstants
     
     // rate limiting
     public const int MaxLoginAttemptsPerMinute = 5;
-    public const int MaxChatMessagesPerMinute = 30;
     public const int MaxMatchmakingRequestsPerMinute = 10;
-    public const int MaxFriendRequestsPerHour = 20;
     
     // token security
     public const int RefreshTokenExpirationDays = 30;

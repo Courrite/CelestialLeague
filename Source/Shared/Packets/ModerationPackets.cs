@@ -19,6 +19,7 @@ namespace CelestialLeague.Shared.Packets
             TargetUserId = int.Parse(targetUserId);
             ActionType = actionType;
             Reason = reason;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -33,14 +34,15 @@ namespace CelestialLeague.Shared.Packets
     public class ModerationActionResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.ModerationActionResponse;
-        public required string SessionToken { get; set; }
         public ModerationActionType ActionType { get; set; }
         public string? TargetUsername { get; set; }
         public string? ActionId { get; set; } = Guid.NewGuid().ToString();
 
-        public ModerationActionResponsePacket(bool success = true)
+        public ModerationActionResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -54,28 +56,24 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerKickPacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerKick;
-        public required string SessionToken { get; set; }
         public required int TargetUserId { get; set; }
         public string? Reason { get; set; }
 
-        public PlayerKickPacket(string sessionToken, int targetUserId, string? reason = null)
+        public PlayerKickPacket(int targetUserId, string? reason = null)
         {
-            SessionToken = sessionToken;
             TargetUserId = targetUserId;
             Reason = reason;
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken) &&
-                TargetUserId > 0;
+            return TargetUserId > 0;
         }
     }
 
     public class PlayerBanPacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerBan;
-        public required string SessionToken { get; set; }
         public int TargetUserId;
         public DateTime BanExpiration;
         public string? Reason;
@@ -99,7 +97,6 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerUnbanPacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerUnban;
-        public required string SessionToken { get; set; }
         public int TargetUserId;
 
         public PlayerUnbanPacket(int playerid)
@@ -116,7 +113,6 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerMutePacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerMute;
-        public required string SessionToken { get; set; }
         public int TargetUserId;
         public DateTime MuteExpiration;
         public string? Reason;
@@ -140,7 +136,6 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerUnmutePacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerMute;
-        public required string SessionToken { get; set; }
         public int TargetUserId;
 
         public PlayerUnmutePacket(int targetUserId, DateTime muteExpiration)
@@ -157,7 +152,6 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerWarnPacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerWarn;
-        public required string SessionToken { get; set; }
         public int TargetUserId;
         public string? Reason;
         public string? Evidence;
@@ -179,7 +173,6 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerRemoveWarnPacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerRemoveWarn;
-        public required string SessionToken { get; set; }
         public int TargetUserId;
         public string WarnId;
 
@@ -198,22 +191,19 @@ namespace CelestialLeague.Shared.Packets
     public class ServerAnnouncementPacket : BasePacket
     {
         public override PacketType Type => PacketType.ServerAnnouncement;
-        public required string SessionToken { get; set; }
         public required string Message { get; set; }
         public AnnouncementType AnnouncementType { get; set; } = AnnouncementType.General;
         public AnnouncementPriority Priority { get; set; } = AnnouncementPriority.Normal;
         public int DisplayDurationSeconds { get; set; } = 10;
 
-        public ServerAnnouncementPacket(string sessionToken, string message)
+        public ServerAnnouncementPacket(string message)
         {
-            SessionToken = sessionToken;
             Message = message;
         }
 
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    !string.IsNullOrWhiteSpace(Message) &&
                    Message.Length <= 500 &&
                    Enum.IsDefined(typeof(AnnouncementType), AnnouncementType) &&

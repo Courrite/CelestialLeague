@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Shared.Packets
@@ -5,46 +6,27 @@ namespace CelestialLeague.Shared.Packets
     public class HeartbeatPacket : BasePacket
     {
         public override PacketType Type => PacketType.Heartbeat;
-        public long ClientTimestamp { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         public override bool IsValid()
         {
-            return base.IsValid() && ClientTimestamp > 0;
-        }
-    }
-
-    public class HeartbeatResponsePacket : BasePacket
-    {
-        public override PacketType Type => PacketType.HeartbeatResponse;
-        public long ServerTimestamp { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        public long ClientTimestamp { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-        public HeartbeatResponsePacket(long clientTimestamp)
-        {
-            ClientTimestamp = clientTimestamp;
-        }
-
-        public override bool IsValid()
-        {
-            return base.IsValid() && ClientTimestamp > 0;
+            return base.IsValid();
         }
     }
 
     public class DisconnectPacket : BasePacket
     {
         public override PacketType Type => PacketType.Disconnect;
-        public required string SessionToken { get; set; }
         public string? Reason { get; set; }
 
-        public DisconnectPacket(string sessionToken, string? reason = null)
+        public DisconnectPacket(string? reason = null)
         {
-            SessionToken = sessionToken;
             Reason = reason;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return base.IsValid() && !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -52,9 +34,11 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.DisconnectResponse;
 
-        public DisconnectResponsePacket(bool success = true)
+        public DisconnectResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -69,7 +53,9 @@ namespace CelestialLeague.Shared.Packets
         public new long Timestamp { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         public PingPacket()
-        { }
+        {
+            CorrelationId = GenerateCorrelationId();
+        }
 
         public override bool IsValid()
         {
@@ -83,9 +69,10 @@ namespace CelestialLeague.Shared.Packets
         public long OriginalTimestamp { get; set; }
         public long ResponseTimestamp { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-        public PingResponsePacket(long originalTimestamp)
+        public PingResponsePacket(uint? requestCorrelationId, long originalTimestamp)
         {
             OriginalTimestamp = originalTimestamp;
+            CorrelationId = requestCorrelationId;
         }
 
         public override bool IsValid()
@@ -102,6 +89,7 @@ namespace CelestialLeague.Shared.Packets
         public string? Details { get; set; }
         public Dictionary<string, object> ErrorData { get; set; } = new();
 
+        [SetsRequiredMembers]
         public ErrorPacket(ResponseErrorCode errorCode, string errorMessage, string? details = null)
         {
             ErrorCode = errorCode;
@@ -111,25 +99,24 @@ namespace CelestialLeague.Shared.Packets
 
         public override bool IsValid()
         {
-            return base.IsValid() && Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode) && !string.IsNullOrWhiteSpace(ErrorMessage);
+            return base.IsValid() &&
+                   Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode) &&
+                   !string.IsNullOrWhiteSpace(ErrorMessage);
         }
     }
 
     public class AcknowledgmentPacket : BasePacket
     {
         public override PacketType Type => PacketType.Acknowledgment;
-        public required string SessionToken { get; set; }
-        public required string AcknowledgmentToken { get; set; }
 
-        public AcknowledgmentPacket(string sessionToken, string acknowledgmentToken)
+        public AcknowledgmentPacket(uint? requestCorrelationId)
         {
-            SessionToken = sessionToken;
-            AcknowledgmentToken = acknowledgmentToken;
+            CorrelationId = requestCorrelationId; // Use same ID as original request
         }
 
         public override bool IsValid()
         {
-            return base.IsValid() && !string.IsNullOrWhiteSpace(SessionToken) && !string.IsNullOrWhiteSpace(AcknowledgmentToken);
+            return base.IsValid();
         }
     }
 
@@ -147,9 +134,10 @@ namespace CelestialLeague.Shared.Packets
 
         public override bool IsValid()
         {
-            return base.IsValid() && OnlinePlayerCount >= 0 &&
-            ActiveMatches >= 0 &&
-            QueuedPlayers >= 0;
+            return base.IsValid() &&
+                   OnlinePlayerCount >= 0 &&
+                   ActiveMatches >= 0 &&
+                   QueuedPlayers >= 0;
         }
     }
 
@@ -204,7 +192,10 @@ namespace CelestialLeague.Shared.Packets
 
         public override bool IsValid()
         {
-            return base.IsValid() && RequestsPerSecond > 0 && MaxAllowed > 0 && CooldownSeconds > 0;
+            return base.IsValid() &&
+                   RequestsPerSecond > 0 &&
+                   MaxAllowed > 0 &&
+                   CooldownSeconds > 0;
         }
     }
 }

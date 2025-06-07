@@ -169,7 +169,7 @@ namespace CelestialLeague.Shared.Utils
 
         public static bool CheckChatRateLimit(string identifier)
         {
-            return CheckRateLimit(identifier, SecurityConstants.MaxChatMessagesPerMinute, TimeSpan.FromMinutes(1));
+            return CheckRateLimit(identifier, ChatConstants.MaxMessagesPerMinute, TimeSpan.FromMinutes(1));
         }
 
         public static bool CheckMatchmakingRateLimit(string identifier)
@@ -179,7 +179,7 @@ namespace CelestialLeague.Shared.Utils
 
         public static bool CheckFriendRequestRateLimit(string identifier)
         {
-            return CheckRateLimit(identifier, SecurityConstants.MaxFriendRequestsPerHour, TimeSpan.FromHours(1));
+            return CheckRateLimit(identifier, ChatConstants.MaxMessagesPerMinute, TimeSpan.FromHours(1));
         }
 
         public static void RecordRequest(string identifier)

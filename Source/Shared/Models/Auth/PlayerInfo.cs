@@ -5,7 +5,8 @@ namespace CelestialLeague.Shared.Models
     public class PlayerInfo
     {
         // credential and profile
-        public required string Name { get; set; }
+        public required int Id { get; set; }
+        public required string Username { get; set; }
         public required string PasswordHash { get; set; } = string.Empty;
         public required string PasswordSalt { get; set; } = string.Empty;
         public required DateTime CreatedAt { get; set; }
@@ -13,7 +14,7 @@ namespace CelestialLeague.Shared.Models
 
         // rating
         public int MMR { get; set; } = 0;
-        public int Rank { get; set; } = 0;
+        public RankTier Rank { get; set; } = 0;
 
         // stats
         public int TotalMatches { get; set; } = 0;

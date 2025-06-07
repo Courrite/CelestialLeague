@@ -20,6 +20,7 @@ namespace CelestialLeague.Shared.Packets
             RememberMe = rememberMe;
             ClientVersion = clientVersion ?? VersionConstants.CURRENT_CLIENT_VERSION;
             TimeStamp = DateTime.UtcNow;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -38,20 +39,20 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.LoginResponse;
         public PlayerInfo? Player { get; set; }
-        public string? SessionToken { get; set; }
         public string ServerVersion { get; set; } = VersionConstants.CURRENT_SERVER_VERSION;
         public string? MessageOfTheDay { get; set; }
         public int OnlinePlayerCount { get; set; }
 
-        public LoginResponsePacket(bool success = true)
+        public LoginResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
         {
             return Player is not null &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    OnlinePlayerCount >= 0 &&
                    VersionUtils.IsValidVersionFormat(ServerVersion);
         }
@@ -73,6 +74,7 @@ namespace CelestialLeague.Shared.Packets
             Email = email;
             ClientVersion = clientVersion ?? VersionConstants.CURRENT_CLIENT_VERSION;
             TimeStamp = DateTime.UtcNow;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -93,19 +95,19 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.RegisterResponse;
         public PlayerInfo? Player { get; set; }
-        public string? SessionToken { get; set; }
         public string ServerVersion { get; set; } = VersionConstants.CURRENT_SERVER_VERSION;
         public string? WelcomeMessage { get; set; }
 
-        public RegisterResponsePacket(bool success = true)
+        public RegisterResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
         {
             return Player is not null &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    VersionUtils.IsValidVersionFormat(ServerVersion);
         }
     }
@@ -114,18 +116,16 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.LogoutRequest;
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public required string SessionToken { get; set; }
 
-        public LogoutRequestPacket(string sessionToken)
+        public LogoutRequestPacket()
         {
-            SessionToken = sessionToken;
             TimeStamp = DateTime.UtcNow;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -133,9 +133,11 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.LogoutResponse;
 
-        public LogoutResponsePacket(bool success = true)
+        public LogoutResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -148,18 +150,16 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.ValidateSessionRequest;
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public required string SessionToken { get; set; }
 
-        public ValidateSessionRequestPacket(string sessionToken)
+        public ValidateSessionRequestPacket()
         {
-            SessionToken = sessionToken;
             TimeStamp = DateTime.UtcNow;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -169,9 +169,11 @@ namespace CelestialLeague.Shared.Packets
         public PlayerInfo? Player { get; set; }
         public DateTime? ExpiresAt { get; set; }
 
-        public ValidateSessionResponsePacket(bool success = true)
+        public ValidateSessionResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -184,22 +186,20 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.ChangePasswordRequest;
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public required string SessionToken { get; set; }
         public required string CurrentPassword { get; set; }
         public required string NewPassword { get; set; }
 
-        public ChangePasswordRequestPacket(string sessionToken, string currentPassword, string newPassword)
+        public ChangePasswordRequestPacket(string currentPassword, string newPassword)
         {
-            SessionToken = sessionToken;
             CurrentPassword = currentPassword;
             NewPassword = newPassword;
             TimeStamp = DateTime.UtcNow;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
             return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken) &&
                    !string.IsNullOrWhiteSpace(CurrentPassword) &&
                    !string.IsNullOrWhiteSpace(NewPassword) &&
                    NewPassword.Length >= 6 &&
@@ -211,50 +211,16 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.ChangePasswordResponse;
 
-        public ChangePasswordResponsePacket(bool success = true)
+        public ChangePasswordResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
         {
             return true;
-        }
-    }
-
-    public class SessionRenewRequestPacket : BasePacket
-    {
-        public override PacketType Type => PacketType.SessionRenewRequest;
-        public required string SessionToken { get; set; }
-
-        public SessionRenewRequestPacket(string sessionToken)
-        {
-            SessionToken = sessionToken;
-        }
-
-        public override bool IsValid()
-        {
-            return base.IsValid() &&
-                   !string.IsNullOrWhiteSpace(SessionToken);
-        }
-    }
-
-    public class SessionRenewResponsePacket : BaseResponse
-    {
-        public override PacketType Type => PacketType.SessionRenewResponse;
-        public string? NewSessionToken { get; set; }
-        public DateTime? ExpiresAt { get; set; }
-
-        public SessionRenewResponsePacket(bool success = true)
-        {
-            Success = success;
-        }
-
-        protected override bool ValidateSuccessResponse()
-        {
-            return !string.IsNullOrWhiteSpace(NewSessionToken) &&
-                   ExpiresAt.HasValue &&
-                   ExpiresAt.Value > DateTime.UtcNow;
         }
     }
 }

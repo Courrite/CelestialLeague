@@ -5,6 +5,5 @@ namespace CelestialLeague.Shared.Enums
         Low = 1, // small notif
         Normal = 2, // standard popup/banner
         High = 3, // prominent display
-        Critical = 4, // full screen overlay
     }
 }

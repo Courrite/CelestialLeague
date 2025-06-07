@@ -6,15 +6,22 @@ namespace CelestialLeague.Shared.Packets
     {
         public abstract PacketType Type { get; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-        public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Version { get; set; } = 1;
-        public string CorrelationId { get; set; } = Guid.NewGuid().ToString();
+        public uint? CorrelationId { get; set; }
+
+        private static uint _nextCorrelationId = 1;
+        protected static uint GenerateCorrelationId()
+        {
+            var timestamp = (uint)
+            (DateTimeOffset.UtcNow.ToUnixTimeSeconds() & 0xFFFFFF);
+            var random = (uint)Random.Shared.Next(0, 256);
+            return (timestamp << 8) | random;
+        }
 
         public virtual bool IsValid()
         {
-            return !string.IsNullOrEmpty(Id) &&
-                   Timestamp != default &&
-                   Timestamp <= DateTime.UtcNow.AddMinutes(5); // Allow clock skew
+            return Timestamp != default &&
+                   Timestamp <= DateTime.UtcNow.AddMinutes(5); // allow clock skew
         }
     }
 }

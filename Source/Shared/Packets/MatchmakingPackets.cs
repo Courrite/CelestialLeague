@@ -7,18 +7,17 @@ namespace CelestialLeague.Shared.Packets
     public class QueueRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.QueueRequest;
-        public required string SessionToken { get; set; }
         public required MatchGamemode MatchGamemode { get; set; }
 
-        public QueueRequestPacket(string sessionToken, MatchGamemode matchType, int? mmr = null)
+        public QueueRequestPacket(MatchGamemode matchType, int? mmr = null)
         {
-            SessionToken = sessionToken;
             MatchGamemode = matchType;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrEmpty(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -29,44 +28,43 @@ namespace CelestialLeague.Shared.Packets
         public int QueuePosition { get; set; }
         public int PlayersInQueue { get; set; }
 
-        public QueueResponsePacket(bool success = true)
+        public QueueResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
             TimeStamp = DateTime.UtcNow;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
+            if (CorrelationId < 0)
                 return false;
-
             if (Success)
             {
                 return EstimatedWaitTime >= 0 &&
                        QueuePosition >= 0 &&
                        PlayersInQueue >= 0;
             }
-
             return !string.IsNullOrWhiteSpace(ErrorMessage) &&
                    ErrorCode.HasValue &&
                    Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
         }
     }
 
-    // quuee cancel
+    // queue cancel
     public class QueueCancelRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.QueueCancel;
-        public required string SessionToken { get; set; }
 
-        public QueueCancelRequestPacket(string sessionToken)
+        public QueueCancelRequestPacket()
         {
-            SessionToken = sessionToken;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken);
+            return base.IsValid();
         }
     }
 
@@ -74,22 +72,23 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.QueueCancelResponse;
 
-        public QueueCancelResponsePacket() : base()
+        public QueueCancelResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
+            Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
+            if (CorrelationId < 0)
                 return false;
-
             if (!Success)
             {
                 return !string.IsNullOrWhiteSpace(ErrorMessage) &&
                        ErrorCode.HasValue &&
                    Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
             }
-
             return true;
         }
     }
@@ -124,19 +123,17 @@ namespace CelestialLeague.Shared.Packets
     public class MatchAcceptRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchAccept;
-        public required string SessionToken { get; set; }
         public required string MatchId { get; set; }
 
-        public MatchAcceptRequestPacket(string sessionToken, string matchId)
+        public MatchAcceptRequestPacket(string matchId)
         {
-            SessionToken = sessionToken;
             MatchId = matchId;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken) &&
-                   !string.IsNullOrWhiteSpace(MatchId);
+            return !string.IsNullOrWhiteSpace(MatchId);
         }
     }
 
@@ -145,8 +142,11 @@ namespace CelestialLeague.Shared.Packets
         public override PacketType Type => PacketType.MatchAcceptResponse;
         public bool WaitingForOpponent { get; set; }
 
-        public MatchAcceptResponsePacket() : base()
+        public MatchAcceptResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
+            Success = success;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         protected override bool ValidateSuccessResponse()
@@ -159,19 +159,17 @@ namespace CelestialLeague.Shared.Packets
     public class MatchDeclineRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchDecline;
-        public required string SessionToken { get; set; }
         public required string MatchId { get; set; }
 
-        public MatchDeclineRequestPacket(string sessionToken, string matchId)
+        public MatchDeclineRequestPacket(string matchId)
         {
-            SessionToken = sessionToken;
             MatchId = matchId;
+            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(SessionToken) &&
-                   !string.IsNullOrWhiteSpace(MatchId);
+            return !string.IsNullOrWhiteSpace(MatchId);
         }
     }
 
@@ -180,24 +178,24 @@ namespace CelestialLeague.Shared.Packets
         public override PacketType Type => PacketType.MatchDeclineResponse;
         public bool ReturnToQueue { get; set; } = true;
 
-        public MatchDeclineResponsePacket(bool success = true)
+        public MatchDeclineResponsePacket(uint? requestCorrelationId = null, bool success = true)
         {
             Success = success;
             TimeStamp = DateTime.UtcNow;
+            if (requestCorrelationId.HasValue)
+                CorrelationId = requestCorrelationId.Value;
         }
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(CorrelationId))
+            if (CorrelationId < 0)
                 return false;
-
             if (!Success)
             {
                 return !string.IsNullOrWhiteSpace(ErrorMessage) &&
                        ErrorCode.HasValue &&
                    Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
             }
-
             return true;
         }
     }

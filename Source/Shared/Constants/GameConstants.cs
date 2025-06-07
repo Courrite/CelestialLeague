@@ -22,10 +22,6 @@
     public const int MaxUsernameLength = 20;
     public const int MinUsernameLength = 3;
 
-    // chat
-    public const int MaxChatMessageLength = 500;
-    public const int MaxPrivateMessageLength = 1000;
-
     // replays
     public const int MaxReplayDurationMinutes = 15;
     public const int MaxReplaysPerPlayer = 50;
@@ -35,10 +31,4 @@
     public static readonly TimeSpan SeasonDuration = TimeSpan.FromDays(90);
     public static readonly DateTime FirstSeasonStart = new DateTime(2099, 12, 12, 12, 12, 12, DateTimeKind.Utc);
     public const float SeasonResetPercentage = 0.8f; // 80% of current MMR
-
-    // filtering
-    public static readonly string[] ProfanityList = {
-        "badword1",
-        "badword2"
-    };
 }

@@ -24,7 +24,7 @@
     public const int UdpBufferSize = 1024;
     public const int CompressionThreshold = 512; // bytes
 
-    // critical: game update rate limiting
+    // game update rate limiting
     public const int ServerTickRate = 60; // server runs at 60hz
     public const int MaxPositionUpdatesPerSecond = 30; // client can send max 30 position updates/sec
     public const int MaxGameEventsPerSecond = 20; // max game events per second
@@ -39,6 +39,7 @@
     public const int MaxTcpPacketsPerSecond = 20; // total tcp packets per second per client
     public const int RateLimitWindowSeconds = 60;
     public const int BurstAllowance = 10; // allow short bursts above the limit
+    public const int MaxDeserializationErrors = 10;
 
     // packet drop protection
     public const int PacketDropThreshold = 100; // drop packets if queue exceeds this

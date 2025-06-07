@@ -40,9 +40,11 @@
         <PackageMod Files="@(FilesToPackage)" OutputPath="..\UITest.zip" />
     </Target>
     
-    <PropertyGroup>
-        <PathMap>$(MSBuildProjectDirectory)=UITest/</PathMap>
-    </PropertyGroup>
+
+    <!-- Project References -->
+    <ItemGroup>
+       <ProjectReference Include="..\Shared\CelestialLeague.Shared.csproj" />
+    </ItemGroup>
 
     <!-- Inline task used to create a .zip for the mod -->
     <UsingTask TaskName="PackageMod"

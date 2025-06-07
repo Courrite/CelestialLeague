@@ -32,14 +32,14 @@ namespace CelestialLeague.Server.Networking
             {
                 if (!packet.IsValid())
                 {
-                    _logger.Warning($"invalid packet received from {connection.ConnectionID}: {packet.Type}");
+                    _logger.Warning($"Invalid packet received from {connection.ConnectionID}: {packet.Type}");
                     await SendErrorPacket(connection, ResponseErrorCode.InvalidPacket, "Invalid packet received").ConfigureAwait(false);
                     return;
                 }
 
                 connection.UpdateActivity();
 
-                _logger.Debug($"processing {packet.Type} from {connection.ConnectionID} ({packet.CorrelationId})");
+                _logger.Debug($"Processing {packet.Type} from {connection.ConnectionID} ({packet.CorrelationId})");
 
                 if (_packetHandlers.TryGetValue(packet.Type, out var handler))
                 {
@@ -62,7 +62,7 @@ namespace CelestialLeague.Server.Networking
             }
             catch (Exception ex)
             {
-                _logger.Error($"failed to send error packet to {connection.ConnectionID}: {ex.Message}");
+                _logger.Error($"Failed to send error packet to {connection.ConnectionID}: {ex.Message}");
             }
         }
 
@@ -75,7 +75,7 @@ namespace CelestialLeague.Server.Networking
             }
             catch (Exception ex)
             {
-                _logger.Error($"failed to send ack packet to {connection.ConnectionID}: {ex.Message}");
+                _logger.Error($"Failed to send ack packet to {connection.ConnectionID}: {ex.Message}");
             }
         }
 
@@ -87,7 +87,7 @@ namespace CelestialLeague.Server.Networking
             }
             catch (Exception ex)
             {
-                _logger.Error($"failed to send ack packet to {connection.ConnectionID}: {ex.Message}");
+                _logger.Error($"Failed to send ack packet to {connection.ConnectionID}: {ex.Message}");
             }
         }
     }

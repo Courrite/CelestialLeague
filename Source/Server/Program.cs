@@ -22,11 +22,11 @@ namespace CelestialLeague.Server
                 
                 _gameServer = new GameServer(ipAddress, port, logger);
                 
-                logger.Info("Starting Celestial League Server...");
+                logger.Info("Starting server...");
                 
                 await _gameServer.StartAsync();
                 
-                logger.Info("Server is running. Press Ctrl+C to stop.");
+                logger.Info("Server is running, press ctrl + c to stop.");
                 await WaitForCancellation(_cancellationTokenSource.Token);
             }
             catch (Exception ex)

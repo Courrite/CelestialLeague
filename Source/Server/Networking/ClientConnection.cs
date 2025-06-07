@@ -1,7 +1,5 @@
-using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using CelestialLeague.Server.Core;
 using CelestialLeague.Server.Models;
 using CelestialLeague.Server.Utils;
@@ -14,23 +12,33 @@ namespace CelestialLeague.Server.Networking
     public class ClientConnection : IDisposable
     {
         // private fields
-        private TcpClient _tcpClient { get; set; }
-        private NetworkStream? _stream { get; set; }
-        private GameServer _gameServer { get; set; }
-        private Logger _logger => _gameServer.Logger;
-        private PacketProcessor _packetProcessor { get; set; }
-        private CancellationTokenSource? _cancellationTokenSource { get; set; }
-        // public SemaphoreSlim _semaphore { get; set; } // overkill for now
+        private readonly TcpClient _tcpClient;
+        private readonly NetworkStream? _stream;
+        private readonly GameServer _gameServer;
+        private readonly Logger _logger;
+        private readonly PacketProcessor _packetProcessor;
+        private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly object _sendLock = new object();
         private Task? _receiveTask;
-        private bool _isDisposed { get; set; }
+        private bool _isDisposed;
+
+        // statistics
+        public int PacketsSent { get; private set; }
+        public int PacketsReceived { get; private set; }
+        public int SendErrors { get; private set; }
+        public int ReceiveErrors { get; private set; }
+        public int DeserializationErrors { get; private set; }
+        public int ProcessingErrors { get; private set; }
 
         // public properties
         public Session? Session { get; private set; }
         public bool IsAuthenticated => Session != null;
         public string ConnectionID { get; private set; } = Guid.NewGuid().ToString("N");
         public IPEndPoint? RemoteEndpoint => _tcpClient.Client.RemoteEndPoint as IPEndPoint;
-        public bool IsConnected => _tcpClient.Connected == true && !_isDisposed;
+        public bool IsConnected => _tcpClient.Connected && !_isDisposed;
+        public DateTime ConnectedAt { get; private set; } = DateTime.UtcNow;
         public DateTime LastActivity { get; private set; } = DateTime.UtcNow;
+        public ConnectionQuality ConnectionQuality => CalculateConnectionQuality();
 
         // events
         public event EventHandler<PacketReceivedEventArgs>? OnPacketReceived;
@@ -38,12 +46,12 @@ namespace CelestialLeague.Server.Networking
 
         public ClientConnection(GameServer gameServer, TcpClient tcpClient)
         {
-            _tcpClient = tcpClient;
-            _gameServer = gameServer;
-            _packetProcessor = new PacketProcessor(_gameServer);
+            _tcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
+            _gameServer = gameServer ?? throw new ArgumentNullException(nameof(gameServer));
+            _logger = gameServer.Logger;
+            _packetProcessor = new PacketProcessor(gameServer);
             _cancellationTokenSource = new CancellationTokenSource();
-            // _semaphore = new SemaphoreSlim(1, 1);
-            _stream = tcpClient?.GetStream();
+            _stream = tcpClient.GetStream();
         }
 
         public async Task StartAsync()
@@ -54,88 +62,133 @@ namespace CelestialLeague.Server.Networking
 
             try
             {
-                _logger.Info($"start connection handler for {RemoteEndpoint}");
-                _receiveTask = ReceivePacketsAsync(_cancellationTokenSource!.Token);
+                _logger.Info($"Starting connection handler for {RemoteEndpoint} (ID: {ConnectionID})");
+                _receiveTask = ReceivePacketsAsync(_cancellationTokenSource.Token);
                 await _receiveTask.ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                _logger.Error($"error in connection handler: {ex.Message}");
+                _logger.Error($"Error in connection handler for {ConnectionID}: {ex.Message}");
                 throw;
             }
         }
 
-        public async Task DisconnectAsync()
+        public async Task DisconnectAsync(string reason = "Server requested disconnect")
         {
-            ThrowIfDisposed();
-            if (!IsConnected)
+            if (_isDisposed || !IsConnected)
                 return;
 
             try
             {
-                _cancellationTokenSource!.Cancel();
+                _logger.Info($"Disconnecting {ConnectionID}: {reason}");
+
+                _cancellationTokenSource.Cancel();
+
                 if (_receiveTask != null)
+                {
                     await _receiveTask.ConfigureAwait(false);
+                }
+
                 _stream?.Close();
                 _tcpClient.Close();
-                _logger.Info($"disconnected from {_tcpClient.Client.RemoteEndPoint}");
-                OnDisconnected?.Invoke(this, new DisconnectedEventArgs());
+
+                OnDisconnected?.Invoke(this, new DisconnectedEventArgs(reason));
+                _logger.Info($"Disconnected {ConnectionID} from {RemoteEndpoint}");
             }
             catch (Exception ex)
             {
-                _logger.Error($"error disconnecting from server: {ex.Message}");
+                _logger.Error($"Error disconnecting {ConnectionID}: {ex.Message}");
             }
         }
 
-        public async Task SendPacketAsync<T>(T packet) where T : BasePacket
+        public async Task<bool> SendPacketAsync<T>(T packet) where T : BasePacket
         {
             ThrowIfDisposed();
-            if (!IsConnected)
-                throw new InvalidOperationException("Not connected");
 
-            if (_stream == null)
-                throw new InvalidOperationException("Network stream is null");
+            if (!IsConnected || _stream == null)
+            {
+                _logger.Warning($"Cannot send {typeof(T).Name} to {ConnectionID}: Not connected");
+                return false;
+            }
 
             try
             {
                 if (!packet.IsValid())
                 {
-                    _logger.Warning($"attempted to send invalid packet: {packet.Type}");
-                    return;
+                    _logger.Warning($"Attempted to send invalid {packet.Type} to {ConnectionID}");
+                    return false;
                 }
 
-                var json = Serialization.ToJson(packet);
-                var data = Encoding.UTF8.GetBytes(json);
+                var data = Serialization.SerializePacket(packet);
 
                 if (data.Length > NetworkConstants.MaxPacketSize)
                 {
-                    _logger.Warning($"packet too large: {data.Length} bytes");
-                    return;
+                    _logger.Warning($"Packet too large for {ConnectionID}: {data.Length} bytes");
+                    SendErrors++;
+                    return false;
                 }
 
-                await _stream.WriteAsync(data).ConfigureAwait(false);
-                await _stream.FlushAsync().ConfigureAwait(false);
+                lock (_sendLock)
+                {
+                    var lengthBytes = BitConverter.GetBytes(data.Length);
+                    _stream.Write(lengthBytes, 0, 4);
 
-                _logger.Debug($"sent {packet.Type} packet to {ConnectionID} ({data.Length} bytes)");
+                    _stream.Write(data, 0, data.Length);
+                    _stream.Flush();
+                }
+
+                PacketsSent++;
+                UpdateActivity();
+
+                _logger.Debug($"Sent {packet.Type} to {ConnectionID} ({data.Length} bytes)");
+                return true;
             }
             catch (Exception ex)
             {
-                _logger.Error($"error sending packet to {RemoteEndpoint}: {ex.Message}");
+                SendErrors++;
+                _logger.Error($"Error sending {typeof(T).Name} to {ConnectionID}: {ex.Message}");
+                await DisconnectAsync($"Send error: {ex.Message}").ConfigureAwait(false);
+                return false;
             }
         }
 
         private async Task ReceivePacketsAsync(CancellationToken cancellationToken)
         {
-            var buffer = new byte[1024 * 4];
+            var buffer = new byte[NetworkConstants.MaxPacketSize];
+
             while (IsConnected && !cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    var bytesRead = await _stream!.ReadAsync(buffer, cancellationToken).ConfigureAwait(false);
-                    if (bytesRead == 0)
-                        break;
+                    var lengthBytes = new byte[4];
+                    var bytesRead = await ReadExactAsync(_stream!, lengthBytes, 4, cancellationToken).ConfigureAwait(false);
 
-                    await ProcessReceivedDataAsync(buffer.AsMemory(0, bytesRead)).ConfigureAwait(false);
+                    if (bytesRead != 4)
+                    {
+                        _logger.Warning($"Failed to read packet length header from {ConnectionID}");
+                        break;
+                    }
+
+                    var packetLength = BitConverter.ToInt32(lengthBytes, 0);
+
+                    if (packetLength <= 0 || packetLength > NetworkConstants.MaxPacketSize)
+                    {
+                        _logger.Error($"Invalid packet length from {ConnectionID}: {packetLength}");
+                        ReceiveErrors++;
+                        break;
+                    }
+
+                    var packetData = new byte[packetLength];
+                    bytesRead = await ReadExactAsync(_stream!, packetData, packetLength, cancellationToken).ConfigureAwait(false);
+
+                    if (bytesRead != packetLength)
+                    {
+                        _logger.Warning($"Incomplete packet from {ConnectionID}: {bytesRead}/{packetLength} bytes");
+                        ReceiveErrors++;
+                        break;
+                    }
+
+                    await ProcessReceivedDataAsync(packetData, packetLength).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
                 {
@@ -143,36 +196,93 @@ namespace CelestialLeague.Server.Networking
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error($"error receiving data: {ex.Message}");
+                    ReceiveErrors++;
+                    _logger.Error($"Error receiving data from {ConnectionID}: {ex.Message}");
                     break;
                 }
             }
         }
 
-        private async Task ProcessReceivedDataAsync(ReadOnlyMemory<byte> data)
+        private static async Task<int> ReadExactAsync(NetworkStream stream, byte[] buffer, int count, CancellationToken cancellationToken)
+        {
+            int totalBytesRead = 0;
+
+            while (totalBytesRead < count && !cancellationToken.IsCancellationRequested)
+            {
+                var bytesRead = await stream.ReadAsync(
+                    buffer,
+                    totalBytesRead,
+                    count - totalBytesRead,
+                    cancellationToken).ConfigureAwait(false);
+
+                if (bytesRead == 0)
+                    break; // connection closed
+
+                totalBytesRead += bytesRead;
+            }
+
+            return totalBytesRead;
+        }
+
+        private async Task ProcessReceivedDataAsync(byte[] data, int length)
         {
             ThrowIfDisposed();
+
             try
             {
-                var json = Encoding.UTF8.GetString(data.Span);
-                var packet = Serialization.FromJson<BasePacket>(json);
-
+                var packet = Serialization.DeserializePacket(data);
                 if (packet != null)
                 {
-                    OnPacketReceived?.Invoke(this, new PacketReceivedEventArgs(packet, data.Length));
-                    _logger.Info($"received packet: {packet.GetType().Name}");
+                    PacketsReceived++;
+                    UpdateActivity();
+
+                    OnPacketReceived?.Invoke(this, new PacketReceivedEventArgs(packet, length));
+                    _logger.Info($"Received {packet.Type} from {ConnectionID} ({length} bytes)");
 
                     await _packetProcessor.ProcessAsync(this, packet).ConfigureAwait(false);
                 }
                 else
                 {
-                    _logger.Warning($"failed to deserialize packet from {ConnectionID}");
+                    DeserializationErrors++;
+                    _logger.Warning($"Failed to deserialize packet from {ConnectionID} ({length} bytes)");
+
+                    if (DeserializationErrors > NetworkConstants.MaxDeserializationErrors)
+                    {
+                        await DisconnectAsync("Too many invalid packets").ConfigureAwait(false);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error($"error processing received data: {ex.Message}");
+                ProcessingErrors++;
+                _logger.Error($"Error processing packet from {ConnectionID}: {ex.Message}");
+
+                if (ex is OutOfMemoryException || ex is StackOverflowException)
+                {
+                    await DisconnectAsync($"Critical error: {ex.GetType().Name}").ConfigureAwait(false);
+                }
             }
+        }
+
+        private ConnectionQuality CalculateConnectionQuality()
+        {
+            var totalPackets = PacketsSent + PacketsReceived;
+            if (totalPackets == 0) return ConnectionQuality.VeryPoor;
+
+            var totalErrors = SendErrors + ReceiveErrors + DeserializationErrors;
+            var errorRate = (double)totalErrors / totalPackets;
+            var timeSinceLastActivity = DateTime.UtcNow - LastActivity;
+
+            if (timeSinceLastActivity > TimeSpan.FromSeconds(30))
+                return ConnectionQuality.Poor;
+            else if (errorRate > 0.1)
+                return ConnectionQuality.Poor;
+            else if (errorRate > 0.05)
+                return ConnectionQuality.Fair;
+            else if (errorRate > 0.01)
+                return ConnectionQuality.Good;
+            else
+                return ConnectionQuality.Excellent;
         }
 
         public void UpdateActivity()
@@ -182,12 +292,14 @@ namespace CelestialLeague.Server.Networking
 
         public void SetSession(Session session)
         {
-            Session = session;
+            Session = session ?? throw new ArgumentNullException(nameof(session));
+            UpdateActivity();
         }
 
         public void ClearSession()
         {
             Session = null;
+            UpdateActivity();
         }
 
         public void Dispose()
@@ -203,19 +315,27 @@ namespace CelestialLeague.Server.Networking
 
             if (disposing)
             {
-                _cancellationTokenSource?.Cancel();
+                try
+                {
+                    DisconnectAsync("Connection disposed").Wait(1000);
+                }
+                catch
+                {
+                    // ignore exceptions during dispose
+                }
+
                 _cancellationTokenSource?.Dispose();
                 _stream?.Dispose();
                 _tcpClient?.Dispose();
-                // _semaphore?.Dispose();
             }
+
             _isDisposed = true;
         }
 
         private void ThrowIfDisposed()
         {
             if (_isDisposed)
-                throw new ObjectDisposedException(nameof(ClientConnection), "ClientConnection has been disposed");
+                throw new ObjectDisposedException(nameof(ClientConnection));
         }
     }
 
@@ -229,22 +349,15 @@ namespace CelestialLeague.Server.Networking
 
         public PacketReceivedEventArgs(BasePacket packet, int packetSize)
         {
-            Packet = packet;
+            Packet = packet ?? throw new ArgumentNullException(nameof(packet));
             PacketType = packet.Type;
             ReceivedAt = DateTime.UtcNow;
             PacketSize = packetSize;
             CorrelationId = packet.CorrelationId;
         }
 
-        public bool IsPacketType<T>() where T : BasePacket
-        {
-            return Packet is T;
-        }
-
-        public bool IsPacketType(PacketType packetType)
-        {
-            return Packet.Type == packetType;
-        }
+        public bool IsPacketType<T>() where T : BasePacket => Packet is T;
+        public bool IsPacketType(PacketType packetType) => Packet.Type == packetType;
     }
 
     public class DisconnectedEventArgs : EventArgs
@@ -257,8 +370,7 @@ namespace CelestialLeague.Server.Networking
         public DisconnectedEventArgs(
             string? message = null,
             Exception? exception = null,
-            ResponseErrorCode? errorCode = null
-        )
+            ResponseErrorCode? errorCode = null)
         {
             DisconnectedAt = DateTime.UtcNow;
             Message = message;

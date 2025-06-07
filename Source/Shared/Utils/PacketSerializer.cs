@@ -12,11 +12,11 @@ namespace CelestialLeague.Shared.Utils
             return ShouldCompress(data) ? Compression.Compress(data) : data;
         }
 
-        public static T? Deserialize<T>(byte[] data) where T : BasePacket
+        public static BasePacket? Deserialize(byte[] data)
         {
             if (!IsValidSize(data)) return null;
             
-            var packet = JsonSerializer.FromBytes<T>(data);
+            var packet = JsonSerializer.FromBytes<BasePacket>(data);
             return packet?.IsValid() == true ? packet : null;
         }
 

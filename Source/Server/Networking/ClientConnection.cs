@@ -43,6 +43,7 @@ namespace CelestialLeague.Server.Networking
             _packetProcessor = new PacketProcessor(_gameServer);
             _cancellationTokenSource = new CancellationTokenSource();
             // _semaphore = new SemaphoreSlim(1, 1);
+            _stream = tcpClient?.GetStream();
         }
 
         public async Task StartAsync()
@@ -92,16 +93,34 @@ namespace CelestialLeague.Server.Networking
             if (!IsConnected)
                 throw new InvalidOperationException("Not connected");
 
+            if (_stream == null)
+                throw new InvalidOperationException("Network stream is null");
+
             try
             {
+                if (!packet.IsValid())
+                {
+                    _logger.Warning($"attempted to send invalid packet: {packet.Type}");
+                    return;
+                }
+
                 var json = Serialization.ToJson(packet);
                 var data = Encoding.UTF8.GetBytes(json);
-                await _stream!.WriteAsync(data).ConfigureAwait(false);
+
+                if (data.Length > NetworkConstants.MaxPacketSize)
+                {
+                    _logger.Warning($"packet too large: {data.Length} bytes");
+                    return;
+                }
+
+                await _stream.WriteAsync(data).ConfigureAwait(false);
                 await _stream.FlushAsync().ConfigureAwait(false);
+
+                _logger.Debug($"sent {packet.Type} packet to {ConnectionID} ({data.Length} bytes)");
             }
             catch (Exception ex)
             {
-                _logger.Error($"error sending packet to {_tcpClient.Client.RemoteEndPoint}: {ex.Message}");
+                _logger.Error($"error sending packet to {RemoteEndpoint}: {ex.Message}");
             }
         }
 

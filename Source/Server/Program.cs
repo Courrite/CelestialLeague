@@ -23,7 +23,6 @@ namespace CelestialLeague.Server
                 _gameServer = new GameServer(ipAddress, port, logger);
                 
                 logger.Info("Starting Celestial League Server...");
-                logger.Info($"Server will bind to {ipAddress}:{port}");
                 
                 await _gameServer.StartAsync();
                 

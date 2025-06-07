@@ -47,15 +47,15 @@ namespace CelestialLeague.Server.Core
                 _tcpListener.Start();
                 _isRunning = true;
 
-                Logger.Info($"Server started on {IPAddress}:{Port}");
+                Logger.Info($"server started on {IPAddress}:{Port}");
 
                 _acceptTask = AcceptClientsAsync(_cancellationTokenSource!.Token);
 
-                Logger.Info("Server is ready to accept connections");
+                Logger.Info("server is ready to accept connections");
             }
             catch (Exception ex)
             {
-                Logger.Error($"Failed to start server: {ex.Message}");
+                Logger.Error($"failed to start server: {ex.Message}");
                 throw;
             }
         }
@@ -67,7 +67,7 @@ namespace CelestialLeague.Server.Core
 
             try
             {
-                Logger.Info("Stopping server...");
+                Logger.Info("stopping server...");
 
                 _isRunning = false;
                 _cancellationTokenSource?.Cancel();
@@ -88,11 +88,11 @@ namespace CelestialLeague.Server.Core
 
                 await DisconnectAllClientsAsync().ConfigureAwait(false);
 
-                Logger.Info("Server stopped");
+                Logger.Info("server stopped");
             }
             catch (Exception ex)
             {
-                Logger.Error($"Error stopping server: {ex.Message}");
+                Logger.Error($"error stopping server: {ex.Message}");
             }
         }
 
@@ -121,7 +121,7 @@ namespace CelestialLeague.Server.Core
                 {
                     if (_isRunning)
                     {
-                        Logger.Error($"Error accepting client: {ex.Message}");
+                        Logger.Error($"error accepting client: {ex.Message}");
                         await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
                     }
                 }
@@ -137,18 +137,18 @@ namespace CelestialLeague.Server.Core
 
                 _connections.TryAdd(connection.ConnectionID, connection);
 
-                Logger.Info($"Client connected: {connection.ConnectionID} from {connection.RemoteEndpoint}");
+                Logger.Info($"client connected: {connection.ConnectionID} from {connection.RemoteEndpoint}");
 
                 connection.OnDisconnected += (sender, e) =>
                 {
-                    Logger.Info($"Client disconnected: {connection.ConnectionID}");
+                    Logger.Info($"client disconnected: {connection.ConnectionID}");
                 };
 
                 await connection.StartAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                Logger.Error($"Error handling client: {ex.Message}");
+                Logger.Error($"error handling client: {ex.Message}");
             }
             finally
             {

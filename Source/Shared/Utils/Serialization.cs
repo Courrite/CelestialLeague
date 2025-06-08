@@ -18,13 +18,7 @@ namespace CelestialLeague.Shared.Utils
         // packets
         public static byte[] SerializePacket<T>(T packet) where T : BasePacket => 
             PacketSerializer.Serialize(packet);
-        public static BasePacket? DeserializePacket(byte[] data) => 
-            PacketSerializer.Deserialize(data);
-        
-        // network packets
-        public static byte[] SerializeNetworkPacket<T>(T packet) where T : BasePacket => 
-            NetworkPacketSerializer.Create(packet);
-        public static (PacketType Type, byte[] Data)? DeserializeNetworkPacket(byte[] data) => 
-            NetworkPacketSerializer.Parse(data);
+        public static BasePacket? DeserializePacket(byte[] data, int length) => 
+            PacketSerializer.Deserialize(data, length);
     }
 }

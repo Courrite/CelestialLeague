@@ -1,35 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 using CelestialLeague.Shared.Packets;
+using CelestialLeague.Shared.Utils;
 
 namespace CelestialLeague.Shared.Utils
 {
     public static class PacketSerializer
     {
+        private static readonly Dictionary<string, Type> _packetTypes = new();
+        private static readonly object _lock = new();
+        private static bool _initialized = false;
+
+        private static void EnsureInitialized()
+        {
+            if (_initialized) return;
+
+            lock (_lock)
+            {
+                if (_initialized) return;
+
+                var packetTypes = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(assembly =>
+                    {
+                        try
+                        {
+                            return assembly.GetTypes();
+                        }
+                        catch (ReflectionTypeLoadException)
+                        {
+                            return Array.Empty<Type>();
+                        }
+                    })
+                    .Where(t => t.IsSubclassOf(typeof(BasePacket)) && !t.IsAbstract && t.IsClass);
+
+                foreach (var type in packetTypes)
+                {
+                    _packetTypes[type.Name] = type;
+                }
+
+                _initialized = true;
+            }
+        }
+
+        public static BasePacket? Deserialize(byte[] buffer, int length)
+        {
+            try
+            {
+                EnsureInitialized();
+
+                var span = new ReadOnlySpan<byte>(buffer, 0, length);
+                var json = System.Text.Encoding.UTF8.GetString(span);
+
+                using var jsonDoc = JsonDocument.Parse(json);
+                if (!jsonDoc.RootElement.TryGetProperty("type", out var typeElement))
+                {
+                    return null;
+                }
+
+                var packetTypeName = typeElement.GetString();
+
+                foreach (var (typeName, type) in _packetTypes)
+                {
+                    try
+                    {
+                        var tempInstance = Activator.CreateInstance(type) as BasePacket;
+                        if (tempInstance?.Type.ToString() == packetTypeName)
+                        {
+                            var method = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.FromJson))
+                                ?.MakeGenericMethod(type);
+
+                            if (method != null)
+                            {
+                                var result = method.Invoke(null, new object[] { json });
+                                if (result != null)
+                                {
+                                    return (BasePacket)result;
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static byte[] Serialize<T>(T packet) where T : BasePacket
         {
-            Validate(packet);
-            
-            var data = JsonSerializer.ToBytes(packet);
-            return ShouldCompress(data) ? Compression.Compress(data) : data;
+            return JsonSerializer.ToBytes(packet);
         }
-
-        public static BasePacket? Deserialize(byte[] data)
-        {
-            if (!IsValidSize(data)) return null;
-            
-            var packet = JsonSerializer.FromBytes<BasePacket>(data);
-            return packet?.IsValid() == true ? packet : null;
-        }
-
-        private static void Validate<T>(T packet) where T : BasePacket
-        {
-            if (packet?.IsValid() != true)
-                throw new ArgumentException("Invalid packet", nameof(packet));
-        }
-
-        private static bool ShouldCompress(byte[] data) => 
-            data.Length > NetworkConstants.CompressionThreshold;
-
-        private static bool IsValidSize(byte[] data) => 
-            data.Length <= NetworkConstants.MaxPacketSize;
     }
 }

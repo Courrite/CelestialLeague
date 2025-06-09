@@ -230,7 +230,7 @@ namespace CelestialLeague.Server.Networking
 
             try
             {
-                var packet = Serialization.DeserializePacket(data);
+                var packet = Serialization.DeserializePacket(data, length);
                 if (packet != null)
                 {
                     PacketsReceived++;

@@ -43,11 +43,11 @@ namespace CelestialLeague.Shared.Enums
         GamePause = 48,
         // GameResume = 49, merged with GamePause
         MatchStateChange = 50, // match officially starts
-                               // MatchEnd = 51, merged with MatchStateChange
+        // MatchEnd = 51, merged with MatchStateChange
         PlayerStateChange = 52, // player ready state
-                                // PlayerNotReady = 53, merged with PlayerStateChange
+        // PlayerNotReady = 53, merged with PlayerStateChange
         LevelLoad = 54, // level loading sync
-                        // reserved: 55-69 for future game features
+        // reserved: 55-69 for future game features
 
         // chat (70-89)
         ChatMessage = 70,
@@ -63,7 +63,6 @@ namespace CelestialLeague.Shared.Enums
         ChatUserList = 80,
         ChatUserListResponse = 81,
         // reserved: 82-89 for future chat features
-
 
         // system (90-109)
         Heartbeat = 90,

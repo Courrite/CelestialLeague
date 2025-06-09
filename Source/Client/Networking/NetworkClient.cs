@@ -140,7 +140,7 @@ namespace CelestialLeague.Client.Networking
                 var packetData = new byte[packetLength];
                 Array.Copy(buffer, 0, packetData, 0, packetLength);
 
-                var packet = Serialization.DeserializePacket(packetData);
+                var packet = Serialization.DeserializePacket(packetData, packetLength);
 
                 if (packet == null)
                 {

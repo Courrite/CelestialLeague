@@ -47,7 +47,6 @@ Generated\ Files/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
-Test/*
 
 # NUnit
 *.VisualState.xml
@@ -360,5 +359,7 @@ MigrationBackup/
 .idea
 
 # project stuff
-GDD.md
-Plan.md
+Documentation/
+Test/*
+*.db
+.*

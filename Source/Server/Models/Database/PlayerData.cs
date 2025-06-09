@@ -1,39 +1,41 @@
 using CelestialLeague.Shared.Enums;
 
-namespace CelestialLeague.Shared.Models
+namespace CelestialLeague.Server.Models
 {
-    public class PlayerInfo
+    public class Player
     {
-        // credential and profile
-        public required int Id { get; set; }
+        public int Id { get; set; }
         public required string Username { get; set; }
-        public required string PasswordHash { get; set; } = string.Empty;
-        public required string PasswordSalt { get; set; } = string.Empty;
+        public required string PasswordHash { get; set; }
+        public required string PasswordSalt { get; set; }
+        
+        // timestamps
         public required DateTime CreatedAt { get; set; }
         public required DateTime LastSeen { get; set; }
-
+        
         // rating
-        public int MMR { get; set; } = 0;
-        public RankTier Rank { get; set; } = 0;
-
+        public int MMR { get; set; } = GameConstants.StartingMMR;
+        public RankTier Rank { get; set; } = RankTier.Bronze;
+        
         // stats
         public int TotalMatches { get; set; } = 0;
         public int Wins { get; set; } = 0;
         public int Losses { get; set; } = 0;
-        public float WinRate => TotalMatches > 0 ? (float)Wins / TotalMatches : 0;
         public TimeSpan BestTime { get; set; } = TimeSpan.Zero;
         public int WinStreak { get; set; } = 0;
         public int BestWinStreak { get; set; } = 0;
-
-        // social
+        
+        // status
         public PlayerStatus PlayerStatus { get; set; } = PlayerStatus.Offline;
-        public List<(int PlayerId, DateTime FriendsSince)> Friends { get; set; } = new();
-        public List<(int PlayerId, DateTime BlockedSince)> Blocked { get; set; } = new();
-
+        
         // moderation
         public DateTime? BanExpires { get; set; }
         public DateTime? MuteExpires { get; set; }
         public DateTime? PenaltyExpires { get; set; }
-        public UserRole UserRole { get; set; } 
+        public UserRole UserRole { get; set; } = UserRole.None;
+        
+        // navigation properties for EF relationships
+        public virtual ICollection<Friendship> SentFriendRequests { get; } = new List<Friendship>();
+        public virtual ICollection<Friendship> ReceivedFriendRequests { get; } = new List<Friendship>();
     }
 }

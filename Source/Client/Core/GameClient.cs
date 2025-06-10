@@ -52,16 +52,13 @@ namespace CelestialLeague.Client.Core
             {
                 Logger.Info("CelestialLeague", $"Connecting to {host}:{port}...");
 
-                // Create new TcpClient for connection
                 _tcpClient = new TcpClient();
 
-                // Set timeout if specified
                 var connectTimeout = timeout ?? TimeSpan.FromSeconds(10);
                 using var timeoutCts = new CancellationTokenSource(connectTimeout);
                 using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(
                     _cancellationTokenSource.Token, timeoutCts.Token);
 
-                // Connect to server
                 await _tcpClient.ConnectAsync(host, port);
 
                 if (!_tcpClient.Connected)
@@ -70,10 +67,8 @@ namespace CelestialLeague.Client.Core
                     return false;
                 }
 
-                // Get network stream
                 _networkStream = _tcpClient.GetStream();
 
-                // Start connection manager
                 var serverEndpoint = $"{host}:{port}";
                 await _connectionManager!.StartAsync(_networkStream, serverEndpoint);
 
@@ -128,7 +123,6 @@ namespace CelestialLeague.Client.Core
             }
         }
 
-        // Packet sending methods
         public async Task<TResponse> SendRequestAsync<TRequest, TResponse>(
             TRequest request,
             TimeSpan? timeout = null,

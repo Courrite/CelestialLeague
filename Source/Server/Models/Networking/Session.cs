@@ -10,11 +10,13 @@ namespace CelestialLeague.Server.Models
         public string SessionToken { get; set; } = string.Empty;
         public int PlayerId { get; set; }
         public string Username { get; set; } = string.Empty;
-        public string ConnectionId { get; set; } = string.Empty;
+        public string? ConnectionId { get; set; } = string.Empty;
 
         // timing
-        public DateTime LoginTime { get; set; } = DateTime.UtcNow;
-        public DateTime ExpiresAt { get; set; } = DateTime.UtcNow.AddHours(SecurityConstants.SessionDurationHours);
+        public DateTime CreatedAt { get; set; }
+        public DateTime LoginTime { get; set; }
+        public DateTime ExpiresAt { get; set; }
+        public DateTime LastActivity { get; set; }
 
         // state
         public PlayerStatus Status { get; set; } = PlayerStatus.Online;
@@ -33,12 +35,17 @@ namespace CelestialLeague.Server.Models
         public bool IsDisposed => _disposed;
 
         // constructor
-        public Session(string connectionId, IPAddress ipAddress)
+        public Session(int playerId, string? connectionId, IPAddress? ipAddress)
         {
             SessionToken = SecurityHelpers.GenerateToken();
-            ConnectionId = connectionId;
-            IpAddress = ipAddress;
-            Status = PlayerStatus.Online;
+            PlayerId = playerId;
+            ConnectionId = connectionId ??  string.Empty;
+            IpAddress = ipAddress ?? IPAddress.None;
+            CreatedAt = DateTime.UtcNow;
+            LoginTime = DateTime.UtcNow;
+            ExpiresAt = DateTime.UtcNow.AddHours(SecurityConstants.SessionDurationHours);
+            LastActivity = DateTime.UtcNow;
+            Status = PlayerStatus.Offline;
         }
 
         // methods

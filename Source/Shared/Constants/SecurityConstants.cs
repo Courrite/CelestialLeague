@@ -19,6 +19,8 @@ public static class SecurityConstants
     public const int MinPasswordLength = 8;
     public const int MaxPasswordLength = 128;
     public const int PasswordSaltLength = 32;
+    public const int PasswordHashLength = 32;
+    public const int PasswordHashIterations = 10000;
     
     // rate limiting
     public const int MaxLoginAttemptsPerMinute = 5;

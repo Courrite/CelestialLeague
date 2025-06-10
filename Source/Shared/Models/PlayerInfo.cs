@@ -7,8 +7,6 @@ namespace CelestialLeague.Shared.Models
         // credential and profile
         public required int Id { get; set; }
         public required string Username { get; set; }
-        public required string PasswordHash { get; set; } = string.Empty;
-        public required string PasswordSalt { get; set; } = string.Empty;
         public required DateTime CreatedAt { get; set; }
         public required DateTime LastSeen { get; set; }
 

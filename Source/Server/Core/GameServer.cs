@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using CelestialLeague.Server.Models;
 using CelestialLeague.Server.Networking;
+using CelestialLeague.Server.Services;
 using CelestialLeague.Server.Utils;
 
 namespace CelestialLeague.Server.Core
@@ -12,26 +13,28 @@ namespace CelestialLeague.Server.Core
         public Logger Logger { get; private set; }
         public IPAddress IPAddress { get; private set; }
         public int Port { get; private set; }
+        public SessionManager SessionManager { get; private set; }
 
         private TcpListener? _tcpListener;
         private CancellationTokenSource? _cancellationTokenSource;
         private Task? _acceptTask;
-
+        
         private readonly ConcurrentDictionary<string, ClientConnection> _connections = new();
-        private readonly ConcurrentDictionary<string, Session> _sessions = new();
-
+        
         private bool _isRunning;
         private bool _isDisposed;
 
         public bool IsRunning => _isRunning && !_isDisposed;
         public int ConnectedClients => _connections.Count;
-        public int ActiveSessions => _sessions.Count;
+        
+        public Task<int> ActiveSessions => SessionManager.GetActiveSessionCount();
 
-        public GameServer(IPAddress ipAddress, int port, Logger? logger = null)
+        public GameServer(IPAddress ipAddress, int port, Logger? logger = null, SessionManager? sessionManager = null)
         {
             IPAddress = ipAddress;
             Port = port;
             Logger = logger ?? new Logger();
+            SessionManager = sessionManager ?? new SessionManager();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -102,7 +105,7 @@ namespace CelestialLeague.Server.Core
             {
                 try
                 {
-                    var tcpClient = await _tcpListener!.AcceptTcpClientAsync().ConfigureAwait(false);
+                    var tcpClient = await _tcpListener!.AcceptTcpClientAsync(cancellationToken).ConfigureAwait(false);
 
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -134,14 +137,14 @@ namespace CelestialLeague.Server.Core
             try
             {
                 connection = new ClientConnection(this, tcpClient);
-
                 _connections.TryAdd(connection.ConnectionID, connection);
 
                 Logger.Info($"Client connected: {connection.ConnectionID} from {connection.RemoteEndpoint}");
 
-                connection.OnDisconnected += (sender, e) =>
+                connection.OnDisconnected += async (sender, e) =>
                 {
                     Logger.Info($"Client disconnected: {connection.ConnectionID}");
+                    await SessionManager.DisconnectAsync(connection.ConnectionID).ConfigureAwait(false);
                 };
 
                 await connection.StartAsync().ConfigureAwait(false);
@@ -153,18 +156,18 @@ namespace CelestialLeague.Server.Core
             finally
             {
                 if (connection != null)
-
+                {
+                    // Remove connection from our dictionary
                     _connections.TryRemove(connection.ConnectionID, out _);
 
-                if (connection.Session != null)
-                {
-                    _sessions.TryRemove(connection.Session.SessionToken, out _);
+                    // Clean up session manager connection
+                    await SessionManager.DisconnectAsync(connection.ConnectionID).ConfigureAwait(false);
+
+                    connection.Dispose();
                 }
 
-                connection.Dispose();
+                tcpClient?.Close();
             }
-
-            tcpClient?.Close();
         }
 
         private async Task DisconnectAllClientsAsync()
@@ -182,23 +185,62 @@ namespace CelestialLeague.Server.Core
             }
 
             _connections.Clear();
-            _sessions.Clear();
+            
+            // note: sessionmanager handles its own cleanup via timer
         }
 
-        public void AddSession(Session session)
+        public async Task<string> CreateSessionAsync(int playerId)
         {
-            _sessions.TryAdd(session.SessionToken, session);
+            return await SessionManager.CreateSessionAsync(playerId).ConfigureAwait(false);
         }
 
-        public Session? GetSession(string sessionToken)
+        public async Task<Session?> GetSessionAsync(string sessionToken)
         {
-            _sessions.TryGetValue(sessionToken, out var session);
-            return session;
+            if (await SessionManager.IsSessionValidAsync(sessionToken).ConfigureAwait(false))
+            {
+                var playerId = await SessionManager.GetPlayerIdAsync(sessionToken).ConfigureAwait(false);
+                if (playerId != null)
+                {
+                    var sessions = await SessionManager.GetActiveSessionsForPlayerAsync(playerId.Value).ConfigureAwait(false);
+                    return sessions.FirstOrDefault(s => s.SessionToken == sessionToken);
+                }
+            }
+            return null;
         }
 
-        public void RemoveSession(string sessionToken)
+        public async Task<bool> IsSessionValidAsync(string sessionToken)
         {
-            _sessions.TryRemove(sessionToken, out _);
+            return await SessionManager.IsSessionValidAsync(sessionToken).ConfigureAwait(false);
+        }
+
+        public async Task InvalidateSessionAsync(string sessionToken)
+        {
+            await SessionManager.InvalidateSessionAsync(sessionToken).ConfigureAwait(false);
+        }
+
+        public async Task<bool> SetConnectionAsync(string sessionToken, string connectionId)
+        {
+            return await SessionManager.SetConnectionAsync(sessionToken, connectionId).ConfigureAwait(false);
+        }
+
+        public async Task<Session?> GetSessionByConnectionAsync(string connectionId)
+        {
+            return await SessionManager.GetSessionByConnectionAsync(connectionId).ConfigureAwait(false);
+        }
+
+        public async Task<(bool Success, int? PlayerId)> ValidateAndReconnectAsync(string sessionToken, string newConnectionId)
+        {
+            return await SessionManager.ValidateAndReconnectAsync(sessionToken, newConnectionId).ConfigureAwait(false);
+        }
+
+        public async Task<List<Session>> GetOnlineSessionsAsync()
+        {
+            return await SessionManager.GetOnlineSessionsAsync().ConfigureAwait(false);
+        }
+
+        public async Task<Dictionary<string, object>> GetSessionStatsAsync()
+        {
+            return await SessionManager.GetSessionStatsAsync().ConfigureAwait(false);
         }
 
         public ClientConnection? GetConnection(string connectionId)
@@ -212,11 +254,29 @@ namespace CelestialLeague.Server.Core
             return _connections.Values.ToList();
         }
 
+        public async Task<Dictionary<string, object>> GetServerStatsAsync()
+        {
+            var sessionStats = await SessionManager.GetSessionStatsAsync().ConfigureAwait(false);
+            var connectionStats = new Dictionary<string, object>
+            {
+                ["ConnectedClients"] = ConnectedClients,
+                ["ServerUptime"] = DateTime.UtcNow - _serverStartTime,
+                ["IsRunning"] = IsRunning
+            };
+
+            var combinedStats = new Dictionary<string, object>(sessionStats);
+            foreach (var stat in connectionStats)
+            {
+                combinedStats[stat.Key] = stat.Value;
+            }
+
+            return combinedStats;
+        }
+
+        private readonly DateTime _serverStartTime = DateTime.UtcNow;
+
         public void Dispose()
         {
-            if (_isDisposed)
-                return;
-
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -228,6 +288,8 @@ namespace CelestialLeague.Server.Core
                 StopAsync().GetAwaiter().GetResult();
                 _cancellationTokenSource?.Dispose();
                 _tcpListener?.Stop();
+                _tcpListener?.Dispose();
+                SessionManager?.Dispose();
             }
             _isDisposed = true;
         }
@@ -235,7 +297,7 @@ namespace CelestialLeague.Server.Core
         private void ThrowIfDisposed()
         {
             if (_isDisposed)
-                throw new ObjectDisposedException(nameof(GameServer));
+                ObjectDisposedException.ThrowIf(_isDisposed, nameof(GameServer));
         }
     }
 }

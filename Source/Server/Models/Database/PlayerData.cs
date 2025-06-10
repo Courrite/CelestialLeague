@@ -14,28 +14,28 @@ namespace CelestialLeague.Server.Models
         public required DateTime LastSeen { get; set; }
         
         // rating
-        public int MMR { get; set; } = GameConstants.StartingMMR;
-        public RankTier Rank { get; set; } = RankTier.Bronze;
+        // public int MMR { get; set; } = GameConstants.StartingMMR;
+        // public RankTier Rank { get; set; } = RankTier.Bronze;
         
         // stats
-        public int TotalMatches { get; set; } = 0;
-        public int Wins { get; set; } = 0;
-        public int Losses { get; set; } = 0;
-        public TimeSpan BestTime { get; set; } = TimeSpan.Zero;
-        public int WinStreak { get; set; } = 0;
-        public int BestWinStreak { get; set; } = 0;
+        // public int TotalMatches { get; set; } = 0;
+        // public int Wins { get; set; } = 0;
+        // public int Losses { get; set; } = 0;
+        // public TimeSpan BestTime { get; set; } = TimeSpan.Zero;
+        // public int WinStreak { get; set; } = 0;
+        // public int BestWinStreak { get; set; } = 0;
         
         // status
         public PlayerStatus PlayerStatus { get; set; } = PlayerStatus.Offline;
         
         // moderation
-        public DateTime? BanExpires { get; set; }
-        public DateTime? MuteExpires { get; set; }
-        public DateTime? PenaltyExpires { get; set; }
+        // public DateTime? BanExpires { get; set; }
+        // public DateTime? MuteExpires { get; set; }
+        // public DateTime? PenaltyExpires { get; set; }
         public UserRole UserRole { get; set; } = UserRole.None;
         
         // navigation properties for EF relationships
-        public virtual ICollection<Friendship> SentFriendRequests { get; } = new List<Friendship>();
-        public virtual ICollection<Friendship> ReceivedFriendRequests { get; } = new List<Friendship>();
+        // public virtual ICollection<Friendship> SentFriendRequests { get; } = new List<Friendship>();
+        // public virtual ICollection<Friendship> ReceivedFriendRequests { get; } = new List<Friendship>();
     }
 }

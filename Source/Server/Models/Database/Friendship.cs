@@ -15,8 +15,8 @@ namespace CelestialLeague.Server.Models
         public DateTime? BlockedAt { get; set; }
 
         // Navigation properties for EF relationships
-        public virtual Player Requester { get; set; }
-        public virtual Player Receiver { get; set; }
+        public required virtual Player Requester { get; set; }
+        public required virtual Player Receiver { get; set; }
 
         public bool IsPending => Status == FriendshipStatus.Pending;
         public bool IsAccepted => Status == FriendshipStatus.Accepted;

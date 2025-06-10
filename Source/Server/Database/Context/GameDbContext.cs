@@ -19,8 +19,12 @@ namespace Source.Server.Database.Context
 
         private static void ConfigurePlayer(ModelBuilder modelBuilder)
         {
-            modelBuilder?.Entity<Player>().HasIndex(p => p.Username).IsUnique();
-            modelBuilder?.Entity<Player>().Property(p => p.Username).HasMaxLength(GameConstants.MaxUsernameLength);
+            modelBuilder.Entity<Player>(entity =>
+                {
+                    entity.HasIndex(p => p.Username).IsUnique().HasDatabaseName("IX_Players_Username");
+                    entity.Property(p => p.Username).HasMaxLength(GameConstants.MaxUsernameLength).IsRequired();
+                }
+            );
         }
     }
 }

@@ -87,13 +87,13 @@ namespace CelestialLeague.Shared.Utils
             return Encoding.UTF8.GetString(decryptedBytes);
         }
 
-        public static byte[] GenerateSalt()
+        public static string GenerateSalt()
         {
             var salt = new byte[SecurityConstants.PasswordSaltLength];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(salt);
 
-            return salt;
+            return Convert.ToBase64String(salt);
         }
 
         // hashing
@@ -105,15 +105,15 @@ namespace CelestialLeague.Shared.Utils
             return Convert.ToBase64String(hashBytes);
         }
 
-        public static string HashPassword(string password, byte[] salt)
+        public static string HashPassword(string password, string salt)
         {
-            using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256);
-            var hash = pbkdf2.GetBytes(32);
+            using var pbkdf2 = new Rfc2898DeriveBytes(password, Convert.FromBase64String(salt), SecurityConstants.PasswordHashIterations, HashAlgorithmName.SHA256);
+            var hash = pbkdf2.GetBytes(SecurityConstants.PasswordHashLength);
 
             return Convert.ToBase64String(hash);
         }
 
-        public static bool VerifyPassword(string password, string hash, byte[] salt)
+        public static bool VerifyPassword(string password, string hash, string salt)
         {
             var computedHash = HashPassword(password, salt);
 
@@ -134,13 +134,6 @@ namespace CelestialLeague.Shared.Utils
                 result.Append(chars[bytes[i] % chars.Length]);
             }
             return result.ToString();
-        }
-
-        public static bool IsTokenExpired(string token, TimeSpan maxAge)
-        {
-            // removed, this method cant determind expiration from random tokens
-            // this should be used with server-side token sotrage
-            return false; // actual expiration checking is server-side
         }
 
         // rate limiting

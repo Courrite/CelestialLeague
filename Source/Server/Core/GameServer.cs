@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Sockets;
+using CelestialLeague.Server.Database.Context;
 using CelestialLeague.Server.Models;
 using CelestialLeague.Server.Networking;
 using CelestialLeague.Server.Services;
@@ -14,31 +16,38 @@ namespace CelestialLeague.Server.Core
         public IPAddress IPAddress { get; private set; }
         public int Port { get; private set; }
         public SessionManager SessionManager { get; private set; }
+        public GameDbContext GameDbContext { get; private set; }
+        public AuthenticationService AuthenticationService { get; private set; }
+        public PacketProcessor PacketProcessor { get; private set; }
 
         private TcpListener? _tcpListener;
-        private CancellationTokenSource? _cancellationTokenSource;
+        private readonly CancellationTokenSource? _cancellationTokenSource;
         private Task? _acceptTask;
-        
+
         private readonly ConcurrentDictionary<string, ClientConnection> _connections = new();
-        
+
         private bool _isRunning;
         private bool _isDisposed;
 
         public bool IsRunning => _isRunning && !_isDisposed;
         public int ConnectedClients => _connections.Count;
-        
-        public Task<int> ActiveSessions => SessionManager.GetActiveSessionCount();
 
-        public GameServer(IPAddress ipAddress, int port, Logger? logger = null, SessionManager? sessionManager = null)
+        public Task<int> ActiveSessions => SessionManager.GetActiveSessionCountAsync();
+
+        public GameServer(IPAddress ipAddress, int port, Logger logger, string? connectionString = null)
         {
             IPAddress = ipAddress;
             Port = port;
             Logger = logger ?? new Logger();
-            SessionManager = sessionManager ?? new SessionManager();
+            SessionManager = new SessionManager();
+            GameDbContext = new GameDbContextFactory().CreateDbContext([connectionString ?? "Data Source=celestial_league.db"]);
+            AuthenticationService = new AuthenticationService(this);
+            PacketProcessor = new PacketProcessor(this, HandlerFactory.CreateAllHandlers(this));
+
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        public async Task StartAsync()
+        public void StartAsync()
         {
             ThrowIfDisposed();
             if (_isRunning)
@@ -73,7 +82,7 @@ namespace CelestialLeague.Server.Core
                 Logger.Info("Stopping server...");
 
                 _isRunning = false;
-                _cancellationTokenSource?.Cancel();
+                _cancellationTokenSource?.CancelAsync();
 
                 _tcpListener?.Stop();
 
@@ -157,10 +166,7 @@ namespace CelestialLeague.Server.Core
             {
                 if (connection != null)
                 {
-                    // Remove connection from our dictionary
                     _connections.TryRemove(connection.ConnectionID, out _);
-
-                    // Clean up session manager connection
                     await SessionManager.DisconnectAsync(connection.ConnectionID).ConfigureAwait(false);
 
                     connection.Dispose();
@@ -185,15 +191,11 @@ namespace CelestialLeague.Server.Core
             }
 
             _connections.Clear();
-            
+
             // note: sessionmanager handles its own cleanup via timer
         }
 
-        public async Task<string> CreateSessionAsync(int playerId)
-        {
-            return await SessionManager.CreateSessionAsync(playerId).ConfigureAwait(false);
-        }
-
+        public async Task<string> CreateSessionAsync(int playerId) => await SessionManager.CreateSessionAsync(playerId).ConfigureAwait(false);
         public async Task<Session?> GetSessionAsync(string sessionToken)
         {
             if (await SessionManager.IsSessionValidAsync(sessionToken).ConfigureAwait(false))
@@ -208,40 +210,13 @@ namespace CelestialLeague.Server.Core
             return null;
         }
 
-        public async Task<bool> IsSessionValidAsync(string sessionToken)
-        {
-            return await SessionManager.IsSessionValidAsync(sessionToken).ConfigureAwait(false);
-        }
-
-        public async Task InvalidateSessionAsync(string sessionToken)
-        {
-            await SessionManager.InvalidateSessionAsync(sessionToken).ConfigureAwait(false);
-        }
-
-        public async Task<bool> SetConnectionAsync(string sessionToken, string connectionId)
-        {
-            return await SessionManager.SetConnectionAsync(sessionToken, connectionId).ConfigureAwait(false);
-        }
-
-        public async Task<Session?> GetSessionByConnectionAsync(string connectionId)
-        {
-            return await SessionManager.GetSessionByConnectionAsync(connectionId).ConfigureAwait(false);
-        }
-
-        public async Task<(bool Success, int? PlayerId)> ValidateAndReconnectAsync(string sessionToken, string newConnectionId)
-        {
-            return await SessionManager.ValidateAndReconnectAsync(sessionToken, newConnectionId).ConfigureAwait(false);
-        }
-
-        public async Task<List<Session>> GetOnlineSessionsAsync()
-        {
-            return await SessionManager.GetOnlineSessionsAsync().ConfigureAwait(false);
-        }
-
-        public async Task<Dictionary<string, object>> GetSessionStatsAsync()
-        {
-            return await SessionManager.GetSessionStatsAsync().ConfigureAwait(false);
-        }
+        public async Task<bool> IsSessionValidAsync(string sessionToken) => await SessionManager.IsSessionValidAsync(sessionToken).ConfigureAwait(false);
+        public async Task InvalidateSessionAsync(string sessionToken) => await SessionManager.InvalidateSessionAsync(sessionToken).ConfigureAwait(false);
+        public async Task<bool> SetConnectionAsync(string sessionToken, string connectionId) => await SessionManager.SetConnectionAsync(sessionToken, connectionId).ConfigureAwait(false);
+        public async Task<Session?> GetSessionByConnectionAsync(string connectionId) => await SessionManager.GetSessionByConnectionAsync(connectionId).ConfigureAwait(false);
+        public async Task<(bool Success, int? PlayerId)> ValidateAndReconnectAsync(string sessionToken, string newConnectionId) => await SessionManager.ValidateAndReconnectAsync(sessionToken, newConnectionId).ConfigureAwait(false);
+        public async Task<Collection<Session>> GetOnlineSessionsAsync() => await SessionManager.GetOnlineSessionsAsync().ConfigureAwait(false);
+        public async Task<Dictionary<string, object>> GetSessionStatsAsync() => await SessionManager.GetSessionStatsAsync().ConfigureAwait(false);
 
         public ClientConnection? GetConnection(string connectionId)
         {

@@ -9,7 +9,20 @@ namespace CelestialLeague.Shared.Packets
         public int Version { get; set; } = 1;
         public uint? CorrelationId { get; set; }
 
-        private static uint _nextCorrelationId = 1;
+        protected BasePacket()
+        {
+            Timestamp = DateTime.UtcNow;
+            Version = 1;
+            CorrelationId = 0;
+        }
+
+        protected BasePacket(bool generateCorrelationId)
+        {
+            Timestamp = DateTime.UtcNow;
+            Version = 1;
+            CorrelationId = generateCorrelationId ? GenerateCorrelationId() : 0;
+        }
+
         protected static uint GenerateCorrelationId()
         {
             var timestamp = (uint)

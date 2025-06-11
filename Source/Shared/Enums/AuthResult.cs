@@ -10,6 +10,7 @@ namespace CelestialLeague.Shared.Enums
         SessionExpired = 5,
         DatabaseError = 6,
         UnknownError = 7,
-        AccountLocked = 8
+        AccountLocked = 8,
+        Timeout = 9,
     }
 }

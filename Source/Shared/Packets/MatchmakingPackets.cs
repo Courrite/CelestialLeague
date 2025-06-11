@@ -1,18 +1,22 @@
 using CelestialLeague.Shared.Enums;
 using CelestialLeague.Shared.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CelestialLeague.Shared.Packets
 {
-    // queue
     public class QueueRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.QueueRequest;
         public required MatchGamemode MatchGamemode { get; set; }
 
-        public QueueRequestPacket(MatchGamemode matchType, int? mmr = null)
+        public QueueRequestPacket() : base()
+        {
+        }
+
+        [SetsRequiredMembers]
+        public QueueRequestPacket(MatchGamemode matchType, int? mmr = null) : base(true)
         {
             MatchGamemode = matchType;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -28,10 +32,13 @@ namespace CelestialLeague.Shared.Packets
         public int QueuePosition { get; set; }
         public int PlayersInQueue { get; set; }
 
-        public QueueResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public QueueResponsePacket() : base()
+        {
+        }
+
+        public QueueResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
-            TimeStamp = DateTime.UtcNow;
             if (requestCorrelationId.HasValue)
                 CorrelationId = requestCorrelationId.Value;
         }
@@ -52,14 +59,16 @@ namespace CelestialLeague.Shared.Packets
         }
     }
 
-    // queue cancel
     public class QueueCancelRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.QueueCancel;
 
-        public QueueCancelRequestPacket()
+        public QueueCancelRequestPacket() : base()
         {
-            CorrelationId = GenerateCorrelationId();
+        }
+
+        public QueueCancelRequestPacket(bool generateCorrelationId) : base(generateCorrelationId)
+        {
         }
 
         public override bool IsValid()
@@ -71,6 +80,10 @@ namespace CelestialLeague.Shared.Packets
     public class QueueCancelResponsePacket : BaseResponse
     {
         public override PacketType Type => PacketType.QueueCancelResponse;
+
+        public QueueCancelResponsePacket() : base()
+        {
+        }
 
         public QueueCancelResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
@@ -87,25 +100,32 @@ namespace CelestialLeague.Shared.Packets
             {
                 return !string.IsNullOrWhiteSpace(ErrorMessage) &&
                        ErrorCode.HasValue &&
-                   Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
+                       Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
             }
             return true;
         }
     }
 
-    // match found notif
     public class MatchFoundPacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchFound;
         public required string MatchId { get; set; } = Guid.NewGuid().ToString();
         public required PlayerInfo Opponent { get; set; }
-        public required string LevelName { get; set; }
+        public required string LevelName { get; set; } = string.Empty;
         public MatchGamemode MatchGamemode { get; set; }
         public int AcceptTimeoutSeconds { get; set; } = 30;
 
-        public MatchFoundPacket(PlayerInfo opponent, string LevelName, MatchGamemode matchType = MatchGamemode.Ranked)
+        public MatchFoundPacket() : base()
+        {
+            MatchId = Guid.NewGuid().ToString();
+            LevelName = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public MatchFoundPacket(PlayerInfo opponent, string levelName, MatchGamemode matchType = MatchGamemode.Ranked) : base()
         {
             Opponent = opponent;
+            LevelName = levelName;
             MatchGamemode = matchType;
         }
 
@@ -119,16 +139,20 @@ namespace CelestialLeague.Shared.Packets
         }
     }
 
-    // match accept
     public class MatchAcceptRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchAccept;
-        public required string MatchId { get; set; }
+        public required string MatchId { get; set; } = string.Empty;
 
-        public MatchAcceptRequestPacket(string matchId)
+        public MatchAcceptRequestPacket() : base()
+        {
+            MatchId = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public MatchAcceptRequestPacket(string matchId) : base(true)
         {
             MatchId = matchId;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -141,6 +165,10 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.MatchAcceptResponse;
         public bool WaitingForOpponent { get; set; }
+
+        public MatchAcceptResponsePacket() : base()
+        {
+        }
 
         public MatchAcceptResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
@@ -155,16 +183,20 @@ namespace CelestialLeague.Shared.Packets
         }
     }
 
-    // match decline
     public class MatchDeclineRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchDecline;
-        public required string MatchId { get; set; }
+        public required string MatchId { get; set; } = string.Empty;
 
-        public MatchDeclineRequestPacket(string matchId)
+        public MatchDeclineRequestPacket() : base()
+        {
+            MatchId = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public MatchDeclineRequestPacket(string matchId) : base(true)
         {
             MatchId = matchId;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -178,10 +210,13 @@ namespace CelestialLeague.Shared.Packets
         public override PacketType Type => PacketType.MatchDeclineResponse;
         public bool ReturnToQueue { get; set; } = true;
 
-        public MatchDeclineResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public MatchDeclineResponsePacket() : base()
+        {
+        }
+
+        public MatchDeclineResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
-            TimeStamp = DateTime.UtcNow;
             if (requestCorrelationId.HasValue)
                 CorrelationId = requestCorrelationId.Value;
         }
@@ -194,7 +229,7 @@ namespace CelestialLeague.Shared.Packets
             {
                 return !string.IsNullOrWhiteSpace(ErrorMessage) &&
                        ErrorCode.HasValue &&
-                   Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
+                       Enum.IsDefined(typeof(ResponseErrorCode), ErrorCode.Value);
             }
             return true;
         }
@@ -211,7 +246,11 @@ namespace CelestialLeague.Shared.Packets
         public string? StatusMessage { get; set; }
         public Dictionary<string, object> AdditionalData { get; set; } = new();
 
-        public MatchmakingStatusPacket(MatchmakingStatus status)
+        public MatchmakingStatusPacket() : base()
+        {
+        }
+
+        public MatchmakingStatusPacket(MatchmakingStatus status) : base()
         {
             Status = status;
         }

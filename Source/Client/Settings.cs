@@ -1,4 +1,9 @@
+using Celeste;
 using Celeste.Mod;
+using Celeste.Mod.UI;
+using CelestialLeague.Client.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace CelestialLeague.Client
 {
@@ -24,5 +29,13 @@ namespace CelestialLeague.Client
         [SettingSubText("How long to wait for connection")]
         [SettingRange(5, 60)]
         public int ConnectionTimeout { get; set; } = 10;
+
+        [SettingName("Test Username")]
+        [SettingSubText("Username for testing")]
+        public string TestUsername { get; set; } = "testuser";
+
+        [SettingName("Test Password")]
+        [SettingSubText("Password for testing")]
+        public string TestPassword { get; set; } = "testpass";
     }
 }

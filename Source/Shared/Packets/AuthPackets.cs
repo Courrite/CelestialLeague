@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using CelestialLeague.Shared.Enums;
 using CelestialLeague.Shared.Models;
 using CelestialLeague.Shared.Utils;
@@ -7,20 +8,24 @@ namespace CelestialLeague.Shared.Packets
     public class LoginRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.LoginRequest;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public required string Username { get; set; }
-        public required string Password { get; set; }
+        public required string Username { get; set; } = string.Empty;
+        public required string Password { get; set; } = string.Empty;
         public string ClientVersion { get; set; } = VersionConstants.CURRENT_CLIENT_VERSION;
         public bool RememberMe { get; set; } = false;
 
-        public LoginRequestPacket(string username, string password, bool rememberMe = false, string? clientVersion = null)
+        public LoginRequestPacket() : base()
+        {
+            Username = string.Empty;
+            Password = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public LoginRequestPacket(string username, string password, bool rememberMe = false, string? clientVersion = null) : base(true)
         {
             Username = username;
             Password = password;
             RememberMe = rememberMe;
             ClientVersion = clientVersion ?? VersionConstants.CURRENT_CLIENT_VERSION;
-            TimeStamp = DateTime.UtcNow;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -39,11 +44,15 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.LoginResponse;
         public PlayerInfo? Player { get; set; }
+        public string? SessionToken { get; set; }
         public string ServerVersion { get; set; } = VersionConstants.CURRENT_SERVER_VERSION;
-        public string? MessageOfTheDay { get; set; }
         public int OnlinePlayerCount { get; set; }
 
-        public LoginResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public LoginResponsePacket() : base()
+        {
+        }
+
+        public LoginResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)
@@ -61,20 +70,22 @@ namespace CelestialLeague.Shared.Packets
     public class RegisterRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.RegisterRequest;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public required string Username { get; set; }
-        public required string Password { get; set; }
-        public string? Email { get; set; }
+        public required string Username { get; set; } = string.Empty;
+        public required string Password { get; set; } = string.Empty;
         public string ClientVersion { get; set; } = VersionConstants.CURRENT_CLIENT_VERSION;
 
-        public RegisterRequestPacket(string username, string password, string? email = null, string? clientVersion = null)
+        public RegisterRequestPacket() : base()
+        {
+            Username = string.Empty;
+            Password = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public RegisterRequestPacket(string username, string password, string? clientVersion = null) : base(true)
         {
             Username = username;
             Password = password;
-            Email = email;
             ClientVersion = clientVersion ?? VersionConstants.CURRENT_CLIENT_VERSION;
-            TimeStamp = DateTime.UtcNow;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -86,7 +97,6 @@ namespace CelestialLeague.Shared.Packets
                    Username.Length <= GameConstants.MaxUsernameLength &&
                    Password.Length >= 6 &&
                    Validation.IsValidUsername(Username) &&
-                   (string.IsNullOrEmpty(Email) || Validation.IsValidEmail(Email)) &&
                    VersionUtils.IsValidVersionFormat(ClientVersion);
         }
     }
@@ -95,10 +105,14 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.RegisterResponse;
         public PlayerInfo? Player { get; set; }
+        public string? SessionToken { get; set; }
         public string ServerVersion { get; set; } = VersionConstants.CURRENT_SERVER_VERSION;
-        public string? WelcomeMessage { get; set; }
 
-        public RegisterResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public RegisterResponsePacket() : base()
+        {
+        }
+
+        public RegisterResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)
@@ -115,12 +129,13 @@ namespace CelestialLeague.Shared.Packets
     public class LogoutRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.LogoutRequest;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 
-        public LogoutRequestPacket()
+        public LogoutRequestPacket() : base()
         {
-            TimeStamp = DateTime.UtcNow;
-            CorrelationId = GenerateCorrelationId();
+        }
+
+        public LogoutRequestPacket(bool generateCorrelationId) : base(generateCorrelationId)
+        {
         }
 
         public override bool IsValid()
@@ -133,7 +148,11 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.LogoutResponse;
 
-        public LogoutResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public LogoutResponsePacket() : base()
+        {
+        }
+
+        public LogoutResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)
@@ -149,12 +168,13 @@ namespace CelestialLeague.Shared.Packets
     public class ValidateSessionRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.ValidateSessionRequest;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 
-        public ValidateSessionRequestPacket()
+        public ValidateSessionRequestPacket() : base()
         {
-            TimeStamp = DateTime.UtcNow;
-            CorrelationId = GenerateCorrelationId();
+        }
+
+        public ValidateSessionRequestPacket(bool generateCorrelationId) : base(generateCorrelationId)
+        {
         }
 
         public override bool IsValid()
@@ -169,7 +189,11 @@ namespace CelestialLeague.Shared.Packets
         public PlayerInfo? Player { get; set; }
         public DateTime? ExpiresAt { get; set; }
 
-        public ValidateSessionResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public ValidateSessionResponsePacket() : base()
+        {
+        }
+
+        public ValidateSessionResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)
@@ -185,16 +209,20 @@ namespace CelestialLeague.Shared.Packets
     public class ChangePasswordRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.ChangePasswordRequest;
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public required string CurrentPassword { get; set; }
-        public required string NewPassword { get; set; }
+        public required string CurrentPassword { get; set; } = string.Empty;
+        public required string NewPassword { get; set; } = string.Empty;
 
-        public ChangePasswordRequestPacket(string currentPassword, string newPassword)
+        public ChangePasswordRequestPacket() : base()
+        {
+            CurrentPassword = string.Empty;
+            NewPassword = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public ChangePasswordRequestPacket(string currentPassword, string newPassword) : base(true)
         {
             CurrentPassword = currentPassword;
             NewPassword = newPassword;
-            TimeStamp = DateTime.UtcNow;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -211,7 +239,11 @@ namespace CelestialLeague.Shared.Packets
     {
         public override PacketType Type => PacketType.ChangePasswordResponse;
 
-        public ChangePasswordResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public ChangePasswordResponsePacket() : base()
+        {
+        }
+
+        public ChangePasswordResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)

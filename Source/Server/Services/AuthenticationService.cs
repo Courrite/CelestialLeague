@@ -4,22 +4,24 @@ using CelestialLeague.Server.Utils;
 using CelestialLeague.Shared.Enums;
 using CelestialLeague.Shared.Utils;
 using Microsoft.EntityFrameworkCore;
-using Source.Server.Database.Context;
+using CelestialLeague.Server.Database.Context;
 using System.Text.RegularExpressions;
+using CelestialLeague.Server.Core;
+using System.Threading.Tasks;
+using CelestialLeague.Shared.Models;
 
 namespace CelestialLeague.Server.Services
 {
     public class AuthenticationService
     {
-        private readonly GameDbContext _context;
-        private readonly Logger _logger;
-        private readonly SessionManager _sessionManager;
+        private readonly GameServer _gameServer;
+        private GameDbContext _context => _gameServer.GameDbContext;
+        private Logger _logger => _gameServer.Logger;
+        private SessionManager _sessionManager => _gameServer.SessionManager;
 
-        public AuthenticationService(GameDbContext context, Logger logger, SessionManager sessionManager)
+        public AuthenticationService(GameServer gameServer)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
+            _gameServer = gameServer ?? throw new ArgumentNullException(nameof(gameServer));
         }
 
         public async Task<AuthResult> RegisterAsync(string username, string password)
@@ -36,8 +38,8 @@ namespace CelestialLeague.Server.Services
                 var salt = SecurityHelpers.GenerateSalt();
                 var hash = SecurityHelpers.HashPassword(password, salt);
 
-                var player = new Player(username, hash, salt);
-                
+                var player = new Player(username, hash, salt, DateTime.UtcNow);
+
                 _context.Players.Add(player);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -51,24 +53,24 @@ namespace CelestialLeague.Server.Services
             }
         }
 
-        public async Task<(AuthResult Result, string? SessionToken)> LoginAsync(string username, string password)
+        public async Task<(AuthResult Result, PlayerInfo PlayerInfo, string? SessionToken)> LoginAsync(string username, string password)
         {
             try
             {
                 var player = await _context.Players
-                    .FirstOrDefaultAsync(p => username.Equals(p.Username, StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefaultAsync(p => p.Username == username)
                     .ConfigureAwait(false);
 
                 if (player == null)
                 {
                     _logger.Warning($"Login attempt with non-existent username: {username}");
-                    return (AuthResult.InvalidCredentials, null);
+                    return (AuthResult.InvalidCredentials, null!, null);
                 }
 
                 if (!SecurityHelpers.VerifyPassword(password, player.PasswordHash, player.PasswordSalt))
                 {
                     _logger.Warning($"Invalid password attempt for user: {username}");
-                    return (AuthResult.InvalidCredentials, null);
+                    return (AuthResult.InvalidCredentials, null!, null);
                 }
 
                 player.LastSeen = DateTime.UtcNow;
@@ -77,26 +79,29 @@ namespace CelestialLeague.Server.Services
                 var sessionToken = await _sessionManager.CreateSessionAsync(player.Id).ConfigureAwait(false);
 
                 _logger.Info($"User logged in successfully: {username}");
-                return (AuthResult.Success, sessionToken);
+                return (AuthResult.Success, new PlayerInfo(player.Id, player.Username, player.CreatedAt), sessionToken);
             }
             catch (Exception ex)
             {
                 _logger.Error($"Login failed for {username}: {ex.Message}");
-                return (AuthResult.DatabaseError, null);
+                return (AuthResult.DatabaseError, null!, null);
             }
         }
 
-        public async Task<bool> IsUsernameTakenAsync(string username)
+        private async Task<bool> IsUsernameTakenAsync(string username)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                return false;
+
             try
-            {   
+            {
                 return await _context.Players
-                    .AnyAsync(p => username.Equals(p.Username, StringComparison.OrdinalIgnoreCase))
+                    .AnyAsync(p => p.Username == username)
                     .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error checking username availability for {username}: {ex.Message}");
+                _logger.Error($"Error checking username availability for {username}: {ex}");
                 return true;
             }
         }
@@ -178,7 +183,7 @@ namespace CelestialLeague.Server.Services
             if (string.IsNullOrWhiteSpace(username))
                 return false;
 
-            if (username.Length < GameConstants.MinUsernameLength || 
+            if (username.Length < GameConstants.MinUsernameLength ||
                 username.Length > GameConstants.MaxUsernameLength)
                 return false;
 
@@ -192,7 +197,7 @@ namespace CelestialLeague.Server.Services
             return true;
         }
 
-        private AuthResult ValidateRegistrationInput(string username, string password)
+        private static AuthResult ValidateRegistrationInput(string username, string password)
         {
             if (!IsValidUsername(username))
                 return AuthResult.InvalidUsername;
@@ -216,7 +221,7 @@ namespace CelestialLeague.Server.Services
             };
         }
 
-        public string GetUserFriendlyErrorMessage(AuthResult result)
+        public static string GetUserFriendlyErrorMessage(AuthResult result)
         {
             return GetErrorMessage(result);
         }

@@ -42,7 +42,6 @@ public static class SecurityConstants
     // account security
     public const int MaxFailedLoginAttempts = 5;
     public const int AccountLockoutMinutes = 15;
-    public const int EmailVerificationTokenLength = 6;
     
     // trust system
     public const int DefaultTrustScore = 100;

@@ -6,6 +6,7 @@ using CelestialLeague.Client.Networking;
 using CelestialLeague.Shared.Packets;
 using Celeste.Mod;
 using CelestialLeague.Shared.Enums;
+using CelestialLeague.Client.Services;
 
 namespace CelestialLeague.Client.Core
 {
@@ -18,11 +19,12 @@ namespace CelestialLeague.Client.Core
         private bool _isDisposed;
 
         private NetworkClient _networkClient;
-        private ConnectionManager _connectionManager;
+        
+        public ConnectionManager ConnectionManager;
 
-        public bool IsConnected => _isConnected && !_isDisposed && _connectionManager?.IsConnected == true;
-        public string ServerEndpoint => _connectionManager?.ServerEndpoint;
-        public DateTime? ConnectedAt => _connectionManager?.ConnectedAt;
+        public bool IsConnected => _isConnected && !_isDisposed && ConnectionManager?.IsConnected == true;
+        public string ServerEndpoint => ConnectionManager?.ServerEndpoint;
+        public DateTime? ConnectedAt => ConnectionManager?.ConnectedAt;
 
         public event EventHandler<PacketReceivedEventArgs> OnPacketReceived;
         public event EventHandler<DisconnectedEventArgs> OnDisconnected;
@@ -30,10 +32,10 @@ namespace CelestialLeague.Client.Core
         public GameClient()
         {
             _networkClient = new NetworkClient();
-            _connectionManager = new ConnectionManager(this, _networkClient);
+            ConnectionManager = new ConnectionManager(this, _networkClient);
 
-            _connectionManager.OnPacketReceived += (sender, args) => OnPacketReceived?.Invoke(this, args);
-            _connectionManager.OnDisconnected += (sender, args) =>
+            ConnectionManager.OnPacketReceived += (sender, args) => OnPacketReceived?.Invoke(this, args);
+            ConnectionManager.OnDisconnected += (sender, args) =>
             {
                 _isConnected = false;
                 OnDisconnected?.Invoke(this, args);
@@ -70,7 +72,7 @@ namespace CelestialLeague.Client.Core
                 _networkStream = _tcpClient.GetStream();
 
                 var serverEndpoint = $"{host}:{port}";
-                await _connectionManager!.StartAsync(_networkStream, serverEndpoint);
+                await ConnectionManager!.StartAsync(_networkStream, serverEndpoint);
 
                 _isConnected = true;
                 Logger.Info("CelestialLeague", $"Connected to {serverEndpoint}");
@@ -108,9 +110,9 @@ namespace CelestialLeague.Client.Core
 
             try
             {
-                if (_connectionManager != null)
+                if (ConnectionManager != null)
                 {
-                    await _connectionManager.StopAsync(reason);
+                    await ConnectionManager.StopAsync(reason);
                 }
             }
             catch (Exception ex)
@@ -130,28 +132,28 @@ namespace CelestialLeague.Client.Core
             where TRequest : BasePacket
             where TResponse : BasePacket
         {
-            if (!IsConnected || _connectionManager == null)
+            if (!IsConnected || ConnectionManager == null)
                 throw new InvalidOperationException("Not connected to server");
 
-            return await _connectionManager.SendRequestAsync<TRequest, TResponse>(request, timeout, cancellationToken);
+            return await ConnectionManager.SendRequestAsync<TRequest, TResponse>(request, timeout, cancellationToken);
         }
 
         public async Task<bool> SendPacketAsync<T>(T packet) where T : BasePacket
         {
-            if (!IsConnected || _connectionManager == null)
+            if (!IsConnected || ConnectionManager == null)
                 return false;
 
-            return await _connectionManager.SendPacketAsync(packet);
+            return await ConnectionManager.SendPacketAsync(packet);
         }
 
         public ConnectionQuality GetConnectionQuality()
         {
-            return _connectionManager?.GetConnectionQuality() ?? ConnectionQuality.VeryPoor;
+            return ConnectionManager?.GetConnectionQuality() ?? ConnectionQuality.VeryPoor;
         }
 
         public NetworkStatistics GetNetworkStatistics()
         {
-            return _connectionManager?.GetNetworkStatistics() ?? new NetworkStatistics();
+            return ConnectionManager?.GetNetworkStatistics() ?? new NetworkStatistics();
         }
 
         private async Task CleanupConnectionAsync()
@@ -202,7 +204,7 @@ namespace CelestialLeague.Client.Core
 
                 _cancellationTokenSource?.Cancel();
 
-                _connectionManager?.Dispose();
+                ConnectionManager?.Dispose();
                 _networkClient?.Dispose();
 
                 CleanupConnectionAsync().Wait(TimeSpan.FromSeconds(1));

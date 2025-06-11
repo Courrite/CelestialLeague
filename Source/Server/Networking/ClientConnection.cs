@@ -15,8 +15,8 @@ namespace CelestialLeague.Server.Networking
         private readonly TcpClient _tcpClient;
         private readonly NetworkStream? _stream;
         private readonly GameServer _gameServer;
-        private readonly Logger _logger;
-        private readonly PacketProcessor _packetProcessor;
+        private Logger _logger => _gameServer.Logger;
+        private PacketProcessor _packetProcessor => _gameServer.PacketProcessor;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly object _sendLock = new object();
         private Task? _receiveTask;
@@ -48,8 +48,6 @@ namespace CelestialLeague.Server.Networking
         {
             _tcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
             _gameServer = gameServer ?? throw new ArgumentNullException(nameof(gameServer));
-            _logger = gameServer.Logger;
-            _packetProcessor = new PacketProcessor(gameServer);
             _cancellationTokenSource = new CancellationTokenSource();
             _stream = tcpClient.GetStream();
         }
@@ -82,7 +80,7 @@ namespace CelestialLeague.Server.Networking
             {
                 _logger.Info($"Disconnecting {ConnectionID}: {reason}");
 
-                _cancellationTokenSource.Cancel();
+                await _cancellationTokenSource.CancelAsync().ConfigureAwait(false);
 
                 if (_receiveTask != null)
                 {
@@ -113,6 +111,7 @@ namespace CelestialLeague.Server.Networking
 
             try
             {
+                ArgumentNullException.ThrowIfNull(packet, nameof(packet));
                 if (!packet.IsValid())
                 {
                     _logger.Warning($"Attempted to send invalid {packet.Type} to {ConnectionID}");
@@ -131,10 +130,10 @@ namespace CelestialLeague.Server.Networking
                 lock (_sendLock)
                 {
                     var lengthBytes = BitConverter.GetBytes(data.Length);
-                    _stream.Write(lengthBytes, 0, 4);
+                    _stream.WriteAsync(lengthBytes, 0, 4);
 
-                    _stream.Write(data, 0, data.Length);
-                    _stream.Flush();
+                    _stream.WriteAsync(data, 0, data.Length);
+                    _stream.FlushAsync();
                 }
 
                 PacketsSent++;
@@ -209,11 +208,7 @@ namespace CelestialLeague.Server.Networking
 
             while (totalBytesRead < count && !cancellationToken.IsCancellationRequested)
             {
-                var bytesRead = await stream.ReadAsync(
-                    buffer,
-                    totalBytesRead,
-                    count - totalBytesRead,
-                    cancellationToken).ConfigureAwait(false);
+                var bytesRead = await stream.ReadAsync(buffer.AsMemory(totalBytesRead, count - totalBytesRead), cancellationToken).ConfigureAwait(false);
 
                 if (bytesRead == 0)
                     break; // connection closed
@@ -231,6 +226,7 @@ namespace CelestialLeague.Server.Networking
             try
             {
                 var packet = Serialization.DeserializePacket(data, length);
+                _logger.Info(packet?.ToString()!);
                 if (packet != null)
                 {
                     PacketsReceived++;
@@ -334,8 +330,7 @@ namespace CelestialLeague.Server.Networking
 
         private void ThrowIfDisposed()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(nameof(ClientConnection));
+            ObjectDisposedException.ThrowIf(_isDisposed, nameof(ClientConnection));
         }
     }
 

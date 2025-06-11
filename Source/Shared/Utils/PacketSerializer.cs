@@ -17,11 +17,10 @@ namespace CelestialLeague.Shared.Utils
         private static void EnsureInitialized()
         {
             if (_initialized) return;
-
             lock (_lock)
             {
                 if (_initialized) return;
-
+                
                 var packetTypes = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(assembly =>
                     {
@@ -40,7 +39,7 @@ namespace CelestialLeague.Shared.Utils
                 {
                     _packetTypes[type.Name] = type;
                 }
-
+                
                 _initialized = true;
             }
         }
@@ -50,7 +49,7 @@ namespace CelestialLeague.Shared.Utils
             try
             {
                 EnsureInitialized();
-
+                
                 var span = new ReadOnlySpan<byte>(buffer, 0, length);
                 var json = System.Text.Encoding.UTF8.GetString(span);
 
@@ -67,27 +66,41 @@ namespace CelestialLeague.Shared.Utils
                     try
                     {
                         var tempInstance = Activator.CreateInstance(type) as BasePacket;
-                        if (tempInstance?.Type.ToString() == packetTypeName)
+                        if (tempInstance == null)
+                        {
+                            continue;
+                        }
+
+                        var instanceTypeName = tempInstance.Type.ToString();
+                    
+                        if (instanceTypeName == packetTypeName)
                         {
                             var method = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.FromJson))
                                 ?.MakeGenericMethod(type);
 
-                            if (method != null)
+                            if (method == null)
                             {
-                                var result = method.Invoke(null, new object[] { json });
-                                if (result != null)
-                                {
-                                    return (BasePacket)result;
-                                }
+                                continue;
+                            }
+
+                            var result = method.Invoke(null, new object[] { json });
+                            
+                            if (result != null)
+                            {
+                                return (BasePacket)result;
                             }
                         }
                     }
-                    catch
+                    catch (Exception)
                     {
                         continue;
                     }
                 }
 
+                return null;
+            }
+            catch (JsonException)
+            {
                 return null;
             }
             catch (Exception)
@@ -98,7 +111,17 @@ namespace CelestialLeague.Shared.Utils
 
         public static byte[] Serialize<T>(T packet) where T : BasePacket
         {
-            return JsonSerializer.ToBytes(packet);
+            try
+            {
+                var result = JsonSerializer.ToBytes(packet);
+                var json = System.Text.Encoding.UTF8.GetString(result);
+                
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

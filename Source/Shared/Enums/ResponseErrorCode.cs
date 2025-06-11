@@ -19,7 +19,6 @@ namespace CelestialLeague.Shared.Enums
         InvalidSession = 105,
         NotAuthenticated = 106,
         UsernameInvalid = 107,
-        EmailInvalid = 108,
 
         // matchmaking (200-299)
         AlreadyInQueue = 200,

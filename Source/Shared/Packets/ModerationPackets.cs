@@ -1,5 +1,6 @@
 using CelestialLeague.Shared.Models;
 using CelestialLeague.Shared.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CelestialLeague.Shared.Packets
 {
@@ -13,13 +14,17 @@ namespace CelestialLeague.Shared.Packets
         public string? Reason { get; set; }
         public string? Evidence { get; set; }
 
-        public ModerationActionPacket(string moderatorId, string targetUserId, ModerationActionType actionType, string? reason = null)
+        public ModerationActionPacket() : base()
+        {
+        }
+
+        [SetsRequiredMembers]
+        public ModerationActionPacket(string moderatorId, string targetUserId, ModerationActionType actionType, string? reason = null) : base(true)
         {
             ModeratorId = int.Parse(moderatorId);
             TargetUserId = int.Parse(targetUserId);
             ActionType = actionType;
             Reason = reason;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -38,7 +43,11 @@ namespace CelestialLeague.Shared.Packets
         public string? TargetUsername { get; set; }
         public string? ActionId { get; set; } = Guid.NewGuid().ToString();
 
-        public ModerationActionResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public ModerationActionResponsePacket() : base()
+        {
+        }
+
+        public ModerationActionResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)
@@ -59,7 +68,12 @@ namespace CelestialLeague.Shared.Packets
         public required int TargetUserId { get; set; }
         public string? Reason { get; set; }
 
-        public PlayerKickPacket(int targetUserId, string? reason = null)
+        public PlayerKickPacket() : base()
+        {
+        }
+
+        [SetsRequiredMembers]
+        public PlayerKickPacket(int targetUserId, string? reason = null) : base()
         {
             TargetUserId = targetUserId;
             Reason = reason;
@@ -79,7 +93,11 @@ namespace CelestialLeague.Shared.Packets
         public string? Reason;
         public string? Evidence;
 
-        public PlayerBanPacket(int targetUserId, DateTime banExpiration, string? reason = null, string? evidence = null)
+        public PlayerBanPacket() : base()
+        {
+        }
+
+        public PlayerBanPacket(int targetUserId, DateTime banExpiration, string? reason = null, string? evidence = null) : base()
         {
             TargetUserId = targetUserId;
             BanExpiration = banExpiration;
@@ -99,9 +117,13 @@ namespace CelestialLeague.Shared.Packets
         public override PacketType Type => PacketType.PlayerUnban;
         public int TargetUserId;
 
-        public PlayerUnbanPacket(int playerid)
+        public PlayerUnbanPacket() : base()
         {
-            TargetUserId = playerid;
+        }
+
+        public PlayerUnbanPacket(int playerId) : base()
+        {
+            TargetUserId = playerId;
         }
 
         public override bool IsValid()
@@ -118,7 +140,11 @@ namespace CelestialLeague.Shared.Packets
         public string? Reason;
         public string? Evidence;
 
-        public PlayerMutePacket(int targetUserId, DateTime muteExpiration, string? reason = null, string? evidence = null)
+        public PlayerMutePacket() : base()
+        {
+        }
+
+        public PlayerMutePacket(int targetUserId, DateTime muteExpiration, string? reason = null, string? evidence = null) : base()
         {
             TargetUserId = targetUserId;
             MuteExpiration = muteExpiration;
@@ -135,10 +161,14 @@ namespace CelestialLeague.Shared.Packets
 
     public class PlayerUnmutePacket : BasePacket
     {
-        public override PacketType Type => PacketType.PlayerMute;
+        public override PacketType Type => PacketType.PlayerUnmute;
         public int TargetUserId;
 
-        public PlayerUnmutePacket(int targetUserId, DateTime muteExpiration)
+        public PlayerUnmutePacket() : base()
+        {
+        }
+
+        public PlayerUnmutePacket(int targetUserId) : base()
         {
             TargetUserId = targetUserId;
         }
@@ -155,13 +185,20 @@ namespace CelestialLeague.Shared.Packets
         public int TargetUserId;
         public string? Reason;
         public string? Evidence;
-        public required string WarnId = Guid.NewGuid().ToString();
+        public required string WarnId { get; set; } = Guid.NewGuid().ToString();
 
-        public PlayerWarnPacket(int targetUserId, string? reason = null, string? evidence = null)
+        public PlayerWarnPacket() : base()
+        {
+            WarnId = Guid.NewGuid().ToString();
+        }
+
+        [SetsRequiredMembers]
+        public PlayerWarnPacket(int targetUserId, string? reason = null, string? evidence = null) : base()
         {
             TargetUserId = targetUserId;
             Reason = reason;
             Evidence = evidence;
+            WarnId = Guid.NewGuid().ToString();
         }
 
         public override bool IsValid()
@@ -176,7 +213,12 @@ namespace CelestialLeague.Shared.Packets
         public int TargetUserId;
         public string WarnId;
 
-        public PlayerRemoveWarnPacket(int targetUserId, string warnId)
+        public PlayerRemoveWarnPacket() : base()
+        {
+            WarnId = string.Empty;
+        }
+
+        public PlayerRemoveWarnPacket(int targetUserId, string warnId) : base()
         {
             TargetUserId = targetUserId;
             WarnId = warnId;
@@ -191,12 +233,18 @@ namespace CelestialLeague.Shared.Packets
     public class ServerAnnouncementPacket : BasePacket
     {
         public override PacketType Type => PacketType.ServerAnnouncement;
-        public required string Message { get; set; }
+        public required string Message { get; set; } = string.Empty;
         public AnnouncementType AnnouncementType { get; set; } = AnnouncementType.General;
         public AnnouncementPriority Priority { get; set; } = AnnouncementPriority.Normal;
         public int DisplayDurationSeconds { get; set; } = 10;
 
-        public ServerAnnouncementPacket(string message)
+        public ServerAnnouncementPacket() : base()
+        {
+            Message = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public ServerAnnouncementPacket(string message) : base()
         {
             Message = message;
         }

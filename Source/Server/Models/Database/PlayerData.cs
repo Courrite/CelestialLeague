@@ -41,13 +41,13 @@ namespace CelestialLeague.Server.Models
 
         // constructor
         [SetsRequiredMembers]
-        public Player(string username, string passwordHash, string passwordSalt)
+        public Player(string username, string passwordHash, string passwordSalt, DateTime createdAt)
         {
             Username = username;
             PasswordHash = passwordHash;
             PasswordSalt = passwordSalt;
 
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = createdAt;
             LastSeen = DateTime.UtcNow;
 
             PlayerStatus = PlayerStatus.Offline;

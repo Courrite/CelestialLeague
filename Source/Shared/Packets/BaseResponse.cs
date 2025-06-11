@@ -6,15 +6,14 @@ namespace CelestialLeague.Shared.Packets
 {
     public abstract class BaseResponse : BasePacket
     {
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
         public bool Success { get; set; }
         public string? ErrorMessage { get; set; }
         public ResponseErrorCode? ErrorCode { get; set; }
+        public string? Message { get; set; }
 
-        protected BaseResponse(bool success = true)
+        protected BaseResponse(bool success = true) : base()
         {
             Success = success;
-            TimeStamp = DateTime.UtcNow;
         }
 
         public override bool IsValid()
@@ -89,7 +88,6 @@ namespace CelestialLeague.Shared.Packets
                 Success = false,
                 ErrorMessage = errorMessage,
                 ErrorCode = errorCode,
-                TimeStamp = DateTime.UtcNow
             };
         }
 

@@ -4,7 +4,7 @@ using CelestialLeague.Server.Utils;
 
 namespace CelestialLeague.Server
 {
-    internal class Program
+    sealed internal class Program
     {
         private static GameServer? _gameServer;
         private static readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -18,16 +18,16 @@ namespace CelestialLeague.Server
                 var ipAddress = ParseIPAddress(args);
                 var port = ParsePort(args);
                 
-                var logger = new Logger();
+                using var logger = new Logger();
                 
                 _gameServer = new GameServer(ipAddress, port, logger);
                 
                 logger.Info("Starting server...");
                 
-                await _gameServer.StartAsync();
+                _gameServer.StartAsync();
                 
                 logger.Info("Server is running, press ctrl + c to stop.");
-                await WaitForCancellation(_cancellationTokenSource.Token);
+                await WaitForCancellation(_cancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace CelestialLeague.Server
             }
             finally
             {
-                await Cleanup();
+                await Cleanup().ConfigureAwait(false);
             }
         }
         
@@ -72,7 +72,7 @@ namespace CelestialLeague.Server
         {
             try
             {
-                await Task.Delay(Timeout.Infinite, cancellationToken);
+                await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -83,7 +83,7 @@ namespace CelestialLeague.Server
         private static void OnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true; // prevent immediate termination
-            Console.WriteLine("\nShutdown requested...");
+            _gameServer?.Logger.Info("\nShutdown requested...");
             _cancellationTokenSource.Cancel();
         }
         
@@ -91,10 +91,10 @@ namespace CelestialLeague.Server
         {
             if (_gameServer != null)
             {
-                Console.WriteLine("Stopping server...");
-                await _gameServer.StopAsync();
+                _gameServer.Logger.Info("Stopping server...");
+                await _gameServer.StopAsync().ConfigureAwait(false);
                 _gameServer.Dispose();
-                Console.WriteLine("Server stopped.");
+                _gameServer.Logger.Info("Server stopped.");
             }
             
             _cancellationTokenSource.Dispose();

@@ -1,5 +1,6 @@
 using CelestialLeague.Shared.Enums;
 using CelestialLeague.Shared.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CelestialLeague.Shared.Packets
 {
@@ -12,7 +13,11 @@ namespace CelestialLeague.Shared.Packets
         public float VelocityY { get; set; }
         public byte StateFlags { get; set; }
 
-        public PlayerPositionPacket(float x, float y)
+        public PlayerPositionPacket() : base()
+        {
+        }
+
+        public PlayerPositionPacket(float x, float y) : base()
         {
             X = x;
             Y = y;
@@ -30,7 +35,11 @@ namespace CelestialLeague.Shared.Packets
         public GameState State { get; set; }
         public Dictionary<string, object> StateData { get; set; } = new();
 
-        public GameStatePacket(GameState state)
+        public GameStatePacket() : base()
+        {
+        }
+
+        public GameStatePacket(GameState state) : base()
         {
             State = state;
         }
@@ -50,7 +59,11 @@ namespace CelestialLeague.Shared.Packets
         public int TimeMs { get; set; }
         public Dictionary<string, object> EventData { get; set; } = new();
 
-        public GameEventPacket(EventType eventType)
+        public GameEventPacket() : base()
+        {
+        }
+
+        public GameEventPacket(EventType eventType) : base()
         {
             EventType = eventType;
         }
@@ -64,13 +77,19 @@ namespace CelestialLeague.Shared.Packets
     public class MatchResultPacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchResult;
-        public required string MatchId { get; set; }
+        public required string MatchId { get; set; } = string.Empty;
         public MatchResult Result { get; set; }
         public Dictionary<string, PlayerMatchStats> PlayerStats { get; set; } = new();
         public string? WinnerUsername { get; set; }
         public int MatchDurationMs { get; set; }
 
-        public MatchResultPacket(string matchId, MatchResult result)
+        public MatchResultPacket() : base()
+        {
+            MatchId = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public MatchResultPacket(string matchId, MatchResult result) : base()
         {
             MatchId = matchId;
             Result = result;
@@ -86,14 +105,19 @@ namespace CelestialLeague.Shared.Packets
     public class JoinGameRequestPacket : BasePacket
     {
         public override PacketType Type => PacketType.JoinGameRequest;
-        public required string MatchId { get; set; }
+        public required string MatchId { get; set; } = string.Empty;
         public GameRole JoinAs { get; set; } = GameRole.Player;
 
-        public JoinGameRequestPacket(string matchId, GameRole joinAs = GameRole.Player)
+        public JoinGameRequestPacket() : base()
+        {
+            MatchId = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public JoinGameRequestPacket(string matchId, GameRole joinAs = GameRole.Player) : base(true)
         {
             MatchId = matchId;
             JoinAs = joinAs;
-            CorrelationId = GenerateCorrelationId();
         }
 
         public override bool IsValid()
@@ -112,7 +136,11 @@ namespace CelestialLeague.Shared.Packets
         public GameRole AssignedRole { get; set; }
         public Dictionary<string, object> GameInfo { get; set; } = new();
 
-        public JoinGameResponsePacket(uint? requestCorrelationId = null, bool success = true)
+        public JoinGameResponsePacket() : base()
+        {
+        }
+
+        public JoinGameResponsePacket(uint? requestCorrelationId = null, bool success = true) : base()
         {
             Success = success;
             if (requestCorrelationId.HasValue)
@@ -131,7 +159,11 @@ namespace CelestialLeague.Shared.Packets
         public override PacketType Type => PacketType.GamePause;
         public bool Pause { get; set; }
 
-        public GamePausePacket(bool pause)
+        public GamePausePacket() : base()
+        {
+        }
+
+        public GamePausePacket(bool pause) : base()
         {
             Pause = pause;
         }
@@ -145,10 +177,16 @@ namespace CelestialLeague.Shared.Packets
     public class MatchStateChangePacket : BasePacket
     {
         public override PacketType Type => PacketType.MatchStateChange;
-        public required string MatchId { get; set; }
+        public required string MatchId { get; set; } = string.Empty;
         public MatchState State { get; set; }
 
-        public MatchStateChangePacket(string matchId, MatchState state)
+        public MatchStateChangePacket() : base()
+        {
+            MatchId = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public MatchStateChangePacket(string matchId, MatchState state) : base()
         {
             MatchId = matchId;
             State = state;
@@ -164,12 +202,18 @@ namespace CelestialLeague.Shared.Packets
     public class PlayerStateChangePacket : BasePacket
     {
         public override PacketType Type => PacketType.PlayerStateChange;
-        public required string MatchId { get; set; }
+        public required string MatchId { get; set; } = string.Empty;
         public required int PlayerId { get; set; }
         public PlayerMatchState State { get; set; }
         public Dictionary<string, object> StateData { get; set; } = new();
 
-        public PlayerStateChangePacket(string matchId, int playerId, PlayerMatchState state)
+        public PlayerStateChangePacket() : base()
+        {
+            MatchId = string.Empty;
+        }
+
+        [SetsRequiredMembers]
+        public PlayerStateChangePacket(string matchId, int playerId, PlayerMatchState state) : base()
         {
             MatchId = matchId;
             PlayerId = playerId;

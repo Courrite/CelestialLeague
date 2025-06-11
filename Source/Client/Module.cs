@@ -1,202 +1,216 @@
 using Celeste;
 using Celeste.Mod;
-using Microsoft.Xna.Framework;
-using Monocle;
+using Celeste.Mod.UI;
+using CelestialLeague.Client.Core;
+using CelestialLeague.Client.Player;
+using CelestialLeague.Client.Services;
+using CelestialLeague.Shared.Models;
+using FMOD.Studio;
+using MonoMod.Utils;
 using System;
 using System.Threading.Tasks;
-using CelestialLeague.Client.Core;
-using CelestialLeague.Client.Networking;
-using CelestialLeague.Shared.Packets;
-using CelestialLeague.Shared.Enums;
 
 namespace CelestialLeague.Client
 {
     public class CelestialLeagueModule : EverestModule
     {
         public static CelestialLeagueModule Instance { get; private set; }
-        
         public override Type SettingsType => typeof(CelestialLeagueSettings);
         public static CelestialLeagueSettings Settings => (CelestialLeagueSettings)Instance._Settings;
 
-        private GameClient _gameClient;
-        private bool _isConnecting;
-        private bool _isConnected;
-
-        public bool IsConnected => _gameClient?.IsConnected == true;
-        public bool IsConnecting => _isConnecting;
-        public GameClient GameClient => _gameClient;
-
-        public event EventHandler<PacketReceivedEventArgs> OnPacketReceived;
-        public event EventHandler<DisconnectedEventArgs> OnDisconnected;
-
-        public CelestialLeagueModule()
-        {
-            Instance = this;
-        }
+        public GameClient GameClient { get; private set; }
 
         public override void Load()
         {
-            Logger.Log(LogLevel.Info, "CelestialLeague", "Loading Celestial League...");
-            
-            try
+            Instance = this;
+            GameClient = new GameClient();
+            AuthManager.Initialize(GameClient);
+
+            if (Settings.AutoConnect)
             {
-                _gameClient = new GameClient();
-                _gameClient.OnDisconnected += OnGameClientDisconnected;
-                
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Celestial League loaded successfully");
-                
-                Task.Run(async () => await AutoConnectAsync());
+                _ = Task.Run(async () => await ConnectAsync(Settings.ServerHost, Settings.ServerPort));
             }
-            catch (Exception ex)
-            {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Failed to load Celestial League: {ex.Message}");
-            }
+
+            Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod loaded");
+        }
+        public override void Unload()
+        {
+            _ = Task.Run(async () => await DisconnectAsync("Mod unloading"));
+
+            Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod unloaded");
         }
 
-        private async Task AutoConnectAsync()
+        private void AddTestingButtons(TextMenu menu, bool inGame)
         {
-            try
-            {
-                await Task.Delay(2000);
-                
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Starting auto-connection...");
-                
-                var host = Settings?.ServerHost ?? "127.0.0.1";
-                var port = Settings?.ServerPort ?? 7777;
-                var autoConnect = Settings?.AutoConnect ?? true;
-                
-                if (!autoConnect)
-                {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", "Auto-connect disabled in settings");
-                    return;
-                }
-                
-                var success = await ConnectAsync(host, port);
-                
-                if (success)
-                {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", "Auto-connection successful");
-                }
-                else
-                {
-                    Logger.Log(LogLevel.Warn, "CelestialLeague", "Auto-connection failed - will retry later");
-                    
-                    _ = Task.Run(async () => await RetryConnectionAsync(host, port));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Auto-connection error: {ex.Message}");
-            }
-        }
+            menu.Add(new TextMenu.SubHeader("Testing Functions"));
 
-        private async Task RetryConnectionAsync(string host, int port)
-        {
-            const int maxRetries = 3;
-            const int retryDelayMs = 10000; // 10 seconds
-            
-            for (int attempt = 1; attempt <= maxRetries; attempt++)
+            menu.Add(new TextMenu.Button("Connect to Server").Pressed(() =>
+            {
+                Logger.Log(LogLevel.Info, "CelestialLeague", "Connect button pressed");
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var success = await ConnectAsync(Settings.ServerHost, Settings.ServerPort);
+                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Connect result: {success}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Connect error: {ex.Message}");
+                    }
+                });
+            }));
+
+            menu.Add(new TextMenu.Button("Disconnect from Server").Pressed(() =>
+            {
+                Logger.Log(LogLevel.Info, "CelestialLeague", "Disconnect button pressed");
+                _ = Task.Run(async () => await DisconnectAsync("Manual disconnect"));
+            }));
+
+            menu.Add(new TextMenu.Button("Test Login").Pressed(() =>
+            {
+                Logger.Log(LogLevel.Info, "CelestialLeague", "Test login button pressed");
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var result = await AuthManager.Instance.LoginAsync(Settings.TestUsername, Settings.TestPassword);
+                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Login result: Success={result.Success}");
+                        if (result.Success && result.PlayerInfo != null)
+                        {
+                            Logger.Log(LogLevel.Info, "CelestialLeague", $"Player Info: ID={result.PlayerInfo.Id}, Username={result.PlayerInfo.Username}");
+                        }
+                        else if (!result.Success)
+                        {
+                            Logger.Log(LogLevel.Warn, "CelestialLeague", $"Login failed: {result.ErrorMessage}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Login error: {ex.Message}");
+                    }
+                });
+            }));
+
+            menu.Add(new TextMenu.Button("Test Register").Pressed(() =>
+            {
+                Logger.Log(LogLevel.Info, "CelestialLeague", "Test register button pressed");
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var result = await AuthManager.Instance.RegisterAsync(
+                            Settings.TestUsername,
+                            Settings.TestPassword
+                        );
+                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Register result: Success={result.Success}");
+                        if (result.Success && result.PlayerInfo != null)
+                        {
+                            Logger.Log(LogLevel.Info, "CelestialLeague", $"Player Info: ID={result.PlayerInfo.Id}, Username={result.PlayerInfo.Username}");
+                        }
+                        else if (!result.Success)
+                        {
+                            Logger.Log(LogLevel.Warn, "CelestialLeague", $"Register failed: {result.ErrorMessage}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Register error: {ex.Message}");
+                    }
+                });
+            }));
+
+            menu.Add(new TextMenu.Button("Check Connection Status").Pressed(() =>
             {
                 try
                 {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Connection retry {attempt}/{maxRetries}...");
-                    
-                    await Task.Delay(retryDelayMs);
-                    
-                    if (IsConnected)
-                    {
-                        Logger.Log(LogLevel.Info, "CelestialLeague", "Already connected, stopping retries");
-                        return;
-                    }
-                    
-                    var success = await ConnectAsync(host, port);
-                    
-                    if (success)
-                    {
-                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Connection successful on retry {attempt}");
-                        return;
-                    }
+                    var isConnected = GameClient?.IsConnected ?? false;
+                    var authStatus = LocalPlayer.Instance.IsAuthenticated ? "Authenticated" : "Not Authenticated";
+                    var currentPlayer = LocalPlayer.Instance.Username ?? "None";
+
+                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Connection Status: {isConnected}");
+                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Auth Status: {authStatus}");
+                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Current Player: {currentPlayer}");
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(LogLevel.Error, "CelestialLeague", $"Retry {attempt} failed: {ex.Message}");
+                    Logger.Log(LogLevel.Error, "CelestialLeague", $"Check status error: {ex.Message}");
                 }
-            }
-            
-            Logger.Log(LogLevel.Warn, "CelestialLeague", $"All {maxRetries} connection attempts failed");
-        }
+            }));
 
-        public override void Unload()
-        {
-            Logger.Log(LogLevel.Info, "CelestialLeague", "Unloading Celestial League...");
-            
-            try
+            menu.Add(new TextMenu.Button("Test Logout").Pressed(() =>
             {
-                if (_gameClient != null)
+                Logger.Log(LogLevel.Info, "CelestialLeague", "Test logout button pressed");
+                _ = Task.Run(async () =>
                 {
-                    if (_gameClient.IsConnected)
+                    try
                     {
-                        _gameClient.DisconnectAsync("Module unloading").Wait(TimeSpan.FromSeconds(2));
+                        await AuthManager.Instance.LogoutAsync();
+                        Logger.Log(LogLevel.Info, "CelestialLeague", "Logout completed");
                     }
-                    
-                    _gameClient.Dispose();
-                    _gameClient = null;
-                }
-                
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Celestial League unloaded successfully");
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Error during unload: {ex.Message}");
-            }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Logout error: {ex.Message}");
+                    }
+                });
+            }));
         }
 
-        public async Task<bool> ConnectAsync(string host = "127.0.0.1", int port = 7777)
+        public async Task<bool> ConnectAsync(string host, int port)
         {
-            if (_isConnecting || IsConnected)
-                return IsConnected;
-
             try
             {
-                _isConnecting = true;
+                if (GameClient?.IsConnected == true)
+                {
+                    Logger.Log(LogLevel.Info, "CelestialLeague", "Already connected to server");
+                    return true;
+                }
+
                 Logger.Log(LogLevel.Info, "CelestialLeague", $"Connecting to {host}:{port}...");
-                
-                var timeout = TimeSpan.FromSeconds(Settings?.ConnectionTimeout ?? 10);
-                var success = await _gameClient!.ConnectAsync(host, port, timeout);
-                
+
+                var success = await GameClient.ConnectAsync(host, port, TimeSpan.FromSeconds(Settings.ConnectionTimeout));
+
                 if (success)
                 {
-                    _isConnected = true;
-                    Logger.Log(LogLevel.Info, "CelestialLeague", "Connected to server successfully");
+                    Logger.Log(LogLevel.Info, "CelestialLeague", "Successfully connected to server");
                 }
                 else
                 {
                     Logger.Log(LogLevel.Warn, "CelestialLeague", "Failed to connect to server");
+                    GameClient?.Dispose();
+                    GameClient = null;
                 }
-                
+
                 return success;
             }
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, "CelestialLeague", $"Connection error: {ex.Message}");
+                GameClient?.Dispose();
+                GameClient = null;
                 return false;
-            }
-            finally
-            {
-                _isConnecting = false;
             }
         }
 
-        public async Task DisconnectAsync(string reason = "User disconnected")
+        public async Task DisconnectAsync(string reason = "User requested")
         {
-            if (!IsConnected)
-                return;
-
             try
             {
-                Logger.Log(LogLevel.Info, "CelestialLeague", $"Disconnecting: {reason}");
-                await _gameClient!.DisconnectAsync(reason);
-                _isConnected = false;
+                if (GameClient?.IsConnected == true)
+                {
+                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Disconnecting from server: {reason}");
+                    await GameClient.DisconnectAsync();
+                }
+
+                GameClient?.Dispose();
+                GameClient = null;
+
+                if (LocalPlayer.Instance.IsAuthenticated)
+                {
+                    await AuthManager.Instance.LogoutAsync();
+                }
+
+                Logger.Log(LogLevel.Info, "CelestialLeague", "Disconnected from server");
             }
             catch (Exception ex)
             {
@@ -204,18 +218,26 @@ namespace CelestialLeague.Client
             }
         }
 
-        private void OnGameClientDisconnected(object sender, DisconnectedEventArgs e)
+        public override void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance snapshot)
         {
-            _isConnected = false;
-            Logger.Log(LogLevel.Info, "CelestialLeague", $"Disconnected from server: {e.Message}");
-            OnDisconnected?.Invoke(this, e);
-            
-            if (Settings?.AutoReconnect == true && !e.Message.Contains("Module unloading") && !e.Message.Contains("User disconnected"))
+            base.CreateModMenuSection(menu, inGame, snapshot);
+
+            Logger.Log(LogLevel.Info, "CelestialLeague", "Adding testing buttons to mod menu");
+            AddTestingButtons(menu, inGame);
+
+            if (GameClient?.IsConnected == true)
             {
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Attempting auto-reconnect...");
-                var host = Settings?.ServerHost ?? "127.0.0.1";
-                var port = Settings?.ServerPort ?? 7777;
-                _ = Task.Run(async () => await RetryConnectionAsync(host, port));
+                menu.Add(new TextMenu.Button("Disconnect").Pressed(() =>
+                {
+                    _ = Task.Run(async () => await DisconnectAsync("Menu disconnect"));
+                }));
+            }
+            else
+            {
+                menu.Add(new TextMenu.Button("Quick Connect").Pressed(() =>
+                {
+                    _ = Task.Run(async () => await ConnectAsync(Settings.ServerHost, Settings.ServerPort));
+                }));
             }
         }
     }

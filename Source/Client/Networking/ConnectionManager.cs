@@ -129,7 +129,6 @@ namespace CelestialLeague.Client.Networking
             OnDisconnected?.Invoke(this, new DisconnectedEventArgs(reason));
         }
 
-
         public async Task<TResponse> SendRequestAsync<TRequest, TResponse>(TRequest request, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
         where TRequest : BasePacket where TResponse : BasePacket
         {
@@ -207,7 +206,6 @@ namespace CelestialLeague.Client.Networking
             }
         }
 
-
         public async Task<bool> SendPacketAsync<T>(T packet) where T : BasePacket
         {
             if (!IsConnected || _stream == null)
@@ -215,7 +213,7 @@ namespace CelestialLeague.Client.Networking
 
             try
             {
-                await _networkClient.SendPacketAsync(packet, _stream);
+                await _networkClient.SendPacketAsync<T>(packet, _stream);
                 return true;
             }
             catch (ObjectDisposedException)
@@ -241,7 +239,7 @@ namespace CelestialLeague.Client.Networking
             }
         }
 
-        private Task HandleReceivedPacketAsync(BasePacket packet, int actualPacketSize)
+        public Task HandleReceivedPacketAsync(BasePacket packet, int actualPacketSize)
         {
             if (packet == null)
                 return Task.CompletedTask;

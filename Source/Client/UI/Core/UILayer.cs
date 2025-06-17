@@ -1,10 +1,12 @@
+using Celeste.Mod;
+using CelestialLeague.Client.UI.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Celeste.Mod.CelestialLeague.Client.UI.Core
+namespace CelestialLeague.Client.UI.Core
 {
 	public class UILayer
 	{

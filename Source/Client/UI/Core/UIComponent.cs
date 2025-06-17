@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
-namespace Celeste.Mod.CelestialLeague.Client.UI.Core
+namespace CelestialLeague.Client.UI.Core
 {
     public abstract class UIComponent
     {

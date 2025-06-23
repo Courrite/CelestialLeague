@@ -1,5 +1,3 @@
-using Celeste.Mod;
-using CelestialLeague.Client.UI.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -8,230 +6,189 @@ using System.Linq;
 
 namespace CelestialLeague.Client.UI.Core
 {
-	public class UILayer
-	{
-		public string Name { get; private set; }
-		public int ZOrder { get; set; }
-		public bool IsVisible { get; set; } = true;
-		public bool IsInteractive { get; set; } = true;
-		public Color TintColor { get; set; } = Color.White;
-		public float Alpha { get; set; } = 1.0f;
+    public class UILayer: UIComponent
+    {
+        // identity
+        public string Name { get; set; }
+        public int Depth { get; set; }
 
-		private List<UIComponent> components;
-		private bool needsSorting;
+        // layer state
+        public bool AcceptsInput { get; set; } = true;
+        public bool IsModal { get; set; } = false; // modal layers block input to layers below
 
-		public UILayer(string name, int zOrder = 0)
-		{
-			Name = name;
-			ZOrder = zOrder;
-			components = new List<UIComponent>();
-		}
+        // components
+        private List<UIComponent> components;
 
-		public void AddComponent(UIComponent component)
-		{
-			if (component == null || components.Contains(component)) return;
+        // layer-wide properties
+        public Vector2 Offset { get; set; } = Vector2.Zero; // for screen shake, transitions, etc.
 
-			components.Add(component);
-			needsSorting = true;
+        // events
+        public event Action<UILayer> LayerShown;
+        public event Action<UILayer> LayerHidden;
+        public event Action<UILayer, UIComponent> ComponentAdded;
+        public event Action<UILayer, UIComponent> ComponentRemoved;
 
-			Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Added component {component.Id} to layer {Name}");
-		}
+        public UILayer(string name, int depth = 0)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Depth = depth;
+            components = [];
+        }
 
-		public void RemoveComponent(UIComponent component)
-		{
-			if (component == null) return;
+        // component management
+        public void AddComponent(UIComponent component)
+        {
+            if (component == null) return;
 
-			components.Remove(component);
-			component.Cleanup();
+            UIManager.Instance?.RemoveComponentFromAllLayers(component);
 
-			Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Removed component {component.Id} from layer {Name}");
-		}
+            components.Add(component);
+            ComponentAdded?.Invoke(this, component);
+        }
 
-		public void RemoveAllComponents()
-		{
-			var componentsCopy = new List<UIComponent>(components);
-			foreach (var component in componentsCopy)
-			{
-				RemoveComponent(component);
-			}
-		}
+        public void RemoveComponent(UIComponent component)
+        {
+            if (component == null) return;
 
-		public bool Contains(UIComponent component)
-		{
-			return components.Contains(component);
-		}
+            if (components.Remove(component))
+            {
+                ComponentRemoved?.Invoke(this, component);
+            }
+        }
 
-		public UIComponent FindComponent(string componentId)
-		{
-			return components.FirstOrDefault(c => c.Id == componentId);
-		}
+        public void ClearComponents()
+        {
+            foreach (var component in components)
+            {
+                component.Cleanup();
+                ComponentRemoved?.Invoke(this, component);
+            }
+            components.Clear();
+        }
 
-		public List<UIComponent> GetComponents()
-		{
-			return new List<UIComponent>(components);
-		}
+        // queries
+        public T FindComponent<T>(string id) where T : UIComponent
+        {
+            return FindComponent(id) as T;
+        }
 
-		public List<UIComponent> GetTabbableComponents()
-		{
-			return components.Where(c => c.IsVisible && c.IsEnabled && c.IsFocusable)
-						   .OrderBy(c => c.Position.Y)
-						   .ThenBy(c => c.Position.X)
-						   .ToList();
-		}
+        public UIComponent FindComponent(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
 
-		public UIComponent GetComponentAt(Vector2 point)
-		{
-			if (!IsVisible || !IsInteractive) return null;
+            foreach (var component in components)
+            {
+                if (component.Id == id) return component;
 
-			// check components in reverse order top to bottom
-			for (int i = components.Count - 1; i >= 0; i--)
-			{
-				var component = components[i].GetComponentAt(point);
-				if (component != null) return component;
-			}
+                var found = component.FindChild(id);
+                if (found != null) return found;
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public void Update()
-		{
-			if (!IsVisible) return;
+        public IEnumerable<T> GetComponentsOfType<T>() where T : UIComponent
+        {
+            return GetAllComponents().OfType<T>();
+        }
 
-			SortComponentsIfNeeded();
+        public IEnumerable<UIComponent> GetAllComponents()
+        {
+            foreach (var component in components)
+            {
+                yield return component;
+                foreach (var child in GetAllChildrenRecursive(component))
+                {
+                    yield return child;
+                }
+            }
+        }
 
-			foreach (var component in components)
-			{
-				component.Update();
-			}
-		}
+        private IEnumerable<UIComponent> GetAllChildrenRecursive(UIComponent parent)
+        {
+            foreach (var child in parent.Children)
+            {
+                yield return child;
+                foreach (var grandchild in GetAllChildrenRecursive(child))
+                {
+                    yield return grandchild;
+                }
+            }
+        }
 
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			if (!IsVisible) return;
+        // visibility
+        public void Show()
+        {
+            if (IsVisible) return;
 
-			SortComponentsIfNeeded();
+            IsVisible = true;
+            LayerShown?.Invoke(this);
+        }
 
-			var originalColor = TintColor * Alpha;
+        public void Hide()
+        {
+            if (!IsVisible) return;
 
-			foreach (var component in components)
-			{
-				if (component.IsVisible)
-				{
-					component.Draw(spriteBatch);
-				}
-			}
-		}
+            IsVisible = false;
+            LayerHidden?.Invoke(this);
+        }
 
-		public void LoadContent()
-		{
-			// override in derived classes if needed
-			foreach (var component in components)
-			{
-				// components can load their own content
-			}
-		}
+        public void Toggle()
+        {
+            if (IsVisible)
+                Hide();
+            else
+                Show();
+        }
 
-		public void BringToFront(UIComponent component)
-		{
-			if (!components.Contains(component)) return;
+        // ordering
+        public void BringToFront()
+        {
+            UIManager.Instance?.BringLayerToFront(this);
+        }
 
-			components.Remove(component);
-			components.Add(component);
+        public void SendToBack()
+        {
+            UIManager.Instance?.SendLayerToBack(this);
+        }
 
-			Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Brought component {component.Id} to front in layer {Name}");
-		}
+        // modal layer support
+        public void SetModal(bool modal)
+        {
+            IsModal = modal;
+            UIManager.Instance?.OnLayerModalChanged(this);
+        }
 
-		public void SendToBack(UIComponent component)
-		{
-			if (!components.Contains(component)) return;
+        // layer stats
+        public int ComponentCount => components.Count;
+        public int TotalComponentCount => GetAllComponents().Count();
 
-			components.Remove(component);
-			components.Insert(0, component);
+        public bool HasFocusedComponent()
+        {
+            return GetAllComponents().Any(c => c.IsFocused);
+        }
 
-			Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Sent component {component.Id} to back in layer {Name}");
-		}
+        public bool HasHoveredComponent()
+        {
+            return GetAllComponents().Any(c => c.IsHovered);
+        }
 
-		public void SetComponentZOrder(UIComponent component, int index)
-		{
-			if (!components.Contains(component)) return;
+        public override void Cleanup()
+        {
+            base.Cleanup();
+            
+            LayerShown = null;
+            LayerHidden = null;
+            ComponentAdded = null;
+            ComponentRemoved = null;
 
-			components.Remove(component);
-			index = Math.Max(0, Math.Min(index, components.Count));
-			components.Insert(index, component);
+            ClearComponents();
+        }
 
-			Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Set component {component.Id} z-order to {index} in layer {Name}");
-		}
-
-		private void SortComponentsIfNeeded()
-		{
-			if (!needsSorting) return;
-
-			// sort by Y position first, then X position for natural tab order
-			components.Sort((a, b) =>
-			{
-				int yCompare = a.Position.Y.CompareTo(b.Position.Y);
-				return yCompare != 0 ? yCompare : a.Position.X.CompareTo(b.Position.X);
-			});
-
-			needsSorting = false;
-		}
-
-		public void Cleanup()
-		{
-			RemoveAllComponents();
-			Logger.Log(LogLevel.Verbose, "CelestialLeague",
-				$"Cleaned up layer {Name}");
-		}
-
-		public int GetComponentCount()
-		{
-			return components.Count;
-		}
-
-		public bool IsEmpty()
-		{
-			return components.Count == 0;
-		}
-
-		public void SetAlpha(float alpha)
-		{
-			Alpha = MathHelper.Clamp(alpha, 0f, 1f);
-		}
-
-		public void Show()
-		{
-			IsVisible = true;
-		}
-
-		public void Hide()
-		{
-			IsVisible = false;
-		}
-
-		public void EnableInteraction()
-		{
-			IsInteractive = true;
-		}
-
-		public void DisableInteraction()
-		{
-			IsInteractive = false;
-		}
-
-		public void LogComponents()
-		{
-			Logger.Log(LogLevel.Info, "CelestialLeague", $"Layer {Name} contains {components.Count} components:");
-
-			for (int i = 0; i < components.Count; i++)
-			{
-				var component = components[i];
-				Logger.Log(LogLevel.Info, "CelestialLeague",$"  [{i}] {component.Id} - Visible: {component.IsVisible}, Enabled: {component.IsEnabled}");
-			}
-		}
-
-		public override string ToString()
-		{
-			return $"UILayer[{Name}] - ZOrder: {ZOrder}, Components: {components.Count}, Visible: {IsVisible}";
-		}
-	}
+        // debug helper
+        public override string ToString()
+        {
+            return $"UILayer '{Name}' (Depth: {Depth}, Components: {ComponentCount}, Visible: {IsVisible})";
+        }
+    }
 }

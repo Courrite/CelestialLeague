@@ -1,456 +1,532 @@
-using Celeste;
-using Celeste.Mod;
-using CelestialLeague.Client.UI.Core;
+using Monocle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monocle;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Celeste.Mod;
+using Celeste;
 
 namespace CelestialLeague.Client.UI.Core
 {
     public class UIManager : Entity
     {
-        private static UIManager instance;
-        public static UIManager Instance => instance;
+        public static UIManager Instance { get; private set; }
 
-        private List<UILayer> layers;
-        private List<UIComponent> inputHandlers;
-        private Stack<UIComponent> stateStack;
-        private UIComponent currentScreen;
-        private SpriteBatch spriteBatch;
-        private bool isInitialized;
+        // core ui state
+        public bool IsVisible { get; set; } = true;
+        public bool AcceptInput { get; set; } = true;
+
+        // component management
+        private List<UIComponent> rootComponents;
 
         // input state tracking
-        private Vector2 lastMousePosition;
-        private bool lastMousePressed;
         private UIComponent focusedComponent;
         private UIComponent hoveredComponent;
+        private Vector2 lastMousePosition;
+        private bool lastMousePressed;
+        private bool lastRightMousePressed;
 
-        public UIManager()
+        // ket state tracking
+        private KeyboardState previousKeyboardState;
+        private KeyboardState currentKeyboardState;
+        private HashSet<Keys> pressedThisFrame;
+        private HashSet<Keys> releasedThisFrame;
+
+        // rendering
+        private SpriteBatch spriteBatch;
+
+        // focus management
+        private List<UIComponent> focusableComponents;
+
+        // events
+        public event Action<UIComponent> ComponentFocused;
+        public event Action<UIComponent> ComponentClicked;
+
+        // input viewer api
+        public event Action<Keys> KeyPressed;
+        public event Action<Keys> KeyReleased;
+        public event Action<Keys> KeyHeld;
+
+        public UIManager() : base()
         {
-            instance = this;
-            layers = new List<UILayer>();
-            inputHandlers = new List<UIComponent>();
-            stateStack = new Stack<UIComponent>();
-            Tag = Tags.Global | Tags.Persistent;
+            Instance = this;
+
+            rootComponents = new List<UIComponent>();
+            focusableComponents = new List<UIComponent>();
+            pressedThisFrame = new HashSet<Keys>();
+            releasedThisFrame = new HashSet<Keys>();
+
+            currentKeyboardState = Keyboard.GetState();
+            previousKeyboardState = currentKeyboardState;
+
+            Tag = new BitTag("UI");
+            Depth = -1000;
+
+            spriteBatch = new SpriteBatch(Engine.Graphics.GraphicsDevice);
+
+            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager initialized");
         }
 
         public override void Awake(Scene scene)
         {
             base.Awake(scene);
-            Initialize();
-        }
-
-        public void Initialize()
-        {
-            if (isInitialized) return;
-
-            AddLayer(new UILayer("Background", 0));
-            AddLayer(new UILayer("Main", 100));
-            AddLayer(new UILayer("Overlay", 200));
-            AddLayer(new UILayer("Modal", 300));
-            AddLayer(new UILayer("Tooltip", 400));
-
-            isInitialized = true;
-            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager initialized");
-        }
-
-        public void LoadContent()
-        {
-            spriteBatch = new SpriteBatch(Engine.Graphics.GraphicsDevice);
-            
-            foreach (var layer in layers)
-            {
-                layer.LoadContent();
-            }
+            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager added to scene");
         }
 
         public override void Update()
         {
+            if (!IsVisible) return;
+
             base.Update();
-            
-            if (!isInitialized) return;
 
-            HandleInput();
-            
-            // update layers in reverse order (top to bottom for input)
-            for (int i = layers.Count - 1; i >= 0; i--)
+            UpdateKeyboardState();
+            UpdateComponents();
+            if (AcceptInput)
             {
-                if (layers[i].IsVisible)
+                HandleInput();
+            }
+            RefreshFocusableComponents();
+        }
+
+        private void UpdateKeyboardState()
+        {
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            pressedThisFrame.Clear();
+            releasedThisFrame.Clear();
+
+            var allKeys = Enum.GetValues<Keys>();
+
+            foreach (Keys key in allKeys)
+            {
+                bool wasPressed = previousKeyboardState.IsKeyDown(key);
+                bool isPressed = currentKeyboardState.IsKeyDown(key);
+
+                if (isPressed && !wasPressed)
                 {
-                    layers[i].Update();
+                    pressedThisFrame.Add(key);
+                    KeyPressed?.Invoke(key);
+                }
+                else if (!isPressed && wasPressed)
+                {
+                    releasedThisFrame.Add(key);
+                    KeyReleased?.Invoke(key);
+                }
+                else if (isPressed && wasPressed)
+                {
+                    KeyHeld?.Invoke(key);
                 }
             }
-
-            currentScreen?.Update();
         }
 
-        public override void Render()
+        private void UpdateComponents()
         {
-            base.Render();
-            
-            if (!isInitialized || spriteBatch == null) return;
-
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, 
-                            SamplerState.PointClamp, DepthStencilState.None, 
-                            RasterizerState.CullNone);
-
-            // draw layers in order (bottom to top)
-            foreach (var layer in layers.OrderBy(l => l.ZOrder))
+            for (int i = rootComponents.Count - 1; i >= 0; i--)
             {
-                if (layer.IsVisible)
+                if (i < rootComponents.Count)
                 {
-                    layer.Draw(spriteBatch);
+                    var component = rootComponents[i];
+                    if (component.IsVisible)
+                    {
+                        component.Update();
+                    }
                 }
             }
-
-            spriteBatch.End();
-        }
-
-        public void AddLayer(UILayer layer)
-        {
-            if (layer == null) return;
-            
-            layers.Add(layer);
-            layers.Sort((a, b) => a.ZOrder.CompareTo(b.ZOrder));
-            
-            Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Added UI layer: {layer.Name}");
-        }
-
-        public void RemoveLayer(UILayer layer)
-        {
-            if (layer == null) return;
-            
-            layer.Cleanup();
-            layers.Remove(layer);
-            
-            Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Removed UI layer: {layer.Name}");
-        }
-
-        public UILayer GetLayer(string layerName)
-        {
-            return layers.FirstOrDefault(l => l.Name == layerName);
-        }
-
-        public void SetLayerVisibility(string layerName, bool visible)
-        {
-            var layer = GetLayer(layerName);
-            if (layer != null)
-            {
-                layer.IsVisible = visible;
-            }
-        }
-
-        public void ClearAllLayers()
-        {
-            foreach (var layer in layers)
-            {
-                layer.Cleanup();
-            }
-            layers.Clear();
-        }
-
-        public void ShowScreen(UIComponent screen)
-        {
-            if (screen == null) return;
-
-            if (currentScreen != null)
-            {
-                currentScreen.IsVisible = false;
-                currentScreen.OnHidden();
-            }
-
-            currentScreen = screen;
-            screen.IsVisible = true;
-            screen.OnShown();
-
-            var mainLayer = GetLayer("Main");
-            if (mainLayer != null && !mainLayer.Contains(screen))
-            {
-                mainLayer.AddComponent(screen);
-            }
-
-            Logger.Log(LogLevel.Info, "CelestialLeague", $"Showing screen: {screen.GetType().Name}");
-        }
-
-        public void HideScreen(UIComponent screen)
-        {
-            if (screen == null) return;
-
-            screen.IsVisible = false;
-            screen.OnHidden();
-
-            if (currentScreen == screen)
-            {
-                currentScreen = null;
-            }
-
-            Logger.Log(LogLevel.Info, "CelestialLeague", $"Hiding screen: {screen.GetType().Name}");
-        }
-
-        public UIComponent GetCurrentScreen()
-        {
-            return currentScreen;
-        }
-
-        public void TransitionToScreen(UIComponent newScreen)
-        {
-            ShowScreen(newScreen);
         }
 
         private void HandleInput()
         {
             var mouseState = MInput.Mouse.CurrentState;
             var mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            bool mousePressed = mouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
+            bool leftPressed = mouseState.LeftButton == ButtonState.Pressed;
+            bool rightPressed = mouseState.RightButton == ButtonState.Pressed;
 
-            HandleMouseHover(mousePosition);
-
-            if (mousePressed && !lastMousePressed)
+            if (mousePosition != lastMousePosition)
             {
-                HandleMouseClick(mousePosition);
+                HandleMouseMove(mousePosition);
+                lastMousePosition = mousePosition;
             }
-			
+
+            if (leftPressed && !lastMousePressed)
+            {
+                HandleMouseDown(mousePosition, true);
+            }
+            else if (!leftPressed && lastMousePressed)
+            {
+                HandleMouseUp(mousePosition, true);
+            }
+
+            if (rightPressed && !lastRightMousePressed)
+            {
+                HandleMouseDown(mousePosition, false);
+            }
+            else if (!rightPressed && lastRightMousePressed)
+            {
+                HandleMouseUp(mousePosition, false);
+            }
+
             if (focusedComponent != null)
-			{
-				HandleKeyboardInput();
-			}
-
-            lastMousePosition = mousePosition;
-            lastMousePressed = mousePressed;
-        }
-
-        private void HandleMouseHover(Vector2 mousePosition)
-        {
-            UIComponent newHovered = null;
-
-            // check components in reverse order (top to bottom)
-            for (int i = layers.Count - 1; i >= 0; i--)
             {
-                if (!layers[i].IsVisible) continue;
-
-                newHovered = layers[i].GetComponentAt(mousePosition);
-                if (newHovered != null) break;
+                HandleKeyboardInput();
             }
 
-            if (hoveredComponent != newHovered)
-            {
-                hoveredComponent?.OnMouseLeave();
-                hoveredComponent = newHovered;
-                hoveredComponent?.OnMouseEnter();
-            }
+            lastMousePressed = leftPressed;
+            lastRightMousePressed = rightPressed;
         }
 
-        private void HandleMouseClick(Vector2 mousePosition)
+        private void HandleMouseMove(Vector2 mousePosition)
         {
-            UIComponent clickedComponent = null;
+            UIComponent newHovered = FindComponentAt(mousePosition);
 
-            // topmost clickable component
-            for (int i = layers.Count - 1; i >= 0; i--)
+            if (newHovered != hoveredComponent)
             {
-                if (!layers[i].IsVisible) continue;
-
-                clickedComponent = layers[i].GetComponentAt(mousePosition);
-                if (clickedComponent != null && clickedComponent.CanReceiveInput)
+                if (hoveredComponent != null)
                 {
-                    break;
+                    hoveredComponent.OnMouseLeave();
+                }
+
+                hoveredComponent = newHovered;
+
+                if (hoveredComponent != null)
+                {
+                    hoveredComponent.OnMouseEnter();
                 }
             }
 
-            if (clickedComponent != null)
+            if (hoveredComponent != null)
             {
-                SetFocus(clickedComponent);
-                clickedComponent.OnMouseClick(mousePosition);
+                hoveredComponent.OnMouseMove(mousePosition);
             }
-            else
+        }
+
+        private void HandleMouseDown(Vector2 mousePosition, bool isLeftButton)
+        {
+            if (!isLeftButton) return;
+
+            UIComponent clickedComponent = FindComponentAt(mousePosition);
+
+            SetFocusedComponent(clickedComponent);
+
+            if (clickedComponent != null && clickedComponent.CanReceiveInput && clickedComponent.IsEnabled)
             {
-                // click on empty space - clear focus
-                SetFocus(null);
+                clickedComponent.OnMouseDown(mousePosition);
+            }
+        }
+
+        private void HandleMouseUp(Vector2 mousePosition, bool isLeftButton)
+        {
+            if (!isLeftButton) return;
+
+            UIComponent releasedComponent = FindComponentAt(mousePosition);
+
+            var allComponents = GetAllComponents().ToList();
+            foreach (var component in allComponents)
+            {
+                if (component.IsPressed)
+                {
+                    component.OnMouseUp(mousePosition);
+
+                    if (component == releasedComponent && component.CanReceiveInput && component.IsEnabled)
+                    {
+                        component.OnClick(mousePosition);
+                        ComponentClicked?.Invoke(component);
+                    }
+                }
             }
         }
 
         private void HandleKeyboardInput()
         {
-            if (MInput.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Tab))
+            foreach (var key in pressedThisFrame)
             {
-                HandleTabNavigation();
-            }
-            else if (MInput.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Enter))
-            {
-                focusedComponent?.OnKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter);
-            }
-            else if (MInput.Keyboard.Pressed(Microsoft.Xna.Framework.Input.Keys.Escape))
-            {
-                focusedComponent?.OnKeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape);
-            }
+                focusedComponent.OnKeyPressed(key);
 
-            // let focused component handle other keys
-            focusedComponent?.HandleKeyboardInput();
-        }
-
-        private void HandleTabNavigation()
-        {
-            var tabbableComponents = GetTabbableComponents();
-            if (tabbableComponents.Count == 0) return;
-
-            int currentIndex = focusedComponent != null ? 
-                tabbableComponents.IndexOf(focusedComponent) : -1;
-            
-            int nextIndex = (currentIndex + 1) % tabbableComponents.Count;
-            SetFocus(tabbableComponents[nextIndex]);
-        }
-
-        private List<UIComponent> GetTabbableComponents()
-        {
-            var components = new List<UIComponent>();
-            
-            foreach (var layer in layers.OrderBy(l => l.ZOrder))
-            {
-                if (layer.IsVisible)
+                if (key == Keys.Tab)
                 {
-                    components.AddRange(layer.GetTabbableComponents());
+                    bool shiftHeld = currentKeyboardState.IsKeyDown(Keys.LeftShift) || currentKeyboardState.IsKeyDown(Keys.RightShift);
+                    if (shiftHeld)
+                        MoveFocusToPrevious();
+                    else
+                        MoveFocusToNext();
                 }
             }
-            
-            return components;
-        }
 
-        public void RegisterInputHandler(UIComponent component)
-        {
-            if (component != null && !inputHandlers.Contains(component))
+            foreach (var key in releasedThisFrame)
             {
-                inputHandlers.Add(component);
+                focusedComponent.OnKeyReleased(key);
             }
         }
 
-        public void UnregisterInputHandler(UIComponent component)
+        private UIComponent FindComponentAt(Vector2 position)
         {
-            inputHandlers.Remove(component);
-            
-            if (focusedComponent == component)
+            for (int i = rootComponents.Count - 1; i >= 0; i--)
+            {
+                var component = rootComponents[i];
+                if (!component.IsVisible) continue;
+
+                var found = component.GetComponentAt(new Point((int)position.X, (int)position.Y));
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        public override void Render()
+        {
+            if (!IsVisible) return;
+
+            spriteBatch.Begin(
+                SpriteSortMode.Deferred,
+                BlendState.AlphaBlend,
+                SamplerState.PointClamp,
+                DepthStencilState.None,
+                RasterizerState.CullNone
+            );
+
+            foreach (var component in rootComponents)
+            {
+                if (component.IsVisible)
+                {
+                    component.Render(spriteBatch);
+                }
+            }
+
+            spriteBatch.End();
+        }
+
+        // input viewer api
+        public bool IsKeyPressed(Keys key) => pressedThisFrame.Contains(key);
+        public bool IsKeyReleased(Keys key) => releasedThisFrame.Contains(key);
+        public bool IsKeyHeld(Keys key) => currentKeyboardState.IsKeyDown(key);
+        public bool WasKeyHeld(Keys key) => previousKeyboardState.IsKeyDown(key);
+
+        public IEnumerable<Keys> GetPressedKeys() => pressedThisFrame;
+        public IEnumerable<Keys> GetReleasedKeys() => releasedThisFrame;
+        public IEnumerable<Keys> GetHeldKeys() => Enum.GetValues<Keys>().Where(k => currentKeyboardState.IsKeyDown(k));
+
+        // component management
+        public void AddComponent(UIComponent component)
+        {
+            if (component == null) return;
+            component.RemoveFromParent();
+            rootComponents.Add(component);
+            RefreshFocusableComponents();
+            Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Added UI component: {component}");
+        }
+
+        public void RemoveComponent(UIComponent component)
+        {
+            if (component == null) return;
+            if (rootComponents.Remove(component))
+            {
+                if (focusedComponent == component)
+                    focusedComponent = null;
+                if (hoveredComponent == component)
+                    hoveredComponent = null;
+                component.Cleanup();
+                RefreshFocusableComponents();
+                Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Removed UI component: {component}");
+            }
+        }
+
+        public void ClearComponents()
+        {
+            focusedComponent = null;
+            hoveredComponent = null;
+            foreach (var component in rootComponents)
+            {
+                component.Cleanup();
+            }
+            rootComponents.Clear();
+            focusableComponents.Clear();
+            Logger.Log(LogLevel.Info, "CelestialLeague", "Cleared all UI components");
+        }
+
+        // focus management
+        public void SetFocusedComponent(UIComponent component)
+        {
+            if (focusedComponent == component) return;
+            if (focusedComponent != null)
+            {
+                focusedComponent.OnLostFocus();
+            }
+            focusedComponent = component;
+            if (focusedComponent != null && focusedComponent.IsFocusable && focusedComponent.IsEnabled)
+            {
+                focusedComponent.OnGainedFocus();
+                ComponentFocused?.Invoke(focusedComponent);
+            }
+            else
             {
                 focusedComponent = null;
             }
-            
-            if (hoveredComponent == component)
+        }
+
+        public void MoveFocusToNext()
+        {
+            if (focusableComponents.Count == 0) return;
+            int currentIndex = focusedComponent != null ? focusableComponents.IndexOf(focusedComponent) : -1;
+            int nextIndex = (currentIndex + 1) % focusableComponents.Count;
+            SetFocusedComponent(focusableComponents[nextIndex]);
+        }
+
+        public void MoveFocusToPrevious()
+        {
+            if (focusableComponents.Count == 0) return;
+            int currentIndex = focusedComponent != null ? focusableComponents.IndexOf(focusedComponent) : 0;
+            int prevIndex = currentIndex <= 0 ? focusableComponents.Count - 1 : currentIndex - 1;
+            SetFocusedComponent(focusableComponents[prevIndex]);
+        }
+
+        private void RefreshFocusableComponents()
+        {
+            focusableComponents.Clear();
+            foreach (var component in GetAllComponents())
             {
-                hoveredComponent = null;
-            }
-        }
-
-        public void SetFocus(UIComponent component)
-        {
-            if (focusedComponent == component) return;
-
-            focusedComponent?.OnLostFocus();
-            focusedComponent = component;
-            focusedComponent?.OnGainedFocus();
-        }
-
-        public void PushState(UIComponent state)
-        {
-            if (currentScreen != null)
-            {
-                stateStack.Push(currentScreen);
-                currentScreen.IsVisible = false;
-            }
-            
-            ShowScreen(state);
-        }
-
-        public void PopState()
-        {
-            if (stateStack.Count == 0) return;
-
-            if (currentScreen != null)
-            {
-                HideScreen(currentScreen);
-            }
-
-            var previousState = stateStack.Pop();
-            ShowScreen(previousState);
-        }
-
-        public UIComponent GetCurrentState()
-        {
-            return stateStack.Count > 0 ? stateStack.Peek() : null;
-        }
-		
-        public UIComponent FindComponent(string componentId)
-		{
-			foreach (var layer in layers)
-			{
-				var component = layer.FindComponent(componentId);
-				if (component != null) return component;
-			}
-			return null;
-		}
-
-        public void BringToFront(UIComponent component)
-        {
-            foreach (var layer in layers)
-            {
-                if (layer.Contains(component))
+                if (component.IsFocusable && component.IsEnabled && component.IsVisible)
                 {
-                    layer.BringToFront(component);
-                    break;
+                    focusableComponents.Add(component);
                 }
             }
         }
 
-        public void SendToBack(UIComponent component)
+        public void BringLayerToFront(UILayer layer)
         {
-            foreach (var layer in layers)
+            UIComponent layerComponent = layer;
+            if (layerComponent != null && rootComponents.Remove(layerComponent))
             {
-                if (layer.Contains(component))
+                rootComponents.Add(layerComponent);
+            }
+        }
+
+        public void SendLayerToBack(UILayer layer)
+        {
+            UIComponent layerComponent = layer;
+            if (layerComponent != null && rootComponents.Remove(layerComponent))
+            {
+                rootComponents.Insert(0, layerComponent);
+            }
+        }
+
+        public void OnLayerModalChanged(UILayer layer)
+        {
+            if (layer.IsModal)
+            {
+                foreach (var component in rootComponents)
                 {
-                    layer.SendToBack(component);
-                    break;
+                    if (component != layer)
+                    {
+                        component.CanReceiveInput = false;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var component in rootComponents)
+                {
+                    component.CanReceiveInput = true;
                 }
             }
         }
 
-        public bool IsComponentVisible(UIComponent component)
+        public void RemoveComponentFromAllLayers(UIComponent component)
         {
-            if (component == null || !component.IsVisible) return false;
+            rootComponents.Remove(component);
 
-            foreach (var layer in layers)
+            foreach (var rootComponent in rootComponents)
             {
-                if (layer.Contains(component))
+                if (rootComponent is UILayer layer)
                 {
-                    return layer.IsVisible;
+                    layer.RemoveComponent(component);
                 }
             }
-            
-            return false;
         }
-		
+
+        // util methods
+        public T FindComponent<T>(string id) where T : UIComponent
+        {
+            return FindComponent(id) as T;
+        }
+
+        public UIComponent FindComponent(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            foreach (var component in rootComponents)
+            {
+                if (component.Id == id) return component;
+                var found = component.FindChild(id);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+        public IEnumerable<T> GetComponentsOfType<T>() where T : UIComponent
+        {
+            return GetAllComponents().OfType<T>();
+        }
+
+        private IEnumerable<UIComponent> GetAllComponents()
+        {
+            foreach (var root in rootComponents)
+            {
+                yield return root;
+                foreach (var child in GetAllChildrenRecursive(root))
+                {
+                    yield return child;
+                }
+            }
+        }
+
+        private IEnumerable<UIComponent> GetAllChildrenRecursive(UIComponent parent)
+        {
+            foreach (var child in parent.Children)
+            {
+                yield return child;
+                foreach (var grandchild in GetAllChildrenRecursive(child))
+                {
+                    yield return grandchild;
+                }
+            }
+        }
+
+        // stats
+        public int ComponentCount => rootComponents.Count;
+        public int TotalComponentCount => GetAllComponents().Count();
+        public UIComponent GetFocusedComponent() => focusedComponent;
+        public UIComponent GetHoveredComponent() => hoveredComponent;
+
+        internal void OnComponentFocusRequested(UIComponent component)
+        {
+            SetFocusedComponent(component);
+        }
+
         public override void Removed(Scene scene)
-		{
-			Unload();
-			base.Removed(scene);
-		}
-
-        public void Unload()
         {
-            ClearAllLayers();
-            inputHandlers.Clear();
-            stateStack.Clear();
-            currentScreen = null;
-            focusedComponent = null;
-            hoveredComponent = null;
-            
+            ClearComponents();
+
+            KeyPressed = null;
+            KeyReleased = null;
+            KeyHeld = null;
+
+            ComponentFocused = null;
+            ComponentClicked = null;
             spriteBatch?.Dispose();
-            spriteBatch = null;
-            
-            UIComponent.DisposeStaticResources();
-            
-            isInitialized = false;
-            instance = null;
-            
-            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager unloaded");
+            if (Instance == this)
+                Instance = null;
+            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager removed from scene");
+            base.Removed(scene);
+        }
+
+        // debug helper
+        public override string ToString()
+        {
+            return $"UIManager (Components: {ComponentCount}, Focused: {focusedComponent?.Id ?? "none"})";
         }
     }
 }

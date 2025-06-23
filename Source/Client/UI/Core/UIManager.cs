@@ -28,7 +28,7 @@ namespace CelestialLeague.Client.UI.Core
         private bool lastMousePressed;
         private bool lastRightMousePressed;
 
-        // ket state tracking
+        // key state tracking
         private KeyboardState previousKeyboardState;
         private KeyboardState currentKeyboardState;
         private HashSet<Keys> pressedThisFrame;
@@ -36,6 +36,7 @@ namespace CelestialLeague.Client.UI.Core
 
         // rendering
         private SpriteBatch spriteBatch;
+        private bool spriteBatchInitialized = false;
 
         // focus management
         private List<UIComponent> focusableComponents;
@@ -64,14 +65,23 @@ namespace CelestialLeague.Client.UI.Core
             Tag = new BitTag("UI");
             Depth = -1000;
 
-            spriteBatch = new SpriteBatch(Engine.Graphics.GraphicsDevice);
+            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager initialized (SpriteBatch will be created later)");
+        }
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager initialized");
+        private void EnsureSpriteBatchInitialized()
+        {
+            if (!spriteBatchInitialized && Engine.Graphics?.GraphicsDevice != null)
+            {
+                spriteBatch = new SpriteBatch(Engine.Graphics.GraphicsDevice);
+                spriteBatchInitialized = true;
+                Logger.Log(LogLevel.Info, "CelestialLeague", "SpriteBatch initialized");
+            }
         }
 
         public override void Awake(Scene scene)
         {
             base.Awake(scene);
+            EnsureSpriteBatchInitialized();
             Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager added to scene");
         }
 
@@ -79,6 +89,7 @@ namespace CelestialLeague.Client.UI.Core
         {
             if (!IsVisible) return;
 
+            EnsureSpriteBatchInitialized();
             base.Update();
 
             UpdateKeyboardState();
@@ -279,7 +290,32 @@ namespace CelestialLeague.Client.UI.Core
 
         public override void Render()
         {
-            if (!IsVisible) return;
+            if (!IsVisible || !spriteBatchInitialized) return;
+
+            spriteBatch.Begin(
+                SpriteSortMode.Deferred,
+                BlendState.AlphaBlend,
+                SamplerState.PointClamp,
+                DepthStencilState.None,
+                RasterizerState.CullNone,
+                null,
+                Matrix.Identity
+            );
+
+            foreach (var component in rootComponents)
+            {
+                if (component.IsVisible)
+                {
+                    component.Render(spriteBatch);
+                }
+            }
+
+            spriteBatch.End();
+        }
+
+        public void RenderUI()
+        {
+            if (!IsVisible || !spriteBatchInitialized) return;
 
             spriteBatch.Begin(
                 SpriteSortMode.Deferred,
@@ -299,6 +335,7 @@ namespace CelestialLeague.Client.UI.Core
 
             spriteBatch.End();
         }
+
 
         // input viewer api
         public bool IsKeyPressed(Keys key) => pressedThisFrame.Contains(key);
@@ -516,7 +553,10 @@ namespace CelestialLeague.Client.UI.Core
 
             ComponentFocused = null;
             ComponentClicked = null;
+
             spriteBatch?.Dispose();
+            spriteBatchInitialized = false;
+
             if (Instance == this)
                 Instance = null;
             Logger.Log(LogLevel.Info, "CelestialLeague", "UIManager removed from scene");

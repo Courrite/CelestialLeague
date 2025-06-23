@@ -8,260 +8,297 @@ namespace CelestialLeague.Client.UI.Core
 {
     public abstract class UIComponent
     {
-        public string Id { get; set; }
-        public Vector2 Position { get; set; }
-        public Vector2 Size { get; set; }
-        public bool IsVisible { get; set; } = true;
-        public bool IsEnabled { get; set; } = true;
-        public bool CanReceiveInput { get; set; } = true;
-        public bool IsFocusable { get; set; } = false;
-        public Color BackgroundColor { get; set; } = Color.Transparent;
-        public Color BorderColor { get; set; } = Color.Transparent;
-        public int BorderWidth { get; set; } = 0;
-        public float Alpha { get; set; } = 1.0f;
+        // static texture for drawing rectangles - shared across all components to save memory
+        private static Texture2D pixelTexture;
 
         // hierarchy
         public UIComponent Parent { get; set; }
-        protected List<UIComponent> children;
+        public List<UIComponent> Children { get; private set; }
 
-        // state
-        public bool IsHovered { get; protected set; }
-        public bool IsFocused { get; protected set; }
-        public bool IsPressed { get; protected set; }
+        // identity
+        public string Id { get; set; }
+        public object Tag { get; set; }
 
-        // events
-        public event Action<UIComponent> OnClick;
-        public event Action<UIComponent> OnHover;
-        public event Action<UIComponent> OnFocus;
-        public event Action<UIComponent> OnBlur;
+        // transform - position relative to parent, size in pixels
+        public Vector2 Position { get; set; }
+        public Vector2 Size { get; set; }
 
-        // static pixel texture cache
-        private static Texture2D pixelTexture;
-        private static GraphicsDevice lastGraphicsDevice;
+        // bounds calculations
+        public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+        public Rectangle AbsoluteBounds => new Rectangle((int)AbsolutePosition.X, (int)AbsolutePosition.Y, (int)Size.X, (int)Size.Y);
+        public Vector2 AbsolutePosition => Parent != null ? Parent.AbsolutePosition + Position : Position;
 
-        public UIComponent()
+        // visual properties
+        public bool IsVisible { get; set; } = true;
+        public float Alpha { get; set; } = 1f;
+        public Color BackgroundColor { get; set; } = Color.Transparent;
+        public Color BorderColor { get; set; } = Color.Transparent;
+        public int BorderWidth { get; set; } = 0;
+
+        // interaction states
+        public bool CanReceiveInput { get; set; } = false;
+        public bool IsFocusable { get; set; } = false;
+        public bool IsEnabled { get; set; } = true;
+        public bool IsHovered { get; set; } = false;
+        public bool IsPressed { get; set; } = false;
+        public bool IsFocused { get; set; } = false;
+
+        public UIComponent(string id = null)
         {
-            children = new List<UIComponent>();
-            Id = Guid.NewGuid().ToString();
+            Id = id;
+            Children = [];
         }
 
-		public UIComponent(string id) : this()
-		{
-			Id = id;
-		}
-
-        public virtual void AddChild(UIComponent child)
+        // hierarhcy management
+        public void AddChild(UIComponent child)
         {
-            if (child == null || children.Contains(child)) return;
+            if (child == null) return;
 
-            child.Parent?.RemoveChild(child);
+            child.RemoveFromParent();
+
+            Children.Add(child);
             child.Parent = this;
-            children.Add(child);
-            child.OnAdded();
         }
 
-        public virtual void RemoveChild(UIComponent child)
+        public void RemoveChild(UIComponent child)
         {
-            if (child == null || !children.Contains(child)) return;
+            if (child == null) return;
 
-            child.Parent = null;
-            children.Remove(child);
-            child.OnRemoved();
-        }
-
-        public virtual void RemoveAllChildren()
-        {
-            var childrenCopy = new List<UIComponent>(children);
-            foreach (var child in childrenCopy)
+            if (Children.Remove(child))
             {
-                RemoveChild(child);
+                child.Parent = null;
             }
+        }
+
+        public void RemoveFromParent()
+        {
+            Parent?.RemoveChild(this);
+        }
+
+        // finding components
+        public T FindChild<T>(string id) where T : UIComponent
+        {
+            return FindChild(id) as T;
         }
 
         public UIComponent FindChild(string id)
         {
-            foreach (var child in children)
+            if (string.IsNullOrEmpty(id)) return null;
+
+            foreach (var child in Children)
             {
                 if (child.Id == id) return child;
-                
+            }
+
+            foreach (var child in Children)
+            {
                 var found = child.FindChild(id);
                 if (found != null) return found;
             }
+
             return null;
         }
 
-        public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-
-        public Vector2 AbsolutePosition
-        {
-            get
-            {
-                if (Parent == null) return Position;
-                return Parent.AbsolutePosition + Position;
-            }
-        }
-
-        public Rectangle AbsoluteBounds
-        {
-            get
-            {
-                var absPos = AbsolutePosition;
-                return new Rectangle((int)absPos.X, (int)absPos.Y, (int)Size.X, (int)Size.Y);
-            }
-        }
-
-        public virtual bool ContainsPoint(Vector2 point)
-        {
-            return AbsoluteBounds.Contains((int)point.Y, (int)point.X);
-        }
-
-        public virtual UIComponent GetComponentAt(Vector2 point)
-        {
-            if (!IsVisible || !ContainsPoint(point)) return null;
-
-            // check children in reverse order for top-to-bottom
-            for (int i = children.Count - 1; i >= 0; i--)
-            {
-                var child = children[i].GetComponentAt(point);
-                if (child != null) return child;
-            }
-
-            return CanReceiveInput ? this : null;
-        }
-
+        // update cycle
         public virtual void Update()
         {
             if (!IsVisible) return;
 
             OnUpdate();
 
-            foreach (var child in children)
+            for (int i = Children.Count - 1; i >= 0; i--)
             {
-                child.Update();
+                if (i < Children.Count)
+                {
+                    Children[i].Update();
+                }
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        protected virtual void OnUpdate()
+        {
+            // override in derived classes
+            // base implementation is empty cuz not all components need update logic
+        }
+
+        // render cycle
+        public void Render(SpriteBatch spriteBatch)
         {
             if (!IsVisible) return;
 
-            DrawBackground(spriteBatch);
-            OnDraw(spriteBatch);
-            DrawBorder(spriteBatch);
+            OnRender(spriteBatch);
 
-            // Draw children
-            foreach (var child in children)
+            foreach (var child in Children)
             {
-                child.Draw(spriteBatch);
+                child.Render(spriteBatch);
             }
         }
 
-        protected virtual void DrawBackground(SpriteBatch spriteBatch)
+        protected virtual void OnRender(SpriteBatch spriteBatch)
+        {
+            OnDraw(spriteBatch);
+
+            // override in derived classes
+        }
+
+        protected virtual void OnDraw(SpriteBatch spriteBatch)
         {
             if (BackgroundColor != Color.Transparent)
             {
-                var bounds = AbsoluteBounds;
-                var pixel = GetPixelTexture(spriteBatch.GraphicsDevice);
-                spriteBatch.Draw(pixel, bounds, BackgroundColor * Alpha);
+                DrawBackground(spriteBatch);
             }
+
+            if (BorderWidth > 0 && BorderColor != Color.Transparent)
+            {
+                DrawBorder(spriteBatch);
+            }
+        }
+
+        // drwaing helpers
+        protected virtual void DrawBackground(SpriteBatch spriteBatch)
+        {
+            var pixel = GetPixelTexture(spriteBatch.GraphicsDevice);
+            var bounds = AbsoluteBounds;
+            spriteBatch.Draw(pixel, bounds, BackgroundColor * Alpha);
         }
 
         protected virtual void DrawBorder(SpriteBatch spriteBatch)
         {
-            if (BorderWidth > 0 && BorderColor != Color.Transparent)
-            {
-                var bounds = AbsoluteBounds;
-                var pixel = GetPixelTexture(spriteBatch.GraphicsDevice);
-                var color = BorderColor * Alpha;
+            var pixel = GetPixelTexture(spriteBatch.GraphicsDevice);
+            var bounds = AbsoluteBounds;
+            var borderColor = BorderColor * Alpha;
 
-                // Draw border rectangles
-                spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, BorderWidth), color); // Top
-                spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Bottom - BorderWidth, bounds.Width, BorderWidth), color); // Bottom
-                spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Y, BorderWidth, bounds.Height), color); // Left
-                spriteBatch.Draw(pixel, new Rectangle(bounds.Right - BorderWidth, bounds.Y, BorderWidth, bounds.Height), color); // Right
-            }
+            // T (top)
+            spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, BorderWidth), borderColor);
+            // B (bottmo)
+            spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Bottom - BorderWidth, bounds.Width, BorderWidth), borderColor);
+            // L (left)
+            spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Y, BorderWidth, bounds.Height), borderColor);
+            // R (right)
+            spriteBatch.Draw(pixel, new Rectangle(bounds.Right - BorderWidth, bounds.Y, BorderWidth, bounds.Height), borderColor);
         }
 
-        private static Texture2D GetPixelTexture(GraphicsDevice graphicsDevice)
+        protected static Texture2D GetPixelTexture(GraphicsDevice graphicsDevice)
         {
-            // Recreate if graphics device changed or texture doesn't exist
-            if (pixelTexture == null || lastGraphicsDevice != graphicsDevice)
+            if (pixelTexture == null)
             {
-                pixelTexture?.Dispose(); // Clean up old texture if it exists
                 pixelTexture = new Texture2D(graphicsDevice, 1, 1);
                 pixelTexture.SetData(new[] { Color.White });
-                lastGraphicsDevice = graphicsDevice;
             }
             return pixelTexture;
         }
 
-        public static void DisposeStaticResources()
-        {
-            pixelTexture?.Dispose();
-            pixelTexture = null;
-            lastGraphicsDevice = null;
-        }
-
+        // mouse events
         public virtual void OnMouseEnter()
         {
             IsHovered = true;
-            OnHover?.Invoke(this);
-            OnMouseEnterInternal();
         }
 
         public virtual void OnMouseLeave()
         {
             IsHovered = false;
-            IsPressed = false;
-            OnMouseLeaveInternal();
         }
 
-        public virtual void OnMouseClick(Vector2 mousePosition)
+        public virtual void OnMouseMove(Vector2 mousePosition)
         {
-            if (!IsEnabled || !CanReceiveInput) return;
+            // most components don't need mouse move, but sliders/drag operations do
+        }
+
+        public virtual void OnMouseDown(Vector2 mousePosition)
+        {
+            if (!CanReceiveInput || !IsEnabled) return;
 
             IsPressed = true;
-            OnClick?.Invoke(this);
-            OnMouseClickInternal(mousePosition);
+
+            // request focus on mouse down, not click, for better UX
+            if (IsFocusable)
+            {
+                RequestFocus();
+            }
         }
 
+        public virtual void OnMouseUp(Vector2 mousePosition)
+        {
+            if (!CanReceiveInput || !IsEnabled) return;
+
+            IsPressed = false;
+            // reset press state regardless of where mouse up occurs
+        }
+
+        public virtual void OnClick(Vector2 mousePosition)
+        {
+            if (!CanReceiveInput || !IsEnabled) return;
+
+            // click is mouse down + up on same component
+            // override in derived classes
+        }
+
+        // keyboard events
+        public virtual void OnKeyPressed(Keys key)
+        {
+            if (!CanReceiveInput || !IsEnabled || !IsFocused) return;
+
+            switch (key)
+            {
+                case Keys.Tab:
+                    MoveFocusToNext();
+                    break;
+                case Keys.Enter:
+                case Keys.Space:
+                    // enter/space activates component like clicking
+                    OnClick(Vector2.Zero);
+                    break;
+            }
+        }
+
+        public virtual void OnKeyReleased(Keys key)
+        {
+            if (!CanReceiveInput || !IsEnabled || !IsFocused) return;
+
+            // most components don't need key release events
+        }
+
+        public virtual void OnTextInput(char character)
+        {
+            if (!CanReceiveInput || !IsEnabled || !IsFocused) return;
+
+            // only text input components need this - textboxes, etc.
+        }
+
+        // focuz events
         public virtual void OnGainedFocus()
         {
             IsFocused = true;
-            OnFocus?.Invoke(this);
-            OnGainedFocusInternal();
+            // override in derived classes
         }
 
         public virtual void OnLostFocus()
         {
             IsFocused = false;
-            OnBlur?.Invoke(this);
-            OnLostFocusInternal();
+            // override in derived classes
         }
 
-        public virtual void OnKeyPressed(Keys key)
+        // hit testing
+        public virtual bool ContainsPoint(Point point)
         {
-            OnKeyPressedInternal(key);
+            return AbsoluteBounds.Contains(point);
         }
 
-        public virtual void HandleKeyboardInput()
+        public virtual UIComponent GetComponentAt(Point point)
         {
-            // override in derived classes for specific keyboard handling
+            if (!IsVisible || !ContainsPoint(point)) return null;
+
+            // check children first cuz they render on top
+            for (int i = Children.Count - 1; i >= 0; i--)
+            {
+                var child = Children[i].GetComponentAt(point);
+                if (child != null) return child;
+            }
+
+            return CanReceiveInput ? this : null;
         }
 
-        protected virtual void OnUpdate() { }
-        protected virtual void OnDraw(SpriteBatch spriteBatch) { }
-        protected virtual void OnAdded() { }
-        protected virtual void OnRemoved() { }
-        public virtual void OnShown() { }
-        public virtual void OnHidden() { }
-        protected virtual void OnMouseEnterInternal() { }
-        protected virtual void OnMouseLeaveInternal() { }
-        protected virtual void OnMouseClickInternal(Vector2 mousePosition) { }
-        protected virtual void OnGainedFocusInternal() { }
-        protected virtual void OnLostFocusInternal() { }
-        protected virtual void OnKeyPressedInternal(Keys key) { }
-
+        // util methods
         public void SetPosition(float x, float y)
         {
             Position = new Vector2(x, y);
@@ -272,45 +309,38 @@ namespace CelestialLeague.Client.UI.Core
             Size = new Vector2(width, height);
         }
 
-        public void Center(Vector2 containerSize)
+        public void SetBounds(Rectangle bounds)
         {
-            Position = new Vector2(
-                (containerSize.X - Size.X) / 2,
-                (containerSize.Y - Size.Y) / 2
-            );
+            Position = new Vector2(bounds.X, bounds.Y);
+            Size = new Vector2(bounds.Width, bounds.Height);
         }
 
-        public void Show()
+        // focus management
+        protected virtual void RequestFocus()
         {
-            IsVisible = true;
-            OnShown();
+            UIManager.Instance?.SetFocusedComponent(this);
         }
 
-        public void Hide()
+        protected virtual void MoveFocusToNext()
         {
-            IsVisible = false;
-            OnHidden();
-        }
-
-        public void Enable()
-        {
-            IsEnabled = true;
-        }
-
-        public void Disable()
-        {
-            IsEnabled = false;
+            UIManager.Instance?.MoveFocusToNext();
         }
 
         public virtual void Cleanup()
         {
-            OnClick = null;
-            OnHover = null;
-            OnFocus = null;
-            OnBlur = null;
-            
-            RemoveAllChildren();
-            Parent?.RemoveChild(this);
+            RemoveFromParent();
+
+            foreach (var child in Children)
+            {
+                child.Cleanup();
+            }
+            Children.Clear();
+        }
+
+        // debug helper
+        public override string ToString()
+        {
+            return $"{GetType().Name}({Id ?? "unnamed"}) at {Position} size {Size}";
         }
     }
 }

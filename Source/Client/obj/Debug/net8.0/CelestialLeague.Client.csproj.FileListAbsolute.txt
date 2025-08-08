@@ -1,0 +1,17 @@
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CelestialLeague.Client.csproj.AssemblyReference.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CelestialLeague.Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CelestialLeague.Client.AssemblyInfoInputs.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CelestialLeague.Client.AssemblyInfo.cs
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CelestialLeague.Client.csproj.CoreCompileInputs.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\CL.deps.json
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\CL.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\CL.pdb
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\DiscordRPC.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\CLShared.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\bin\Debug\net8.0\CLShared.pdb
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\Celestia.021AB555.Up2Date
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CL.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\refint\CL.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\CL.pdb
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net8.0\ref\CL.dll

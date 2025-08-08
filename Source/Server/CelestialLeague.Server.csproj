@@ -118,7 +118,7 @@
 
   <!-- Development Dependencies -->
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+    <!-- Microsoft.Extensions.Logging.Debug is already included in Core Dependencies -->
   </ItemGroup>
 
   <!-- Embedded Resources -->

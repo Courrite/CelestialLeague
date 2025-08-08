@@ -1,0 +1,435 @@
+[2025-08-05 12:32:17] [Info] Auto-created handler: AuthenticationHandler
+[2025-08-05 12:32:17] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-08-05 12:32:17] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-08-05 12:32:17] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-08-05 12:32:17] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-08-05 12:32:17] [Info] Starting server...
+[2025-08-05 12:32:17] [Info] Server started on 127.0.0.1:7777
+[2025-08-05 12:32:17] [Info] Server is ready to accept connections
+[2025-08-05 12:32:17] [Info] Server is running, press ctrl + c to stop.
+[2025-08-05 12:32:51] [Info] Client connected: 8528f68dc44348dca25b6bd7c60e87b9 from 127.0.0.1:40507
+[2025-08-05 12:32:51] [Info] Starting connection handler for 127.0.0.1:40507 (ID: 8528f68dc44348dca25b6bd7c60e87b9)
+[2025-08-05 12:33:11] [Info] CelestialLeague.Shared.Packets.LoginRequestPacket
+[2025-08-05 12:33:11] [Info] Received LoginRequest from 8528f68dc44348dca25b6bd7c60e87b9 (191 bytes)
+[2025-08-05 12:33:11] [Info] Login attempt from 8528f68dc44348dca25b6bd7c60e87b9: Courrite
+[2025-08-05 12:33:12] [Error] Login failed for Courrite: The type initializer for 'Microsoft.Data.Sqlite.SqliteConnection' threw an exception.
+[2025-08-05 12:33:12] [Warning] Failed login attempt for Courrite from 8528f68dc44348dca25b6bd7c60e87b9: DatabaseError
+[2025-08-05 12:33:12] [Warning] Attempted to send invalid LoginResponse to 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:33:21] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 12:33:21] [Info] Received Heartbeat from 8528f68dc44348dca25b6bd7c60e87b9 (93 bytes)
+[2025-08-05 12:33:21] [Warning] No handler found for packet type: Heartbeat from 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:33:29] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-08-05 12:33:29] [Info] Received LogoutRequest from 8528f68dc44348dca25b6bd7c60e87b9 (97 bytes)
+[2025-08-05 12:33:29] [Warning] Unauthenticated client 8528f68dc44348dca25b6bd7c60e87b9 tried to send LogoutRequest
+[2025-08-05 12:33:51] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 12:33:51] [Info] Received Heartbeat from 8528f68dc44348dca25b6bd7c60e87b9 (93 bytes)
+[2025-08-05 12:33:51] [Warning] No handler found for packet type: Heartbeat from 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:33:52] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-08-05 12:33:52] [Info] Received LogoutRequest from 8528f68dc44348dca25b6bd7c60e87b9 (97 bytes)
+[2025-08-05 12:33:52] [Warning] Unauthenticated client 8528f68dc44348dca25b6bd7c60e87b9 tried to send LogoutRequest
+[2025-08-05 12:33:56] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-08-05 12:33:56] [Info] Received RegisterRequest from 8528f68dc44348dca25b6bd7c60e87b9 (177 bytes)
+[2025-08-05 12:33:56] [Info] Registration attempt from 8528f68dc44348dca25b6bd7c60e87b9: Courrite
+[2025-08-05 12:33:56] [Error] Error checking username availability for Courrite: System.TypeInitializationException: The type initializer for 'Microsoft.Data.Sqlite.SqliteConnection' threw an exception.
+ ---> System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DllNotFoundException: Unable to load DLL 'e_sqlite3' or one of its dependencies: The specified module could not be found. (0x8007007E)
+   at SQLitePCL.SQLite3Provider_e_sqlite3.NativeMethods.sqlite3_libversion_number()
+   at SQLitePCL.SQLite3Provider_e_sqlite3.SQLitePCL.ISQLite3Provider.sqlite3_libversion_number()
+   at SQLitePCL.raw.SetProvider(ISQLite3Provider imp)
+   at SQLitePCL.Batteries_V2.Init()
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Microsoft.Data.Sqlite.SqliteConnection..cctor()
+   --- End of inner exception stack trace ---
+   at Microsoft.Data.Sqlite.SqliteConnection..ctor()
+   at Microsoft.Extensions.DependencyInjection.SqliteServiceCollectionExtensions.<>c.<AddEntityFrameworkSqlite>b__1_1(IServiceProvider sp)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.CreateModel(Boolean designTime)
+   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.get_Model()
+   at Microsoft.EntityFrameworkCore.DbContext.get_Model()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.CheckState()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-08-05 12:33:56] [Warning] Failed registration attempt for Courrite from 8528f68dc44348dca25b6bd7c60e87b9: UsernameTaken
+[2025-08-05 12:33:56] [Warning] Attempted to send invalid RegisterResponse to 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:34:18] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-08-05 12:34:18] [Info] Received RegisterRequest from 8528f68dc44348dca25b6bd7c60e87b9 (170 bytes)
+[2025-08-05 12:34:18] [Info] Registration attempt from 8528f68dc44348dca25b6bd7c60e87b9: admin
+[2025-08-05 12:34:18] [Error] Error checking username availability for admin: System.TypeInitializationException: The type initializer for 'Microsoft.Data.Sqlite.SqliteConnection' threw an exception.
+ ---> System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DllNotFoundException: Unable to load DLL 'e_sqlite3' or one of its dependencies: The specified module could not be found. (0x8007007E)
+   at SQLitePCL.SQLite3Provider_e_sqlite3.NativeMethods.sqlite3_libversion_number()
+   at SQLitePCL.SQLite3Provider_e_sqlite3.SQLitePCL.ISQLite3Provider.sqlite3_libversion_number()
+   at SQLitePCL.raw.SetProvider(ISQLite3Provider imp)
+   at SQLitePCL.Batteries_V2.Init()
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Microsoft.Data.Sqlite.SqliteConnection..cctor()
+   --- End of inner exception stack trace ---
+   at Microsoft.Data.Sqlite.SqliteConnection..ctor()
+   at Microsoft.Extensions.DependencyInjection.SqliteServiceCollectionExtensions.<>c.<AddEntityFrameworkSqlite>b__1_1(IServiceProvider sp)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.CreateModel(Boolean designTime)
+   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.get_Model()
+   at Microsoft.EntityFrameworkCore.DbContext.get_Model()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.CheckState()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-08-05 12:34:18] [Warning] Failed registration attempt for admin from 8528f68dc44348dca25b6bd7c60e87b9: UsernameTaken
+[2025-08-05 12:34:18] [Warning] Attempted to send invalid RegisterResponse to 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:34:21] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 12:34:21] [Info] Received Heartbeat from 8528f68dc44348dca25b6bd7c60e87b9 (93 bytes)
+[2025-08-05 12:34:21] [Warning] No handler found for packet type: Heartbeat from 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:34:30] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-08-05 12:34:30] [Info] Received RegisterRequest from 8528f68dc44348dca25b6bd7c60e87b9 (171 bytes)
+[2025-08-05 12:34:30] [Info] Registration attempt from 8528f68dc44348dca25b6bd7c60e87b9: admin1
+[2025-08-05 12:34:30] [Error] Error checking username availability for admin1: System.TypeInitializationException: The type initializer for 'Microsoft.Data.Sqlite.SqliteConnection' threw an exception.
+ ---> System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DllNotFoundException: Unable to load DLL 'e_sqlite3' or one of its dependencies: The specified module could not be found. (0x8007007E)
+   at SQLitePCL.SQLite3Provider_e_sqlite3.NativeMethods.sqlite3_libversion_number()
+   at SQLitePCL.SQLite3Provider_e_sqlite3.SQLitePCL.ISQLite3Provider.sqlite3_libversion_number()
+   at SQLitePCL.raw.SetProvider(ISQLite3Provider imp)
+   at SQLitePCL.Batteries_V2.Init()
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Microsoft.Data.Sqlite.SqliteConnection..cctor()
+   --- End of inner exception stack trace ---
+   at Microsoft.Data.Sqlite.SqliteConnection..ctor()
+   at Microsoft.Extensions.DependencyInjection.SqliteServiceCollectionExtensions.<>c.<AddEntityFrameworkSqlite>b__1_1(IServiceProvider sp)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.CreateModel(Boolean designTime)
+   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.get_Model()
+   at Microsoft.EntityFrameworkCore.DbContext.get_Model()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.CheckState()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-08-05 12:34:30] [Warning] Failed registration attempt for admin1 from 8528f68dc44348dca25b6bd7c60e87b9: UsernameTaken
+[2025-08-05 12:34:30] [Warning] Attempted to send invalid RegisterResponse to 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:34:39] [Warning] Failed to read packet length header from 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:34:39] [Info] Disconnecting 8528f68dc44348dca25b6bd7c60e87b9: Connection disposed
+[2025-08-05 12:34:39] [Info] Client disconnected: 8528f68dc44348dca25b6bd7c60e87b9
+[2025-08-05 12:34:39] [Error] Error disconnecting 8528f68dc44348dca25b6bd7c60e87b9: Object reference not set to an instance of an object.
+[2025-08-05 12:41:02] [Info] Client connected: 07b4d299edae4272a9fcb03e57958832 from 127.0.0.1:40651
+[2025-08-05 12:41:02] [Info] Starting connection handler for 127.0.0.1:40651 (ID: 07b4d299edae4272a9fcb03e57958832)
+[2025-08-05 12:41:14] [Error] Error receiving data from 07b4d299edae4272a9fcb03e57958832: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:06:00] [Info] Client connected: e4541c27fcd64e6aa75dd140a43a9184 from 127.0.0.1:41016
+[2025-08-05 13:06:00] [Info] Starting connection handler for 127.0.0.1:41016 (ID: e4541c27fcd64e6aa75dd140a43a9184)
+[2025-08-05 13:06:30] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:06:30] [Info] Received Heartbeat from e4541c27fcd64e6aa75dd140a43a9184 (93 bytes)
+[2025-08-05 13:06:30] [Warning] No handler found for packet type: Heartbeat from e4541c27fcd64e6aa75dd140a43a9184
+[2025-08-05 13:07:00] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:07:00] [Info] Received Heartbeat from e4541c27fcd64e6aa75dd140a43a9184 (93 bytes)
+[2025-08-05 13:07:00] [Warning] No handler found for packet type: Heartbeat from e4541c27fcd64e6aa75dd140a43a9184
+[2025-08-05 13:07:18] [Error] Error receiving data from e4541c27fcd64e6aa75dd140a43a9184: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:10:37] [Info] Client connected: 065da382dbf64e37ab20862f657fcf66 from 127.0.0.1:41062
+[2025-08-05 13:10:37] [Info] Starting connection handler for 127.0.0.1:41062 (ID: 065da382dbf64e37ab20862f657fcf66)
+[2025-08-05 13:10:46] [Error] Error receiving data from 065da382dbf64e37ab20862f657fcf66: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:14:54] [Info] Client connected: fafc5c6af8b340ca820162adadfa2900 from 127.0.0.1:41137
+[2025-08-05 13:14:54] [Info] Starting connection handler for 127.0.0.1:41137 (ID: fafc5c6af8b340ca820162adadfa2900)
+[2025-08-05 13:15:03] [Error] Error receiving data from fafc5c6af8b340ca820162adadfa2900: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:17:18] [Info] Client connected: 27c57cbf955e4d819e6c7c124b627727 from 127.0.0.1:41164
+[2025-08-05 13:17:18] [Info] Starting connection handler for 127.0.0.1:41164 (ID: 27c57cbf955e4d819e6c7c124b627727)
+[2025-08-05 13:17:29] [Error] Error receiving data from 27c57cbf955e4d819e6c7c124b627727: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:36:07] [Info] Client connected: 389a1ea4162843f980cfe639131748a3 from 127.0.0.1:41254
+[2025-08-05 13:36:07] [Info] Starting connection handler for 127.0.0.1:41254 (ID: 389a1ea4162843f980cfe639131748a3)
+[2025-08-05 13:36:31] [Error] Error receiving data from 389a1ea4162843f980cfe639131748a3: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:42:56] [Info] Client connected: ff524160108c4857a80955941fe9128a from 127.0.0.1:41330
+[2025-08-05 13:42:56] [Info] Starting connection handler for 127.0.0.1:41330 (ID: ff524160108c4857a80955941fe9128a)
+[2025-08-05 13:43:10] [Error] Error receiving data from ff524160108c4857a80955941fe9128a: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:44:03] [Info] Client connected: 6709c514ff144604bb4a0bee594cf2a8 from 127.0.0.1:41369
+[2025-08-05 13:44:03] [Info] Starting connection handler for 127.0.0.1:41369 (ID: 6709c514ff144604bb4a0bee594cf2a8)
+[2025-08-05 13:44:11] [Error] Error receiving data from 6709c514ff144604bb4a0bee594cf2a8: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:50:14] [Info] Client connected: e6416c8561f5460aa03556ef618d50da from 127.0.0.1:41434
+[2025-08-05 13:50:14] [Info] Starting connection handler for 127.0.0.1:41434 (ID: e6416c8561f5460aa03556ef618d50da)
+[2025-08-05 13:50:44] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:50:44] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:50:44] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:51:14] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:51:14] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:51:14] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:51:44] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:51:44] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:51:44] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:52:14] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:52:14] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:52:14] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:52:44] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:52:44] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:52:44] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:53:14] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:53:14] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:53:14] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:53:44] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:53:44] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:53:44] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:54:14] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:54:14] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:54:14] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:54:44] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:54:44] [Info] Received Heartbeat from e6416c8561f5460aa03556ef618d50da (93 bytes)
+[2025-08-05 13:54:44] [Warning] No handler found for packet type: Heartbeat from e6416c8561f5460aa03556ef618d50da
+[2025-08-05 13:54:44] [Error] Error receiving data from e6416c8561f5460aa03556ef618d50da: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 13:55:01] [Info] Client connected: c06f9ad9ebab4a52887af00a66615adf from 127.0.0.1:41485
+[2025-08-05 13:55:01] [Info] Starting connection handler for 127.0.0.1:41485 (ID: c06f9ad9ebab4a52887af00a66615adf)
+[2025-08-05 13:55:31] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:55:31] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:55:31] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:56:01] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:56:01] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:56:01] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:56:31] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:56:31] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:56:31] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:57:01] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:57:01] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (92 bytes)
+[2025-08-05 13:57:01] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:57:31] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:57:31] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:57:31] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:58:01] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:58:01] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:58:01] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:58:31] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:58:31] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:58:31] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:59:01] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:59:01] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:59:01] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 13:59:32] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 13:59:32] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 13:59:32] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 14:00:02] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:00:02] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 14:00:02] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 14:00:32] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:00:32] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 14:00:32] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 14:01:02] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:01:02] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 14:01:02] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 14:01:32] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:01:32] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 14:01:32] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 14:02:02] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:02:02] [Info] Received Heartbeat from c06f9ad9ebab4a52887af00a66615adf (93 bytes)
+[2025-08-05 14:02:02] [Warning] No handler found for packet type: Heartbeat from c06f9ad9ebab4a52887af00a66615adf
+[2025-08-05 14:02:12] [Error] Error receiving data from c06f9ad9ebab4a52887af00a66615adf: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 14:02:29] [Info] Client connected: fb0cd9ee707144b18a625f040e675593 from 127.0.0.1:41528
+[2025-08-05 14:02:29] [Info] Starting connection handler for 127.0.0.1:41528 (ID: fb0cd9ee707144b18a625f040e675593)
+[2025-08-05 14:02:59] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:02:59] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:02:59] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:03:29] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:03:29] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:03:29] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:03:59] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:03:59] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:03:59] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:04:29] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:04:29] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:04:29] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:04:59] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:04:59] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:04:59] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:05:29] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:05:29] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:05:29] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:05:59] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:05:59] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:05:59] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:06:29] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:06:29] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:06:29] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:06:59] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:06:59] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:06:59] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:07:29] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:07:29] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:07:29] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:07:59] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:07:59] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:07:59] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:08:29] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:08:29] [Info] Received Heartbeat from fb0cd9ee707144b18a625f040e675593 (93 bytes)
+[2025-08-05 14:08:29] [Warning] No handler found for packet type: Heartbeat from fb0cd9ee707144b18a625f040e675593
+[2025-08-05 14:08:55] [Error] Error receiving data from fb0cd9ee707144b18a625f040e675593: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 14:09:25] [Info] Client connected: 60c08b35a3b7426b89589ee11d4cd9d8 from 127.0.0.1:41584
+[2025-08-05 14:09:25] [Info] Starting connection handler for 127.0.0.1:41584 (ID: 60c08b35a3b7426b89589ee11d4cd9d8)
+[2025-08-05 14:09:55] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:09:55] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:09:55] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:10:25] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:10:25] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:10:25] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:10:55] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:10:55] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:10:55] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:11:25] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:11:25] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:11:25] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:11:55] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:11:55] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:11:55] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:12:25] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:12:25] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:12:25] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:12:55] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:12:55] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:12:55] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:13:25] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:13:25] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:13:25] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:13:55] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:13:55] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:13:55] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:14:25] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:14:25] [Info] Received Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8 (93 bytes)
+[2025-08-05 14:14:25] [Warning] No handler found for packet type: Heartbeat from 60c08b35a3b7426b89589ee11d4cd9d8
+[2025-08-05 14:14:37] [Error] Error receiving data from 60c08b35a3b7426b89589ee11d4cd9d8: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 14:15:01] [Info] Client connected: 85b9ccd1730849dc81f0d84498ce29a8 from 127.0.0.1:41640
+[2025-08-05 14:15:01] [Info] Starting connection handler for 127.0.0.1:41640 (ID: 85b9ccd1730849dc81f0d84498ce29a8)
+[2025-08-05 14:15:31] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:15:31] [Info] Received Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8 (93 bytes)
+[2025-08-05 14:15:31] [Warning] No handler found for packet type: Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8
+[2025-08-05 14:16:01] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:16:01] [Info] Received Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8 (93 bytes)
+[2025-08-05 14:16:01] [Warning] No handler found for packet type: Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8
+[2025-08-05 14:16:31] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:16:31] [Info] Received Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8 (93 bytes)
+[2025-08-05 14:16:31] [Warning] No handler found for packet type: Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8
+[2025-08-05 14:17:01] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:17:01] [Info] Received Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8 (93 bytes)
+[2025-08-05 14:17:01] [Warning] No handler found for packet type: Heartbeat from 85b9ccd1730849dc81f0d84498ce29a8
+[2025-08-05 14:17:23] [Error] Error receiving data from 85b9ccd1730849dc81f0d84498ce29a8: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 14:18:08] [Info] Client connected: 0069353dc80a4c898d140407552e3b8d from 127.0.0.1:41667
+[2025-08-05 14:18:08] [Info] Starting connection handler for 127.0.0.1:41667 (ID: 0069353dc80a4c898d140407552e3b8d)
+[2025-08-05 14:18:38] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:18:38] [Info] Received Heartbeat from 0069353dc80a4c898d140407552e3b8d (93 bytes)
+[2025-08-05 14:18:38] [Warning] No handler found for packet type: Heartbeat from 0069353dc80a4c898d140407552e3b8d
+[2025-08-05 14:18:40] [Error] Error receiving data from 0069353dc80a4c898d140407552e3b8d: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 14:19:12] [Info] Client connected: be85239138c04501b57b5770d5358fe9 from 127.0.0.1:41684
+[2025-08-05 14:19:12] [Info] Starting connection handler for 127.0.0.1:41684 (ID: be85239138c04501b57b5770d5358fe9)
+[2025-08-05 14:19:42] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:19:42] [Info] Received Heartbeat from be85239138c04501b57b5770d5358fe9 (92 bytes)
+[2025-08-05 14:19:42] [Warning] No handler found for packet type: Heartbeat from be85239138c04501b57b5770d5358fe9
+[2025-08-05 14:19:49] [Error] Error receiving data from be85239138c04501b57b5770d5358fe9: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+[2025-08-05 14:20:18] [Info] Client connected: e9ee478c3b4a44b3ac6d8aa1f0c5db2b from 127.0.0.1:41696
+[2025-08-05 14:20:18] [Info] Starting connection handler for 127.0.0.1:41696 (ID: e9ee478c3b4a44b3ac6d8aa1f0c5db2b)
+[2025-08-05 14:20:48] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:20:48] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:20:48] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:21:18] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:21:18] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:21:18] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:21:48] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:21:48] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:21:48] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:22:18] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:22:18] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:22:18] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:22:48] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:22:48] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:22:48] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:23:18] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:23:18] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:23:18] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:23:48] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:23:48] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:23:48] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:24:18] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-08-05 14:24:18] [Info] Received Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b (93 bytes)
+[2025-08-05 14:24:18] [Warning] No handler found for packet type: Heartbeat from e9ee478c3b4a44b3ac6d8aa1f0c5db2b
+[2025-08-05 14:24:43] [Error] Error receiving data from e9ee478c3b4a44b3ac6d8aa1f0c5db2b: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..

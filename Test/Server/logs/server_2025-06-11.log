@@ -1,0 +1,1226 @@
+[2025-06-11 12:25:21] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 12:25:21] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 12:25:21] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 12:25:21] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 12:25:21] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 12:25:21] [Info] Starting server...
+[2025-06-11 12:25:21] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 12:25:21] [Info] Server is ready to accept connections
+[2025-06-11 12:25:21] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 12:27:01] [Info] Client connected: f17c347f0b62412abe792530229be425 from 127.0.0.1:57281
+[2025-06-11 12:27:01] [Info] Starting connection handler for 127.0.0.1:57281 (ID: f17c347f0b62412abe792530229be425)
+[2025-06-11 12:27:31] [Info] Received Heartbeat from f17c347f0b62412abe792530229be425 (75 bytes)
+[2025-06-11 12:27:31] [Warning] No handler found for packet type: Heartbeat from f17c347f0b62412abe792530229be425
+[2025-06-11 12:28:01] [Info] Received Heartbeat from f17c347f0b62412abe792530229be425 (75 bytes)
+[2025-06-11 12:28:01] [Warning] No handler found for packet type: Heartbeat from f17c347f0b62412abe792530229be425
+[2025-06-11 12:29:54] [Error] Error receiving data from f17c347f0b62412abe792530229be425: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:31:07] [Info] Client connected: 7517482da92f47f2ad0f1282aff0b0a7 from 127.0.0.1:57507
+[2025-06-11 12:31:07] [Info] Starting connection handler for 127.0.0.1:57507 (ID: 7517482da92f47f2ad0f1282aff0b0a7)
+[2025-06-11 12:31:36] [Info] Received Heartbeat from 7517482da92f47f2ad0f1282aff0b0a7 (75 bytes)
+[2025-06-11 12:31:36] [Warning] No handler found for packet type: Heartbeat from 7517482da92f47f2ad0f1282aff0b0a7
+[2025-06-11 12:31:58] [Error] Error receiving data from 7517482da92f47f2ad0f1282aff0b0a7: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:32:34] [Info] Client connected: cca1178bbe504f1a80f331ff0bd5e62a from 127.0.0.1:57569
+[2025-06-11 12:32:34] [Info] Starting connection handler for 127.0.0.1:57569 (ID: cca1178bbe504f1a80f331ff0bd5e62a)
+[2025-06-11 12:33:05] [Info] Received Heartbeat from cca1178bbe504f1a80f331ff0bd5e62a (75 bytes)
+[2025-06-11 12:33:05] [Warning] No handler found for packet type: Heartbeat from cca1178bbe504f1a80f331ff0bd5e62a
+[2025-06-11 12:33:35] [Info] Received Heartbeat from cca1178bbe504f1a80f331ff0bd5e62a (75 bytes)
+[2025-06-11 12:33:35] [Warning] No handler found for packet type: Heartbeat from cca1178bbe504f1a80f331ff0bd5e62a
+[2025-06-11 12:33:45] [Error] Error receiving data from cca1178bbe504f1a80f331ff0bd5e62a: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:38:47] [Info] Client connected: b1c83a63b93b4dad944540cdc83666cf from 127.0.0.1:57926
+[2025-06-11 12:38:47] [Info] Starting connection handler for 127.0.0.1:57926 (ID: b1c83a63b93b4dad944540cdc83666cf)
+[2025-06-11 12:39:17] [Info] Received Heartbeat from b1c83a63b93b4dad944540cdc83666cf (75 bytes)
+[2025-06-11 12:39:17] [Warning] No handler found for packet type: Heartbeat from b1c83a63b93b4dad944540cdc83666cf
+[2025-06-11 12:39:47] [Info] Received Heartbeat from b1c83a63b93b4dad944540cdc83666cf (75 bytes)
+[2025-06-11 12:39:47] [Warning] No handler found for packet type: Heartbeat from b1c83a63b93b4dad944540cdc83666cf
+[2025-06-11 12:40:18] [Error] Error receiving data from b1c83a63b93b4dad944540cdc83666cf: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:40:28] [Info] Client connected: eb9c201bb8114f668cb48c5c0d0d5b6c from 127.0.0.1:58012
+[2025-06-11 12:40:28] [Info] Starting connection handler for 127.0.0.1:58012 (ID: eb9c201bb8114f668cb48c5c0d0d5b6c)
+[2025-06-11 12:40:59] [Info] Received Heartbeat from eb9c201bb8114f668cb48c5c0d0d5b6c (75 bytes)
+[2025-06-11 12:40:59] [Warning] No handler found for packet type: Heartbeat from eb9c201bb8114f668cb48c5c0d0d5b6c
+[2025-06-11 12:41:28] [Info] Received Heartbeat from eb9c201bb8114f668cb48c5c0d0d5b6c (75 bytes)
+[2025-06-11 12:41:28] [Warning] No handler found for packet type: Heartbeat from eb9c201bb8114f668cb48c5c0d0d5b6c
+[2025-06-11 12:41:37] [Error] Error receiving data from eb9c201bb8114f668cb48c5c0d0d5b6c: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:42:47] [Info] Client connected: 019dbdb6b1174d1b91745d370e08b4cc from 127.0.0.1:58131
+[2025-06-11 12:42:47] [Info] Starting connection handler for 127.0.0.1:58131 (ID: 019dbdb6b1174d1b91745d370e08b4cc)
+[2025-06-11 12:43:17] [Info] Received Heartbeat from 019dbdb6b1174d1b91745d370e08b4cc (75 bytes)
+[2025-06-11 12:43:17] [Warning] No handler found for packet type: Heartbeat from 019dbdb6b1174d1b91745d370e08b4cc
+[2025-06-11 12:43:47] [Info] Received Heartbeat from 019dbdb6b1174d1b91745d370e08b4cc (75 bytes)
+[2025-06-11 12:43:47] [Warning] No handler found for packet type: Heartbeat from 019dbdb6b1174d1b91745d370e08b4cc
+[2025-06-11 12:49:10] [Error] Error receiving data from 019dbdb6b1174d1b91745d370e08b4cc: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:49:21] [Info] Client connected: 86695fd75a6a49a59cbc78146f9f6859 from 127.0.0.1:58513
+[2025-06-11 12:49:21] [Info] Starting connection handler for 127.0.0.1:58513 (ID: 86695fd75a6a49a59cbc78146f9f6859)
+[2025-06-11 12:49:46] [Error] Error receiving data from 86695fd75a6a49a59cbc78146f9f6859: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:49:56] [Info] Client connected: b728876969624893a29729b42b1f9a13 from 127.0.0.1:58584
+[2025-06-11 12:49:56] [Info] Starting connection handler for 127.0.0.1:58584 (ID: b728876969624893a29729b42b1f9a13)
+[2025-06-11 12:50:13] [Error] Error receiving data from b728876969624893a29729b42b1f9a13: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:50:40] [Info] Client connected: 33c0f7dc50934915ad52fc7066559cff from 127.0.0.1:58632
+[2025-06-11 12:50:40] [Info] Starting connection handler for 127.0.0.1:58632 (ID: 33c0f7dc50934915ad52fc7066559cff)
+[2025-06-11 12:51:10] [Info] Received Heartbeat from 33c0f7dc50934915ad52fc7066559cff (75 bytes)
+[2025-06-11 12:51:10] [Warning] No handler found for packet type: Heartbeat from 33c0f7dc50934915ad52fc7066559cff
+[2025-06-11 12:51:33] [Error] Error receiving data from 33c0f7dc50934915ad52fc7066559cff: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 12:52:06] [Info] Client connected: b44c12afc74b4c04890e648a269eeda3 from 127.0.0.1:58696
+[2025-06-11 12:52:06] [Info] Starting connection handler for 127.0.0.1:58696 (ID: b44c12afc74b4c04890e648a269eeda3)
+[2025-06-11 12:52:36] [Info] Received Heartbeat from b44c12afc74b4c04890e648a269eeda3 (75 bytes)
+[2025-06-11 12:52:36] [Warning] No handler found for packet type: Heartbeat from b44c12afc74b4c04890e648a269eeda3
+[2025-06-11 12:53:06] [Info] Received Heartbeat from b44c12afc74b4c04890e648a269eeda3 (75 bytes)
+[2025-06-11 12:53:06] [Warning] No handler found for packet type: Heartbeat from b44c12afc74b4c04890e648a269eeda3
+[2025-06-11 12:54:15] [Error] Error receiving data from b44c12afc74b4c04890e648a269eeda3: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 13:02:34] [Info] Client connected: 993b5c542296439e837ea4b5ee175d6a from 127.0.0.1:59350
+[2025-06-11 13:02:34] [Info] Starting connection handler for 127.0.0.1:59350 (ID: 993b5c542296439e837ea4b5ee175d6a)
+[2025-06-11 13:03:04] [Info] Received Heartbeat from 993b5c542296439e837ea4b5ee175d6a (75 bytes)
+[2025-06-11 13:03:04] [Warning] No handler found for packet type: Heartbeat from 993b5c542296439e837ea4b5ee175d6a
+[2025-06-11 13:03:34] [Info] Received Heartbeat from 993b5c542296439e837ea4b5ee175d6a (74 bytes)
+[2025-06-11 13:03:34] [Warning] No handler found for packet type: Heartbeat from 993b5c542296439e837ea4b5ee175d6a
+[2025-06-11 13:03:58] [Error] Error receiving data from 993b5c542296439e837ea4b5ee175d6a: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 13:04:27] [Info] Client connected: fdf07cb0c09e4d1a92a849df7fff42d0 from 127.0.0.1:59521
+[2025-06-11 13:04:27] [Info] Starting connection handler for 127.0.0.1:59521 (ID: fdf07cb0c09e4d1a92a849df7fff42d0)
+[2025-06-11 13:04:57] [Info] Received Heartbeat from fdf07cb0c09e4d1a92a849df7fff42d0 (75 bytes)
+[2025-06-11 13:04:57] [Warning] No handler found for packet type: Heartbeat from fdf07cb0c09e4d1a92a849df7fff42d0
+[2025-06-11 13:05:27] [Info] Received Heartbeat from fdf07cb0c09e4d1a92a849df7fff42d0 (75 bytes)
+[2025-06-11 13:05:27] [Warning] No handler found for packet type: Heartbeat from fdf07cb0c09e4d1a92a849df7fff42d0
+[2025-06-11 13:07:13] [Error] Error receiving data from fdf07cb0c09e4d1a92a849df7fff42d0: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 13:07:33] [Info] Client connected: 400c6a5e8f9043b5833a33c990edb345 from 127.0.0.1:59687
+[2025-06-11 13:07:33] [Info] Starting connection handler for 127.0.0.1:59687 (ID: 400c6a5e8f9043b5833a33c990edb345)
+[2025-06-11 13:08:03] [Info] Received Heartbeat from 400c6a5e8f9043b5833a33c990edb345 (75 bytes)
+[2025-06-11 13:08:03] [Warning] No handler found for packet type: Heartbeat from 400c6a5e8f9043b5833a33c990edb345
+[2025-06-11 13:08:33] [Info] Received Heartbeat from 400c6a5e8f9043b5833a33c990edb345 (75 bytes)
+[2025-06-11 13:08:33] [Warning] No handler found for packet type: Heartbeat from 400c6a5e8f9043b5833a33c990edb345
+[2025-06-11 13:09:05] [Error] Error receiving data from 400c6a5e8f9043b5833a33c990edb345: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 13:09:57] [Info] Client connected: 8e54e949446d4dcf9e976111c094da2c from 127.0.0.1:59816
+[2025-06-11 13:09:57] [Info] Starting connection handler for 127.0.0.1:59816 (ID: 8e54e949446d4dcf9e976111c094da2c)
+[2025-06-11 13:10:27] [Info] Received Heartbeat from 8e54e949446d4dcf9e976111c094da2c (75 bytes)
+[2025-06-11 13:10:27] [Warning] No handler found for packet type: Heartbeat from 8e54e949446d4dcf9e976111c094da2c
+[2025-06-11 13:10:57] [Info] Received Heartbeat from 8e54e949446d4dcf9e976111c094da2c (75 bytes)
+[2025-06-11 13:10:57] [Warning] No handler found for packet type: Heartbeat from 8e54e949446d4dcf9e976111c094da2c
+[2025-06-11 13:19:52] [Error] Error receiving data from 8e54e949446d4dcf9e976111c094da2c: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 13:20:32] [Info] Client connected: 435ba2087f1942e4b5224f8e10352429 from 127.0.0.1:60546
+[2025-06-11 13:20:32] [Info] Starting connection handler for 127.0.0.1:60546 (ID: 435ba2087f1942e4b5224f8e10352429)
+[2025-06-11 13:20:51] [Warning] Failed to read packet length header from 435ba2087f1942e4b5224f8e10352429
+[2025-06-11 13:20:51] [Info] Disconnecting 435ba2087f1942e4b5224f8e10352429: Connection disposed
+[2025-06-11 13:20:51] [Info] Client disconnected: 435ba2087f1942e4b5224f8e10352429
+[2025-06-11 13:20:51] [Error] Error disconnecting 435ba2087f1942e4b5224f8e10352429: Object reference not set to an instance of an object.
+[2025-06-11 13:21:23] [Info] 
+Shutdown requested...
+[2025-06-11 13:24:29] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:24:29] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:24:29] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:24:29] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:24:29] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:24:29] [Info] Starting server...
+[2025-06-11 13:24:29] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 13:24:29] [Info] Server is ready to accept connections
+[2025-06-11 13:24:29] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 13:24:32] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:24:32] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:24:32] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:24:32] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:24:32] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:24:32] [Info] Starting server...
+[2025-06-11 13:24:32] [Error] Failed to start server: Обычно разрешается только одно использование адреса сокета (протокол/сетевой адрес/порт).
+[2025-06-11 13:24:54] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:24:55] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:24:55] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:24:55] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:24:55] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:24:55] [Info] Starting server...
+[2025-06-11 13:24:55] [Error] Failed to start server: Обычно разрешается только одно использование адреса сокета (протокол/сетевой адрес/порт).
+[2025-06-11 13:25:26] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:25:27] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:25:27] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:25:27] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:25:27] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:25:27] [Info] Starting server...
+[2025-06-11 13:25:27] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 13:25:27] [Info] Server is ready to accept connections
+[2025-06-11 13:25:27] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 13:25:57] [Info] Client connected: 5081b67fb59441dab9692b81b5c94606 from 127.0.0.1:60915
+[2025-06-11 13:25:57] [Info] Starting connection handler for 127.0.0.1:60915 (ID: 5081b67fb59441dab9692b81b5c94606)
+[2025-06-11 13:26:27] [Info] Received Heartbeat from 5081b67fb59441dab9692b81b5c94606 (75 bytes)
+[2025-06-11 13:26:27] [Warning] No handler found for packet type: Heartbeat from 5081b67fb59441dab9692b81b5c94606
+[2025-06-11 13:26:57] [Info] Received Heartbeat from 5081b67fb59441dab9692b81b5c94606 (75 bytes)
+[2025-06-11 13:26:57] [Warning] No handler found for packet type: Heartbeat from 5081b67fb59441dab9692b81b5c94606
+[2025-06-11 13:28:30] [Info] 
+Shutdown requested...
+[2025-06-11 13:30:48] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:30:48] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:30:48] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:30:48] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:30:48] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:30:48] [Info] Starting server...
+[2025-06-11 13:30:48] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 13:30:48] [Info] Server is ready to accept connections
+[2025-06-11 13:30:48] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 13:30:56] [Info] Client connected: 8bf9c66ee2374026a88804a07c6bb039 from 127.0.0.1:61247
+[2025-06-11 13:30:56] [Info] Starting connection handler for 127.0.0.1:61247 (ID: 8bf9c66ee2374026a88804a07c6bb039)
+[2025-06-11 13:31:23] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (176 bytes)
+[2025-06-11 13:31:26] [Info] Received Heartbeat from 8bf9c66ee2374026a88804a07c6bb039 (75 bytes)
+[2025-06-11 13:31:26] [Warning] No handler found for packet type: Heartbeat from 8bf9c66ee2374026a88804a07c6bb039
+[2025-06-11 13:31:47] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:31:56] [Info] Received Heartbeat from 8bf9c66ee2374026a88804a07c6bb039 (75 bytes)
+[2025-06-11 13:31:56] [Warning] No handler found for packet type: Heartbeat from 8bf9c66ee2374026a88804a07c6bb039
+[2025-06-11 13:32:47] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:47] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (176 bytes)
+[2025-06-11 13:32:47] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:52] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:52] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:52] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (176 bytes)
+[2025-06-11 13:32:53] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:53] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:53] [Warning] Failed to deserialize packet from 8bf9c66ee2374026a88804a07c6bb039 (177 bytes)
+[2025-06-11 13:32:53] [Info] Disconnecting 8bf9c66ee2374026a88804a07c6bb039: Too many invalid packets
+[2025-06-11 13:36:25] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:36:25] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:36:25] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:36:25] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:36:25] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:36:25] [Info] Starting server...
+[2025-06-11 13:36:25] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 13:36:25] [Info] Server is ready to accept connections
+[2025-06-11 13:36:25] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 13:36:35] [Info] Client connected: 5d0a5b3da9784a1b9cc494c9710d4753 from 127.0.0.1:61628
+[2025-06-11 13:36:35] [Info] Starting connection handler for 127.0.0.1:61628 (ID: 5d0a5b3da9784a1b9cc494c9710d4753)
+[2025-06-11 13:36:46] [Info] 
+[2025-06-11 13:36:46] [Warning] Failed to deserialize packet from 5d0a5b3da9784a1b9cc494c9710d4753 (177 bytes)
+[2025-06-11 13:37:05] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 13:37:05] [Info] Received Heartbeat from 5d0a5b3da9784a1b9cc494c9710d4753 (75 bytes)
+[2025-06-11 13:37:05] [Warning] No handler found for packet type: Heartbeat from 5d0a5b3da9784a1b9cc494c9710d4753
+[2025-06-11 13:37:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 13:37:34] [Info] Received Heartbeat from 5d0a5b3da9784a1b9cc494c9710d4753 (75 bytes)
+[2025-06-11 13:37:34] [Warning] No handler found for packet type: Heartbeat from 5d0a5b3da9784a1b9cc494c9710d4753
+[2025-06-11 13:44:34] [Info] 
+[2025-06-11 13:44:34] [Warning] Failed to deserialize packet from 5d0a5b3da9784a1b9cc494c9710d4753 (192 bytes)
+[2025-06-11 13:44:49] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-06-11 13:44:49] [Info] Received LogoutRequest from 5d0a5b3da9784a1b9cc494c9710d4753 (106 bytes)
+[2025-06-11 13:44:49] [Warning] Unauthenticated client 5d0a5b3da9784a1b9cc494c9710d4753 tried to send LogoutRequest
+[2025-06-11 13:52:19] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 13:52:19] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 13:52:19] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 13:52:19] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 13:52:19] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 13:52:19] [Info] Starting server...
+[2025-06-11 13:52:19] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 13:52:19] [Info] Server is ready to accept connections
+[2025-06-11 13:52:19] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 13:52:27] [Info] Client connected: 7c9f856a485c472b8571f3b0374a71df from 127.0.0.1:62446
+[2025-06-11 13:52:27] [Info] Starting connection handler for 127.0.0.1:62446 (ID: 7c9f856a485c472b8571f3b0374a71df)
+[2025-06-11 13:52:57] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 13:52:57] [Info] Received Heartbeat from 7c9f856a485c472b8571f3b0374a71df (75 bytes)
+[2025-06-11 13:52:57] [Warning] No handler found for packet type: Heartbeat from 7c9f856a485c472b8571f3b0374a71df
+[2025-06-11 13:53:27] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 13:53:27] [Info] Received Heartbeat from 7c9f856a485c472b8571f3b0374a71df (75 bytes)
+[2025-06-11 13:53:27] [Warning] No handler found for packet type: Heartbeat from 7c9f856a485c472b8571f3b0374a71df
+[2025-06-11 13:55:44] [Info] 
+[2025-06-11 13:55:44] [Warning] Failed to deserialize packet from 7c9f856a485c472b8571f3b0374a71df (177 bytes)
+[2025-06-11 13:59:04] [Error] Error receiving data from 7c9f856a485c472b8571f3b0374a71df: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 13:59:24] [Info] Client connected: cdba30064b3c47ac89efc10208c8cf15 from 127.0.0.1:62732
+[2025-06-11 13:59:24] [Info] Starting connection handler for 127.0.0.1:62732 (ID: cdba30064b3c47ac89efc10208c8cf15)
+[2025-06-11 13:59:40] [Info] 
+[2025-06-11 13:59:40] [Warning] Failed to deserialize packet from cdba30064b3c47ac89efc10208c8cf15 (177 bytes)
+[2025-06-11 13:59:54] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 13:59:54] [Info] Received Heartbeat from cdba30064b3c47ac89efc10208c8cf15 (75 bytes)
+[2025-06-11 13:59:54] [Warning] No handler found for packet type: Heartbeat from cdba30064b3c47ac89efc10208c8cf15
+[2025-06-11 14:00:24] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:00:24] [Info] Received Heartbeat from cdba30064b3c47ac89efc10208c8cf15 (75 bytes)
+[2025-06-11 14:00:24] [Warning] No handler found for packet type: Heartbeat from cdba30064b3c47ac89efc10208c8cf15
+[2025-06-11 14:01:31] [Info] 
+[2025-06-11 14:01:31] [Warning] Failed to deserialize packet from cdba30064b3c47ac89efc10208c8cf15 (177 bytes)
+[2025-06-11 14:01:52] [Error] Error receiving data from cdba30064b3c47ac89efc10208c8cf15: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 14:02:43] [Info] Client connected: 1f71a01c025e4a41af9819c0d1ee2413 from 127.0.0.1:62947
+[2025-06-11 14:02:43] [Info] Starting connection handler for 127.0.0.1:62947 (ID: 1f71a01c025e4a41af9819c0d1ee2413)
+[2025-06-11 14:02:54] [Info] 
+[2025-06-11 14:02:54] [Warning] Failed to deserialize packet from 1f71a01c025e4a41af9819c0d1ee2413 (177 bytes)
+[2025-06-11 14:03:13] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:03:13] [Info] Received Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413 (75 bytes)
+[2025-06-11 14:03:13] [Warning] No handler found for packet type: Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413
+[2025-06-11 14:03:21] [Info] 
+[2025-06-11 14:03:21] [Warning] Failed to deserialize packet from 1f71a01c025e4a41af9819c0d1ee2413 (177 bytes)
+[2025-06-11 14:03:24] [Info] 
+[2025-06-11 14:03:24] [Warning] Failed to deserialize packet from 1f71a01c025e4a41af9819c0d1ee2413 (192 bytes)
+[2025-06-11 14:03:28] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-06-11 14:03:28] [Info] Received LogoutRequest from 1f71a01c025e4a41af9819c0d1ee2413 (105 bytes)
+[2025-06-11 14:03:28] [Warning] Unauthenticated client 1f71a01c025e4a41af9819c0d1ee2413 tried to send LogoutRequest
+[2025-06-11 14:03:43] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:03:43] [Info] Received Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413 (75 bytes)
+[2025-06-11 14:03:43] [Warning] No handler found for packet type: Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413
+[2025-06-11 14:04:13] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:04:13] [Info] Received Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413 (75 bytes)
+[2025-06-11 14:04:13] [Warning] No handler found for packet type: Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413
+[2025-06-11 14:04:43] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:04:43] [Info] Received Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413 (75 bytes)
+[2025-06-11 14:04:43] [Warning] No handler found for packet type: Heartbeat from 1f71a01c025e4a41af9819c0d1ee2413
+[2025-06-11 14:32:52] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-06-11 14:32:52] [Info] Received LogoutRequest from 1f71a01c025e4a41af9819c0d1ee2413 (106 bytes)
+[2025-06-11 14:32:52] [Warning] Unauthenticated client 1f71a01c025e4a41af9819c0d1ee2413 tried to send LogoutRequest
+[2025-06-11 14:38:47] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 14:38:47] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 14:38:47] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 14:38:47] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 14:38:47] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 14:38:47] [Info] Starting server...
+[2025-06-11 14:38:47] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 14:38:47] [Info] Server is ready to accept connections
+[2025-06-11 14:38:47] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 14:39:00] [Info] Client connected: f88fdcf564764ec9aad0a9a3ed2a7605 from 127.0.0.1:64455
+[2025-06-11 14:39:00] [Info] Starting connection handler for 127.0.0.1:64455 (ID: f88fdcf564764ec9aad0a9a3ed2a7605)
+[2025-06-11 14:39:28] [Info] 
+[2025-06-11 14:39:28] [Warning] Failed to deserialize packet from f88fdcf564764ec9aad0a9a3ed2a7605 (177 bytes)
+[2025-06-11 14:39:30] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:39:30] [Info] Received Heartbeat from f88fdcf564764ec9aad0a9a3ed2a7605 (74 bytes)
+[2025-06-11 14:39:30] [Warning] No handler found for packet type: Heartbeat from f88fdcf564764ec9aad0a9a3ed2a7605
+[2025-06-11 14:40:00] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:40:00] [Info] Received Heartbeat from f88fdcf564764ec9aad0a9a3ed2a7605 (75 bytes)
+[2025-06-11 14:40:00] [Warning] No handler found for packet type: Heartbeat from f88fdcf564764ec9aad0a9a3ed2a7605
+[2025-06-11 14:41:48] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-06-11 14:41:48] [Info] Received LogoutRequest from f88fdcf564764ec9aad0a9a3ed2a7605 (106 bytes)
+[2025-06-11 14:41:48] [Warning] Unauthenticated client f88fdcf564764ec9aad0a9a3ed2a7605 tried to send LogoutRequest
+[2025-06-11 14:41:48] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-06-11 14:41:48] [Info] Received LogoutRequest from f88fdcf564764ec9aad0a9a3ed2a7605 (106 bytes)
+[2025-06-11 14:41:48] [Warning] Unauthenticated client f88fdcf564764ec9aad0a9a3ed2a7605 tried to send LogoutRequest
+[2025-06-11 14:44:34] [Error] Error receiving data from f88fdcf564764ec9aad0a9a3ed2a7605: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 14:46:00] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 14:46:00] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 14:46:00] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 14:46:00] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 14:46:00] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 14:46:00] [Info] Starting server...
+[2025-06-11 14:46:01] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 14:46:01] [Info] Server is ready to accept connections
+[2025-06-11 14:46:01] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 14:46:07] [Info] Client connected: 3615daac12074a7c85b417da8f068232 from 127.0.0.1:64995
+[2025-06-11 14:46:07] [Info] Starting connection handler for 127.0.0.1:64995 (ID: 3615daac12074a7c85b417da8f068232)
+[2025-06-11 14:46:33] [Info] 
+[2025-06-11 14:46:33] [Warning] Failed to deserialize packet from 3615daac12074a7c85b417da8f068232 (177 bytes)
+[2025-06-11 14:46:38] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 14:46:38] [Info] Received Heartbeat from 3615daac12074a7c85b417da8f068232 (75 bytes)
+[2025-06-11 14:46:38] [Warning] No handler found for packet type: Heartbeat from 3615daac12074a7c85b417da8f068232
+[2025-06-11 15:06:09] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 15:06:09] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 15:06:09] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 15:06:09] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 15:06:09] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 15:06:09] [Info] Starting server...
+[2025-06-11 15:06:09] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 15:06:09] [Info] Server is ready to accept connections
+[2025-06-11 15:06:09] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 15:06:53] [Info] Client connected: 82369741709d4e33ae38623c0483a00e from 127.0.0.1:50375
+[2025-06-11 15:06:53] [Info] Starting connection handler for 127.0.0.1:50375 (ID: 82369741709d4e33ae38623c0483a00e)
+[2025-06-11 15:07:15] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 15:07:15] [Info] Received RegisterRequest from 82369741709d4e33ae38623c0483a00e (177 bytes)
+[2025-06-11 15:07:15] [Info] Registration attempt from 82369741709d4e33ae38623c0483a00e: Courrite
+[2025-06-11 15:07:18] [Error] Error checking username availability for Courrite: The LINQ expression 'DbSet<Player>()
+    .Any(p => __username_0.Equals(
+        value: p.Username, 
+        comparisonType: OrdinalIgnoreCase))' could not be translated. Additional information: Translation of the 'string.Equals' overload with a 'StringComparison' parameter is not supported. See https://go.microsoft.com/fwlink/?linkid=2129535 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+[2025-06-11 15:07:18] [Warning] Failed registration attempt for Courrite from 82369741709d4e33ae38623c0483a00e: UsernameTaken
+[2025-06-11 15:07:18] [Warning] Attempted to send invalid RegisterResponse to 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:07:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:07:23] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:07:23] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:07:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:07:53] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:07:53] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:08:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:08:23] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:08:23] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:08:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:08:53] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:08:53] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:09:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:09:23] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:09:23] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:09:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:09:53] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:09:53] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:10:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:10:23] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:10:23] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:10:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:10:53] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:10:53] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:11:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:11:23] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:11:23] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:11:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:11:53] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:11:53] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:12:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:12:23] [Info] Received Heartbeat from 82369741709d4e33ae38623c0483a00e (93 bytes)
+[2025-06-11 15:12:23] [Warning] No handler found for packet type: Heartbeat from 82369741709d4e33ae38623c0483a00e
+[2025-06-11 15:12:26] [Info] 
+Shutdown requested...
+[2025-06-11 15:12:42] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 15:12:42] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 15:12:42] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 15:12:42] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 15:12:42] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 15:12:42] [Info] Starting server...
+[2025-06-11 15:12:43] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 15:12:43] [Info] Server is ready to accept connections
+[2025-06-11 15:12:43] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 15:12:51] [Info] Client connected: 8c57b005d9f34f6cad87671ab2693e66 from 127.0.0.1:50715
+[2025-06-11 15:12:51] [Info] Starting connection handler for 127.0.0.1:50715 (ID: 8c57b005d9f34f6cad87671ab2693e66)
+[2025-06-11 15:13:10] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 15:13:10] [Info] Received RegisterRequest from 8c57b005d9f34f6cad87671ab2693e66 (177 bytes)
+[2025-06-11 15:13:10] [Info] Registration attempt from 8c57b005d9f34f6cad87671ab2693e66: Courrite
+[2025-06-11 15:13:12] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 15:13:12] [Error] Registration failed for Courrite: An error occurred while saving the entity changes. See the inner exception for details.
+[2025-06-11 15:13:12] [Warning] Failed registration attempt for Courrite from 8c57b005d9f34f6cad87671ab2693e66: DatabaseError
+[2025-06-11 15:13:12] [Warning] Attempted to send invalid RegisterResponse to 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:13:21] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:13:21] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:13:21] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:13:51] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:13:51] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:13:51] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:14:21] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:14:21] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:14:21] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:14:51] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:14:51] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (92 bytes)
+[2025-06-11 15:14:51] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:15:21] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:15:21] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (92 bytes)
+[2025-06-11 15:15:21] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:15:51] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:15:51] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:15:51] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:16:21] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:16:21] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:16:21] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:16:52] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:16:52] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:16:52] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:17:22] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:17:22] [Info] Received Heartbeat from 8c57b005d9f34f6cad87671ab2693e66 (93 bytes)
+[2025-06-11 15:17:22] [Warning] No handler found for packet type: Heartbeat from 8c57b005d9f34f6cad87671ab2693e66
+[2025-06-11 15:17:38] [Info] 
+Shutdown requested...
+[2025-06-11 15:48:18] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 15:48:18] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 15:48:18] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 15:48:18] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 15:48:18] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 15:48:18] [Info] Starting server...
+[2025-06-11 15:48:18] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 15:48:18] [Info] Server is ready to accept connections
+[2025-06-11 15:48:18] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 15:49:18] [Info] Client connected: 0bf778d94c614184a4fbec572077619d from 127.0.0.1:51810
+[2025-06-11 15:49:18] [Info] Starting connection handler for 127.0.0.1:51810 (ID: 0bf778d94c614184a4fbec572077619d)
+[2025-06-11 15:49:41] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 15:49:41] [Info] Received RegisterRequest from 0bf778d94c614184a4fbec572077619d (177 bytes)
+[2025-06-11 15:49:41] [Info] Registration attempt from 0bf778d94c614184a4fbec572077619d: Courrite
+[2025-06-11 15:49:43] [Error] Error checking username availability for Courrite: System.InvalidOperationException: The LINQ expression 'DbSet<Player>()
+    .Any(p => __Functions_0
+        .Like(
+            matchExpression: p.Username.ToUpperInvariant(), 
+            pattern: __ToUpperInvariant_1))' could not be translated. Additional information: Translation of method 'string.ToUpperInvariant' failed. If this method can be mapped to your custom function, see https://go.microsoft.com/fwlink/?linkid=2132413 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.<VisitMethodCall>g__CheckTranslated|15_0(ShapedQueryExpression translated, <>c__DisplayClass15_0&)
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 15:49:44] [Error] Registration failed for Courrite: An error occurred while saving the entity changes. See the inner exception for details.
+[2025-06-11 15:49:44] [Warning] Failed registration attempt for Courrite from 0bf778d94c614184a4fbec572077619d: DatabaseError
+[2025-06-11 15:49:44] [Warning] Attempted to send invalid RegisterResponse to 0bf778d94c614184a4fbec572077619d
+[2025-06-11 15:49:44] [Error] Error receiving data from 0bf778d94c614184a4fbec572077619d: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..
+[2025-06-11 15:53:59] [Info] 
+Shutdown requested...
+[2025-06-11 15:54:19] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 15:54:19] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 15:54:19] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 15:54:19] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 15:54:19] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 15:54:19] [Info] Starting server...
+[2025-06-11 15:54:19] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 15:54:19] [Info] Server is ready to accept connections
+[2025-06-11 15:54:19] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 15:55:19] [Info] Client connected: 600683dc7ff34d67bc0fb92c3e7be44b from 127.0.0.1:52215
+[2025-06-11 15:55:19] [Info] Starting connection handler for 127.0.0.1:52215 (ID: 600683dc7ff34d67bc0fb92c3e7be44b)
+[2025-06-11 15:55:43] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 15:55:43] [Info] Received RegisterRequest from 600683dc7ff34d67bc0fb92c3e7be44b (177 bytes)
+[2025-06-11 15:55:43] [Info] Registration attempt from 600683dc7ff34d67bc0fb92c3e7be44b: Courrite
+[2025-06-11 15:55:45] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 15:55:45] [Warning] Failed registration attempt for Courrite from 600683dc7ff34d67bc0fb92c3e7be44b: UsernameTaken
+[2025-06-11 15:55:45] [Warning] Attempted to send invalid RegisterResponse to 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:55:50] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:55:50] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (93 bytes)
+[2025-06-11 15:55:50] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:56:20] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:56:20] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (93 bytes)
+[2025-06-11 15:56:20] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:56:50] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:56:50] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (93 bytes)
+[2025-06-11 15:56:50] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:57:20] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:57:20] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (93 bytes)
+[2025-06-11 15:57:20] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:57:50] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:57:50] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (92 bytes)
+[2025-06-11 15:57:50] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:58:20] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:58:20] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (93 bytes)
+[2025-06-11 15:58:20] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:58:50] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 15:58:50] [Info] Received Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b (93 bytes)
+[2025-06-11 15:58:50] [Warning] No handler found for packet type: Heartbeat from 600683dc7ff34d67bc0fb92c3e7be44b
+[2025-06-11 15:59:34] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 15:59:34] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 15:59:34] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 15:59:34] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 15:59:34] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 15:59:34] [Info] Starting server...
+[2025-06-11 15:59:34] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 15:59:34] [Info] Server is ready to accept connections
+[2025-06-11 15:59:34] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 15:59:46] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 15:59:46] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 15:59:46] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 15:59:46] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 15:59:46] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 15:59:46] [Info] Starting server...
+[2025-06-11 15:59:46] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 15:59:46] [Info] Server is ready to accept connections
+[2025-06-11 15:59:46] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 15:59:57] [Info] Client connected: b189fddaeb0e4e9680b79dde24bea7ff from 127.0.0.1:52521
+[2025-06-11 15:59:57] [Info] Starting connection handler for 127.0.0.1:52521 (ID: b189fddaeb0e4e9680b79dde24bea7ff)
+[2025-06-11 16:00:11] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 16:00:11] [Info] Received RegisterRequest from b189fddaeb0e4e9680b79dde24bea7ff (177 bytes)
+[2025-06-11 16:00:11] [Info] Registration attempt from b189fddaeb0e4e9680b79dde24bea7ff: Courrite
+[2025-06-11 16:00:13] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 16:00:13] [Warning] Failed registration attempt for Courrite from b189fddaeb0e4e9680b79dde24bea7ff: UsernameTaken
+[2025-06-11 16:00:13] [Warning] Attempted to send invalid RegisterResponse to b189fddaeb0e4e9680b79dde24bea7ff
+[2025-06-11 16:00:27] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:00:27] [Info] Received Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff (93 bytes)
+[2025-06-11 16:00:27] [Warning] No handler found for packet type: Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff
+[2025-06-11 16:00:57] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:00:57] [Info] Received Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff (93 bytes)
+[2025-06-11 16:00:57] [Warning] No handler found for packet type: Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff
+[2025-06-11 16:01:27] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:01:27] [Info] Received Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff (93 bytes)
+[2025-06-11 16:01:27] [Warning] No handler found for packet type: Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff
+[2025-06-11 16:01:57] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:01:57] [Info] Received Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff (93 bytes)
+[2025-06-11 16:01:57] [Warning] No handler found for packet type: Heartbeat from b189fddaeb0e4e9680b79dde24bea7ff
+[2025-06-11 16:02:25] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:02:25] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:02:25] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:02:25] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:02:25] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:02:25] [Info] Starting server...
+[2025-06-11 16:02:25] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:02:25] [Info] Server is ready to accept connections
+[2025-06-11 16:02:25] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:02:28] [Info] 
+Shutdown requested...
+[2025-06-11 16:18:18] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:18:18] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:18:18] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:18:18] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:18:18] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:18:18] [Info] Starting server...
+[2025-06-11 16:18:18] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:18:18] [Info] Server is ready to accept connections
+[2025-06-11 16:18:18] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:18:22] [Info] 
+Shutdown requested...
+[2025-06-11 16:19:09] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:19:09] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:19:09] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:19:09] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:19:09] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:19:09] [Info] Starting server...
+[2025-06-11 16:19:09] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:19:09] [Info] Server is ready to accept connections
+[2025-06-11 16:19:09] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:19:13] [Info] 
+Shutdown requested...
+[2025-06-11 16:19:34] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:19:34] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:19:34] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:19:34] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:19:34] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:19:34] [Info] Starting server...
+[2025-06-11 16:19:34] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:19:34] [Info] Server is ready to accept connections
+[2025-06-11 16:19:34] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:19:45] [Info] Client connected: 5f8199d2f0924a85ae9a6b62890d05af from 127.0.0.1:53620
+[2025-06-11 16:19:45] [Info] Starting connection handler for 127.0.0.1:53620 (ID: 5f8199d2f0924a85ae9a6b62890d05af)
+[2025-06-11 16:20:05] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 16:20:05] [Info] Received RegisterRequest from 5f8199d2f0924a85ae9a6b62890d05af (176 bytes)
+[2025-06-11 16:20:05] [Info] Registration attempt from 5f8199d2f0924a85ae9a6b62890d05af: Courrite
+[2025-06-11 16:20:07] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 16:20:07] [Warning] Failed registration attempt for Courrite from 5f8199d2f0924a85ae9a6b62890d05af: UsernameTaken
+[2025-06-11 16:20:07] [Warning] Attempted to send invalid RegisterResponse to 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:20:15] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:20:15] [Info] Received Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af (93 bytes)
+[2025-06-11 16:20:15] [Warning] No handler found for packet type: Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:20:45] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:20:45] [Info] Received Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af (93 bytes)
+[2025-06-11 16:20:45] [Warning] No handler found for packet type: Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:21:16] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:21:16] [Info] Received Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af (93 bytes)
+[2025-06-11 16:21:16] [Warning] No handler found for packet type: Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:21:46] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:21:46] [Info] Received Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af (93 bytes)
+[2025-06-11 16:21:46] [Warning] No handler found for packet type: Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:22:16] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:22:16] [Info] Received Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af (93 bytes)
+[2025-06-11 16:22:16] [Warning] No handler found for packet type: Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:22:46] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:22:46] [Info] Received Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af (93 bytes)
+[2025-06-11 16:22:46] [Warning] No handler found for packet type: Heartbeat from 5f8199d2f0924a85ae9a6b62890d05af
+[2025-06-11 16:22:56] [Info] 
+Shutdown requested...
+[2025-06-11 16:24:10] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:24:10] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:24:10] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:24:10] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:24:10] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:24:10] [Info] Starting server...
+[2025-06-11 16:24:10] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:24:10] [Info] Server is ready to accept connections
+[2025-06-11 16:24:10] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:24:14] [Info] 
+Shutdown requested...
+[2025-06-11 16:24:27] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:24:27] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:24:27] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:24:27] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:24:27] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:24:27] [Info] Starting server...
+[2025-06-11 16:24:27] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:24:27] [Info] Server is ready to accept connections
+[2025-06-11 16:24:27] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:24:30] [Info] 
+Shutdown requested...
+[2025-06-11 16:25:33] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:25:33] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:25:33] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:25:33] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:25:33] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:25:33] [Info] Starting server...
+[2025-06-11 16:25:33] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:25:33] [Info] Server is ready to accept connections
+[2025-06-11 16:25:33] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:25:37] [Info] 
+Shutdown requested...
+[2025-06-11 16:26:08] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:26:08] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:26:08] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:26:08] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:26:08] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:26:08] [Info] Starting server...
+[2025-06-11 16:26:08] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:26:08] [Info] Server is ready to accept connections
+[2025-06-11 16:26:08] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:26:10] [Info] 
+Shutdown requested...
+[2025-06-11 16:26:27] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:26:27] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:26:27] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:26:27] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:26:27] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:26:27] [Info] Starting server...
+[2025-06-11 16:26:27] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:26:27] [Info] Server is ready to accept connections
+[2025-06-11 16:26:27] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:28:06] [Info] 
+Shutdown requested...
+[2025-06-11 16:28:38] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:28:38] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:28:38] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:28:38] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:28:38] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:28:38] [Info] Starting server...
+[2025-06-11 16:28:38] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:28:38] [Info] Server is ready to accept connections
+[2025-06-11 16:28:38] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:29:52] [Info] 
+Shutdown requested...
+[2025-06-11 16:29:58] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:29:58] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:29:58] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:29:58] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:29:58] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:29:58] [Info] Starting server...
+[2025-06-11 16:29:58] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:29:58] [Info] Server is ready to accept connections
+[2025-06-11 16:29:58] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:30:06] [Info] 
+Shutdown requested...
+[2025-06-11 16:30:28] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:30:28] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:30:28] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:30:28] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:30:28] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:30:28] [Info] Starting server...
+[2025-06-11 16:30:28] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:30:28] [Info] Server is ready to accept connections
+[2025-06-11 16:30:28] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:30:36] [Info] Client connected: 10645589e940493894b5b35275d6b8b4 from 127.0.0.1:54281
+[2025-06-11 16:30:36] [Info] Starting connection handler for 127.0.0.1:54281 (ID: 10645589e940493894b5b35275d6b8b4)
+[2025-06-11 16:30:50] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 16:30:50] [Info] Received RegisterRequest from 10645589e940493894b5b35275d6b8b4 (177 bytes)
+[2025-06-11 16:30:50] [Info] Registration attempt from 10645589e940493894b5b35275d6b8b4: Courrite
+[2025-06-11 16:30:51] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 16:30:51] [Warning] Failed registration attempt for Courrite from 10645589e940493894b5b35275d6b8b4: UsernameTaken
+[2025-06-11 16:30:51] [Warning] Attempted to send invalid RegisterResponse to 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:31:06] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:31:06] [Info] Received Heartbeat from 10645589e940493894b5b35275d6b8b4 (93 bytes)
+[2025-06-11 16:31:06] [Warning] No handler found for packet type: Heartbeat from 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:31:36] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:31:36] [Info] Received Heartbeat from 10645589e940493894b5b35275d6b8b4 (93 bytes)
+[2025-06-11 16:31:36] [Warning] No handler found for packet type: Heartbeat from 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:32:06] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:32:06] [Info] Received Heartbeat from 10645589e940493894b5b35275d6b8b4 (93 bytes)
+[2025-06-11 16:32:06] [Warning] No handler found for packet type: Heartbeat from 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:32:36] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:32:36] [Info] Received Heartbeat from 10645589e940493894b5b35275d6b8b4 (93 bytes)
+[2025-06-11 16:32:36] [Warning] No handler found for packet type: Heartbeat from 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:33:06] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:33:06] [Info] Received Heartbeat from 10645589e940493894b5b35275d6b8b4 (92 bytes)
+[2025-06-11 16:33:06] [Warning] No handler found for packet type: Heartbeat from 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:33:36] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:33:36] [Info] Received Heartbeat from 10645589e940493894b5b35275d6b8b4 (93 bytes)
+[2025-06-11 16:33:36] [Warning] No handler found for packet type: Heartbeat from 10645589e940493894b5b35275d6b8b4
+[2025-06-11 16:33:55] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:33:55] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:33:55] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:33:55] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:33:55] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:33:55] [Info] Starting server...
+[2025-06-11 16:33:55] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:33:55] [Info] Server is ready to accept connections
+[2025-06-11 16:33:55] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:34:03] [Info] Client connected: 867b6261b2564330b7529d272c226d7b from 127.0.0.1:54680
+[2025-06-11 16:34:03] [Info] Starting connection handler for 127.0.0.1:54680 (ID: 867b6261b2564330b7529d272c226d7b)
+[2025-06-11 16:34:16] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 16:34:16] [Info] Received RegisterRequest from 867b6261b2564330b7529d272c226d7b (177 bytes)
+[2025-06-11 16:34:16] [Info] Registration attempt from 867b6261b2564330b7529d272c226d7b: Courrite
+[2025-06-11 16:34:17] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 14: 'unable to open database file'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteConnectionInternal..ctor(SqliteConnectionStringBuilder connectionOptions, SqliteConnectionPool pool)
+   at Microsoft.Data.Sqlite.SqliteConnectionPool.GetConnection()
+   at Microsoft.Data.Sqlite.SqliteConnectionFactory.GetConnection(SqliteConnection outerConnection)
+   at Microsoft.Data.Sqlite.SqliteConnection.Open()
+   at System.Data.Common.DbConnection.OpenAsync(CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 16:34:17] [Warning] Failed registration attempt for Courrite from 867b6261b2564330b7529d272c226d7b: UsernameTaken
+[2025-06-11 16:34:17] [Warning] Attempted to send invalid RegisterResponse to 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:34:33] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:34:33] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:34:33] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:35:03] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:35:03] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:35:03] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:35:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:35:34] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:35:34] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:36:03] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:36:03] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:36:03] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:36:33] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:36:33] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:36:33] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:37:03] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:37:03] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:37:03] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:37:33] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:37:33] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:37:33] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:38:03] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:38:03] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:38:03] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:38:33] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:38:33] [Info] Received Heartbeat from 867b6261b2564330b7529d272c226d7b (93 bytes)
+[2025-06-11 16:38:33] [Warning] No handler found for packet type: Heartbeat from 867b6261b2564330b7529d272c226d7b
+[2025-06-11 16:45:44] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 16:45:44] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 16:45:44] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 16:45:44] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 16:45:44] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 16:45:44] [Info] Starting server...
+[2025-06-11 16:45:44] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 16:45:44] [Info] Server is ready to accept connections
+[2025-06-11 16:45:44] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 16:46:34] [Info] Client connected: 0af7bfe4196b4534b3d36f2ce1f51a9c from 127.0.0.1:55530
+[2025-06-11 16:46:34] [Info] Starting connection handler for 127.0.0.1:55530 (ID: 0af7bfe4196b4534b3d36f2ce1f51a9c)
+[2025-06-11 16:46:44] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 16:46:44] [Info] Received RegisterRequest from 0af7bfe4196b4534b3d36f2ce1f51a9c (177 bytes)
+[2025-06-11 16:46:44] [Info] Registration attempt from 0af7bfe4196b4534b3d36f2ce1f51a9c: Courrite
+[2025-06-11 16:46:47] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 16:46:47] [Warning] Failed registration attempt for Courrite from 0af7bfe4196b4534b3d36f2ce1f51a9c: UsernameTaken
+[2025-06-11 16:46:47] [Warning] Attempted to send invalid RegisterResponse to 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:47:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:47:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:47:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:47:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:47:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:47:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:48:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:48:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:48:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:48:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:48:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:48:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:49:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:49:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:49:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:49:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:49:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (92 bytes)
+[2025-06-11 16:49:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:50:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:50:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:50:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:50:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:50:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:50:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:51:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:51:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (92 bytes)
+[2025-06-11 16:51:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:51:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:51:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:51:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:52:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:52:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:52:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:52:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:52:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:52:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:53:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:53:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:53:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:53:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:53:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:53:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:54:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:54:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:54:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:54:35] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:54:35] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:54:35] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:55:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:55:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:55:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:55:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:55:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:55:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:56:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:56:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:56:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:56:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:56:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:56:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:57:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:57:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:57:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:57:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:57:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:57:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:57:48] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 16:57:48] [Info] Received RegisterRequest from 0af7bfe4196b4534b3d36f2ce1f51a9c (177 bytes)
+[2025-06-11 16:57:48] [Info] Registration attempt from 0af7bfe4196b4534b3d36f2ce1f51a9c: Courrite
+[2025-06-11 16:57:49] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 16:57:49] [Warning] Failed registration attempt for Courrite from 0af7bfe4196b4534b3d36f2ce1f51a9c: UsernameTaken
+[2025-06-11 16:57:49] [Warning] Attempted to send invalid RegisterResponse to 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:58:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:58:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:58:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:58:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:58:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:58:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:59:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:59:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (92 bytes)
+[2025-06-11 16:59:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 16:59:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 16:59:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 16:59:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:00:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:00:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:00:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:00:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:00:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:00:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:01:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:01:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (92 bytes)
+[2025-06-11 17:01:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:01:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:01:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:01:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:02:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:02:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:02:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:02:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:02:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:02:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:03:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:03:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:03:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:03:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:03:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:03:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:04:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:04:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:04:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:04:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:04:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:04:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:05:05] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:05:05] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:05:05] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:05:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:05:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (92 bytes)
+[2025-06-11 17:05:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:06:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:06:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:06:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:06:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:06:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:06:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:07:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:07:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:07:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:07:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:07:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:07:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:08:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:08:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:08:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:08:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:08:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:08:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:09:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:09:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:09:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:09:32] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 17:09:32] [Info] Received RegisterRequest from 0af7bfe4196b4534b3d36f2ce1f51a9c (177 bytes)
+[2025-06-11 17:09:32] [Info] Registration attempt from 0af7bfe4196b4534b3d36f2ce1f51a9c: Courrite
+[2025-06-11 17:09:32] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 17:09:32] [Warning] Failed registration attempt for Courrite from 0af7bfe4196b4534b3d36f2ce1f51a9c: UsernameTaken
+[2025-06-11 17:09:32] [Warning] Attempted to send invalid RegisterResponse to 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:09:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:09:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:09:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:10:04] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:10:04] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:10:04] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:10:34] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:10:34] [Info] Received Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c (93 bytes)
+[2025-06-11 17:10:34] [Warning] No handler found for packet type: Heartbeat from 0af7bfe4196b4534b3d36f2ce1f51a9c
+[2025-06-11 17:10:43] [Info] 
+Shutdown requested...
+[2025-06-11 17:10:58] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 17:10:58] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 17:10:58] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 17:10:58] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 17:10:58] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 17:10:58] [Info] Starting server...
+[2025-06-11 17:10:58] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 17:10:58] [Info] Server is ready to accept connections
+[2025-06-11 17:10:58] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 17:11:23] [Info] Client connected: 186329939f834e6e997d6ebf62104423 from 127.0.0.1:56989
+[2025-06-11 17:11:23] [Info] Starting connection handler for 127.0.0.1:56989 (ID: 186329939f834e6e997d6ebf62104423)
+[2025-06-11 17:11:37] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 17:11:37] [Info] Received RegisterRequest from 186329939f834e6e997d6ebf62104423 (177 bytes)
+[2025-06-11 17:11:37] [Info] Registration attempt from 186329939f834e6e997d6ebf62104423: Courrite
+[2025-06-11 17:11:39] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 17:11:39] [Warning] Failed registration attempt for Courrite from 186329939f834e6e997d6ebf62104423: UsernameTaken
+[2025-06-11 17:11:39] [Warning] Attempted to send invalid RegisterResponse to 186329939f834e6e997d6ebf62104423
+[2025-06-11 17:11:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:11:53] [Info] Received Heartbeat from 186329939f834e6e997d6ebf62104423 (93 bytes)
+[2025-06-11 17:11:53] [Warning] No handler found for packet type: Heartbeat from 186329939f834e6e997d6ebf62104423
+[2025-06-11 17:12:23] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:12:23] [Info] Received Heartbeat from 186329939f834e6e997d6ebf62104423 (93 bytes)
+[2025-06-11 17:12:23] [Warning] No handler found for packet type: Heartbeat from 186329939f834e6e997d6ebf62104423
+[2025-06-11 17:12:53] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:12:53] [Info] Received Heartbeat from 186329939f834e6e997d6ebf62104423 (93 bytes)
+[2025-06-11 17:12:53] [Warning] No handler found for packet type: Heartbeat from 186329939f834e6e997d6ebf62104423
+[2025-06-11 17:13:11] [Info] 
+Shutdown requested...
+[2025-06-11 17:14:24] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 17:14:24] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 17:14:24] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 17:14:24] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 17:14:24] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 17:14:24] [Info] Starting server...
+[2025-06-11 17:14:24] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 17:14:24] [Info] Server is ready to accept connections
+[2025-06-11 17:14:24] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 17:14:40] [Info] Client connected: 7b8c4deb5aa74366a3eb28674497ac31 from 127.0.0.1:57151
+[2025-06-11 17:14:40] [Info] Starting connection handler for 127.0.0.1:57151 (ID: 7b8c4deb5aa74366a3eb28674497ac31)
+[2025-06-11 17:14:55] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 17:14:55] [Info] Received RegisterRequest from 7b8c4deb5aa74366a3eb28674497ac31 (177 bytes)
+[2025-06-11 17:14:55] [Info] Registration attempt from 7b8c4deb5aa74366a3eb28674497ac31: Courrite
+[2025-06-11 17:14:58] [Error] Error checking username availability for Courrite: Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such table: Players'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CelestialLeague.Server.Services.AuthenticationService.IsUsernameTakenAsync(String username) in D:\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Server\Services\AuthenticationService.cs:line 98
+[2025-06-11 17:14:58] [Warning] Failed registration attempt for Courrite from 7b8c4deb5aa74366a3eb28674497ac31: UsernameTaken
+[2025-06-11 17:14:58] [Warning] Attempted to send invalid RegisterResponse to 7b8c4deb5aa74366a3eb28674497ac31
+[2025-06-11 17:15:10] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:15:10] [Info] Received Heartbeat from 7b8c4deb5aa74366a3eb28674497ac31 (93 bytes)
+[2025-06-11 17:15:10] [Warning] No handler found for packet type: Heartbeat from 7b8c4deb5aa74366a3eb28674497ac31
+[2025-06-11 17:15:40] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:15:40] [Info] Received Heartbeat from 7b8c4deb5aa74366a3eb28674497ac31 (93 bytes)
+[2025-06-11 17:15:40] [Warning] No handler found for packet type: Heartbeat from 7b8c4deb5aa74366a3eb28674497ac31
+[2025-06-11 17:16:10] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:16:10] [Info] Received Heartbeat from 7b8c4deb5aa74366a3eb28674497ac31 (92 bytes)
+[2025-06-11 17:16:10] [Warning] No handler found for packet type: Heartbeat from 7b8c4deb5aa74366a3eb28674497ac31
+[2025-06-11 17:16:33] [Info] 
+Shutdown requested...
+[2025-06-11 17:16:40] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 17:16:40] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 17:16:40] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 17:16:40] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 17:16:40] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 17:16:40] [Info] Starting server...
+[2025-06-11 17:16:40] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 17:16:40] [Info] Server is ready to accept connections
+[2025-06-11 17:16:40] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 17:16:54] [Info] Client connected: 79c8a55b761344d793c720857021507b from 127.0.0.1:57293
+[2025-06-11 17:16:54] [Info] Starting connection handler for 127.0.0.1:57293 (ID: 79c8a55b761344d793c720857021507b)
+[2025-06-11 17:17:08] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 17:17:08] [Info] Received RegisterRequest from 79c8a55b761344d793c720857021507b (177 bytes)
+[2025-06-11 17:17:08] [Info] Registration attempt from 79c8a55b761344d793c720857021507b: Courrite
+[2025-06-11 17:17:09] [Info] New player registered: Courrite
+[2025-06-11 17:17:09] [Info] Successful registration for Courrite from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:17:09] [Error] Login failed for Courrite: The LINQ expression 'DbSet<Player>()
+    .Where(p => __username_0.Equals(
+        value: p.Username, 
+        comparisonType: OrdinalIgnoreCase))' could not be translated. Additional information: Translation of the 'string.Equals' overload with a 'StringComparison' parameter is not supported. See https://go.microsoft.com/fwlink/?linkid=2129535 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+[2025-06-11 17:17:09] [Warning] Registration succeeded but auto-login failed for Courrite.
+[2025-06-11 17:17:09] [Warning] Attempted to send invalid RegisterResponse to 79c8a55b761344d793c720857021507b
+[2025-06-11 17:17:24] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:17:24] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:17:24] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:17:39] [Info] CelestialLeague.Shared.Packets.LoginRequestPacket
+[2025-06-11 17:17:39] [Info] Received LoginRequest from 79c8a55b761344d793c720857021507b (192 bytes)
+[2025-06-11 17:17:39] [Info] Login attempt from 79c8a55b761344d793c720857021507b: Courrite
+[2025-06-11 17:17:40] [Error] Login failed for Courrite: The LINQ expression 'DbSet<Player>()
+    .Where(p => __username_0.Equals(
+        value: p.Username, 
+        comparisonType: OrdinalIgnoreCase))' could not be translated. Additional information: Translation of the 'string.Equals' overload with a 'StringComparison' parameter is not supported. See https://go.microsoft.com/fwlink/?linkid=2129535 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+[2025-06-11 17:17:40] [Warning] Failed login attempt for Courrite from 79c8a55b761344d793c720857021507b: DatabaseError
+[2025-06-11 17:17:40] [Warning] Attempted to send invalid LoginResponse to 79c8a55b761344d793c720857021507b
+[2025-06-11 17:17:54] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:17:54] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:17:54] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:18:24] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:18:24] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:18:24] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:18:54] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:18:54] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:18:54] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:19:24] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:19:24] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:19:24] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:19:54] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:19:54] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:19:54] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:20:24] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:20:24] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:20:24] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:20:41] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 17:20:41] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 17:20:41] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 17:20:41] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 17:20:41] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 17:20:41] [Info] Starting server...
+[2025-06-11 17:20:41] [Error] Failed to start server: Обычно разрешается только одно использование адреса сокета (протокол/сетевой адрес/порт).
+[2025-06-11 17:20:54] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:20:54] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:20:54] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:21:24] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:21:24] [Info] Received Heartbeat from 79c8a55b761344d793c720857021507b (93 bytes)
+[2025-06-11 17:21:24] [Warning] No handler found for packet type: Heartbeat from 79c8a55b761344d793c720857021507b
+[2025-06-11 17:21:57] [Info] Auto-created handler: AuthenticationHandler
+[2025-06-11 17:21:57] [Info] Registered handler: AuthenticationHandler.HandleLoginAsync for LoginRequest
+[2025-06-11 17:21:57] [Info] Registered handler: AuthenticationHandler.HandleRegisterAsync for RegisterRequest
+[2025-06-11 17:21:57] [Info] Registered handler: AuthenticationHandler.HandleLogoutAsync for LogoutRequest
+[2025-06-11 17:21:57] [Info] PacketProcessor initialized with 3 packet handlers
+[2025-06-11 17:21:57] [Info] Starting server...
+[2025-06-11 17:21:57] [Info] Server started on 127.0.0.1:7777
+[2025-06-11 17:21:57] [Info] Server is ready to accept connections
+[2025-06-11 17:21:57] [Info] Server is running, press ctrl + c to stop.
+[2025-06-11 17:22:08] [Info] Client connected: 33dfe9155a6a44ebaf1dedd3cf5ada68 from 127.0.0.1:57495
+[2025-06-11 17:22:08] [Info] Starting connection handler for 127.0.0.1:57495 (ID: 33dfe9155a6a44ebaf1dedd3cf5ada68)
+[2025-06-11 17:22:39] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:22:39] [Info] Received Heartbeat from 33dfe9155a6a44ebaf1dedd3cf5ada68 (93 bytes)
+[2025-06-11 17:22:39] [Warning] No handler found for packet type: Heartbeat from 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:22:41] [Info] CelestialLeague.Shared.Packets.RegisterRequestPacket
+[2025-06-11 17:22:41] [Info] Received RegisterRequest from 33dfe9155a6a44ebaf1dedd3cf5ada68 (177 bytes)
+[2025-06-11 17:22:41] [Info] Registration attempt from 33dfe9155a6a44ebaf1dedd3cf5ada68: Courrite
+[2025-06-11 17:22:46] [Warning] Failed registration attempt for Courrite from 33dfe9155a6a44ebaf1dedd3cf5ada68: UsernameTaken
+[2025-06-11 17:22:46] [Warning] Attempted to send invalid RegisterResponse to 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:22:55] [Info] CelestialLeague.Shared.Packets.LoginRequestPacket
+[2025-06-11 17:22:55] [Info] Received LoginRequest from 33dfe9155a6a44ebaf1dedd3cf5ada68 (192 bytes)
+[2025-06-11 17:22:55] [Info] Login attempt from 33dfe9155a6a44ebaf1dedd3cf5ada68: Courrite
+[2025-06-11 17:22:55] [Info] User logged in successfully: Courrite
+[2025-06-11 17:22:55] [Info] Successful login for Courrite on connection 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:23:03] [Info] CelestialLeague.Shared.Packets.LogoutRequestPacket
+[2025-06-11 17:23:03] [Info] Received LogoutRequest from 33dfe9155a6a44ebaf1dedd3cf5ada68 (97 bytes)
+[2025-06-11 17:23:03] [Info] Logout request from 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:23:03] [Info] User logged out with session: d_Ya4VXgFSk99SrNSevq9FuI4w1TcWmZ
+[2025-06-11 17:23:03] [Info] User logged out from connection 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:23:09] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:23:09] [Info] Received Heartbeat from 33dfe9155a6a44ebaf1dedd3cf5ada68 (93 bytes)
+[2025-06-11 17:23:09] [Warning] No handler found for packet type: Heartbeat from 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:23:39] [Info] CelestialLeague.Shared.Packets.HeartbeatPacket
+[2025-06-11 17:23:39] [Info] Received Heartbeat from 33dfe9155a6a44ebaf1dedd3cf5ada68 (93 bytes)
+[2025-06-11 17:23:39] [Warning] No handler found for packet type: Heartbeat from 33dfe9155a6a44ebaf1dedd3cf5ada68
+[2025-06-11 17:23:44] [Error] Error receiving data from 33dfe9155a6a44ebaf1dedd3cf5ada68: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение..

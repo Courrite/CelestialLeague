@@ -1,12 +1,13 @@
 using Celeste;
 using Celeste.Mod;
-using Celeste.Mod.UI;
 using CelestialLeague.Client.Core;
 using CelestialLeague.Client.Player;
 using CelestialLeague.Client.Services;
-using CelestialLeague.Shared.Models;
 using FMOD.Studio;
-using MonoMod.Utils;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Monocle;
 using System;
 using System.Threading.Tasks;
 
@@ -31,13 +32,41 @@ namespace CelestialLeague.Client
                 _ = Task.Run(async () => await ConnectAsync(Settings.ServerHost, Settings.ServerPort));
             }
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod loaded");
+            On.Monocle.Engine.RenderCore += OnEngineRender;
+
+            On.Monocle.Scene.Begin += static (orig, self) =>
+            {
+                orig(self);
+
+                if (self is Level || self is Overworld)
+                {
+                    if (InterfaceManager.Instance == null)
+                    {
+                        self.Add(new InterfaceManager());
+                    }
+                    else
+                    {
+                        self.Add(InterfaceManager.Instance);
+                    }
+                }
+            };
+
+            Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague loaded");
         }
+
         public override void Unload()
         {
+            On.Monocle.Engine.RenderCore -= OnEngineRender;
+
             _ = Task.Run(async () => await DisconnectAsync("Mod unloading"));
 
             Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod unloaded");
+        }
+
+        private void OnEngineRender(On.Monocle.Engine.orig_RenderCore orig, Engine self)
+        {
+            orig(self);
+            InterfaceManager.Instance.Render();
         }
 
         private void AddTestingButtons(TextMenu menu, bool inGame)

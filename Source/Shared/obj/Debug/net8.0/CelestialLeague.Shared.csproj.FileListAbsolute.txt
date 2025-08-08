@@ -1,0 +1,12 @@
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\bin\Debug\net8.0\CLShared.deps.json
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\bin\Debug\net8.0\CLShared.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\bin\Debug\net8.0\CLShared.pdb
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CelestialLeague.Shared.csproj.AssemblyReference.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CelestialLeague.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CelestialLeague.Shared.AssemblyInfoInputs.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CelestialLeague.Shared.AssemblyInfo.cs
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CelestialLeague.Shared.csproj.CoreCompileInputs.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CLShared.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\refint\CLShared.dll
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\CLShared.pdb
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Shared\obj\Debug\net8.0\ref\CLShared.dll

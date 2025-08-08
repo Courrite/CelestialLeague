@@ -1,0 +1,23 @@
+{
+  "runtimeOptions": {
+    "tfm": "net8.0",
+    "frameworks": [
+      {
+        "name": "Microsoft.NETCore.App",
+        "version": "8.0.0"
+      },
+      {
+        "name": "Microsoft.AspNetCore.App",
+        "version": "8.0.0"
+      }
+    ],
+    "configProperties": {
+      "System.Globalization.Invariant": true,
+      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
+      "System.GC.Concurrent": true,
+      "System.GC.Server": true,
+      "System.GC.RetainVM": true,
+      "System.Reflection.NullabilityInfoContext.IsSupported": true
+    }
+  }
+}

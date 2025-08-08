@@ -1,346 +1,523 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 
-namespace CelestialLeague.Client.UI.Core
+public interface IUIComponent
 {
-    public abstract class UIComponent
+    void Update(InterfaceManager ui);
+    void Render(InterfaceManager ui);
+    
+    // Visibility and interaction
+    bool IsVisible { get; set; }
+    bool IsEnabled { get; set; }
+    bool CanReceiveFocus { get; set; }
+    bool HasFocus { get; set; }
+    
+    // Layout and rendering
+    int RenderOrder { get; }
+    LayoutInfo Layout { get; set; }
+    Rectangle Bounds { get; }
+    Rectangle ContentBounds { get; }
+    
+    // Hierarchy
+    IUIComponent Parent { get; set; }
+    IReadOnlyList<IUIComponent> Children { get; }
+    
+    // Hierarchy management
+    void AddChild(IUIComponent child);
+    void RemoveChild(IUIComponent child);
+    void ClearChildren();
+    T FindChild<T>(string name = null) where T : class, IUIComponent;
+    
+    // Events
+    event System.Action<IUIComponent> OnClick;
+    event System.Action<IUIComponent> OnFocusGained;
+    event System.Action<IUIComponent> OnFocusLost;
+    event System.Action<IUIComponent> OnMouseEntered;
+    event System.Action<IUIComponent> OnMouseExited;
+    event System.Action<IUIComponent> OnPressed;
+    event System.Action<IUIComponent> OnReleased;
+    event System.Action<IUIComponent> OnHovered;
+    
+    // Transform and bounds
+    Vector2 LocalToWorld(Vector2 localPosition);
+    Vector2 WorldToLocal(Vector2 worldPosition);
+    Rectangle GetWorldBounds();
+    bool ContainsPoint(Vector2 worldPoint);
+    
+    // Layout
+    void InvalidateLayout();
+    void UpdateLayout();
+
+    // Event Triggers
+    void FocusGained();
+    void FocusLost();
+    void Clicked();
+    void MouseEntered();
+    void MouseExited();
+    void Pressed();
+    void Released();
+    void Hovered();
+    
+    // Identification
+    string Name { get; set; }
+    string Tag { get; set; }
+}
+
+public class LayoutInfo
+{
+    // Position
+    public Vector2? AbsolutePosition { get; set; }
+    public Vector2? RelativePosition { get; set; } // 0-1 range relative to parent
+    public Vector2? Offset { get; set; }
+    
+    // Size
+    public Vector2? AbsoluteSize { get; set; }
+    public Vector2? RelativeSize { get; set; } // 0-1 range relative to parent
+    public Vector2? MinSize { get; set; }
+    public Vector2? MaxSize { get; set; }
+    
+    // Anchoring
+    public Anchor Anchor { get; set; } = Anchor.TopLeft;
+    public Vector2 Pivot { get; set; } = Vector2.Zero; // 0-1 range
+    
+    // Margins and padding
+    public Thickness Margin { get; set; }
+    public Thickness Padding { get; set; }
+    
+    // Layout behavior
+    public bool FillParent { get; set; }
+    public LayoutDirection Direction { get; set; } = LayoutDirection.None;
+}
+
+public struct Thickness
+{
+    public float Left, Top, Right, Bottom;
+    
+    public Thickness(float all) : this(all, all, all, all) { }
+    public Thickness(float horizontal, float vertical) : this(horizontal, vertical, horizontal, vertical) { }
+    public Thickness(float left, float top, float right, float bottom)
     {
-        // static texture for drawing rectangles - shared across all components to save memory
-        private static Texture2D pixelTexture;
+        Left = left; Top = top; Right = right; Bottom = bottom;
+    }
+}
 
-        // hierarchy
-        public UIComponent Parent { get; set; }
-        public List<UIComponent> Children { get; private set; }
+public enum Anchor
+{
+    TopLeft, TopCenter, TopRight,
+    MiddleLeft, MiddleCenter, MiddleRight,
+    BottomLeft, BottomCenter, BottomRight
+}
 
-        // identity
-        public string Id { get; set; }
-        public object Tag { get; set; }
+public enum LayoutDirection
+{
+    None, Horizontal, Vertical, Grid
+}
 
-        // transform - position relative to parent, size in pixels
-        public Vector2 Position { get; set; }
-        public Vector2 Size { get; set; }
-
-        // bounds calculations
-        public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
-        public Rectangle AbsoluteBounds => new Rectangle((int)AbsolutePosition.X, (int)AbsolutePosition.Y, (int)Size.X, (int)Size.Y);
-        public Vector2 AbsolutePosition => Parent != null ? Parent.AbsolutePosition + Position : Position;
-
-        // visual properties
-        public bool IsVisible { get; set; } = true;
-        public float Alpha { get; set; } = 1f;
-        public Color BackgroundColor { get; set; } = Color.Transparent;
-        public Color BorderColor { get; set; } = Color.Transparent;
-        public int BorderWidth { get; set; } = 0;
-
-        // interaction states
-        public bool CanReceiveInput { get; set; } = false;
-        public bool IsFocusable { get; set; } = false;
-        public bool IsEnabled { get; set; } = true;
-        public bool IsHovered { get; set; } = false;
-        public bool IsPressed { get; set; } = false;
-        public bool IsFocused { get; set; } = false;
-
-        public UIComponent(string id = null)
+public abstract class UIComponent : IUIComponent
+{
+    private readonly List<IUIComponent> children = new List<IUIComponent>();
+    private IUIComponent parent;
+    private bool layoutDirty = true;
+    private bool wasPressed = false;
+    private bool wasHovered = false;
+    private Rectangle cachedBounds;
+    
+    public string Name { get; set; } = "";
+    public string Tag { get; set; } = "";
+    
+    public bool IsVisible { get; set; } = true;
+    public bool IsEnabled { get; set; } = true;
+    public bool CanReceiveFocus { get; set; } = false;
+    public bool HasFocus { get; set; } = false;
+    
+    public virtual int RenderOrder => 0;
+    public LayoutInfo Layout { get; set; } = new LayoutInfo();
+    
+    public virtual Rectangle Bounds => layoutDirty ? RecalculateBounds() : cachedBounds;
+    public virtual Rectangle ContentBounds 
+    { 
+        get 
         {
-            Id = id;
-            Children = [];
-        }
-
-        // hierarhcy management
-        public void AddChild(UIComponent child)
-        {
-            if (child == null) return;
-
-            child.RemoveFromParent();
-
-            Children.Add(child);
-            child.Parent = this;
-        }
-
-        public void RemoveChild(UIComponent child)
-        {
-            if (child == null) return;
-
-            if (Children.Remove(child))
-            {
-                child.Parent = null;
-            }
-        }
-
-        public void RemoveFromParent()
-        {
-            Parent?.RemoveChild(this);
-        }
-
-        // finding components
-        public T FindChild<T>(string id) where T : UIComponent
-        {
-            return FindChild(id) as T;
-        }
-
-        public UIComponent FindChild(string id)
-        {
-            if (string.IsNullOrEmpty(id)) return null;
-
-            foreach (var child in Children)
-            {
-                if (child.Id == id) return child;
-            }
-
-            foreach (var child in Children)
-            {
-                var found = child.FindChild(id);
-                if (found != null) return found;
-            }
-
-            return null;
-        }
-
-        // update cycle
-        public virtual void Update()
-        {
-            if (!IsVisible) return;
-
-            OnUpdate();
-
-            for (int i = Children.Count - 1; i >= 0; i--)
-            {
-                if (i < Children.Count)
-                {
-                    Children[i].Update();
-                }
-            }
-        }
-
-        protected virtual void OnUpdate()
-        {
-            // override in derived classes
-            // base implementation is empty cuz not all components need update logic
-        }
-
-        // render cycle
-        public void Render(SpriteBatch spriteBatch)
-        {
-            if (!IsVisible) return;
-
-            OnRender(spriteBatch);
-
-            foreach (var child in Children)
-            {
-                child.Render(spriteBatch);
-            }
-        }
-
-        protected virtual void OnRender(SpriteBatch spriteBatch)
-        {
-            OnDraw(spriteBatch);
-
-            // override in derived classes
-        }
-
-        protected virtual void OnDraw(SpriteBatch spriteBatch)
-        {
-            if (BackgroundColor != Color.Transparent)
-            {
-                DrawBackground(spriteBatch);
-            }
-
-            if (BorderWidth > 0 && BorderColor != Color.Transparent)
-            {
-                DrawBorder(spriteBatch);
-            }
-        }
-
-        // drwaing helpers
-        protected virtual void DrawBackground(SpriteBatch spriteBatch)
-        {
-            var pixel = GetPixelTexture(spriteBatch.GraphicsDevice);
-            var bounds = AbsoluteBounds;
-            spriteBatch.Draw(pixel, bounds, BackgroundColor * Alpha);
-        }
-
-        protected virtual void DrawBorder(SpriteBatch spriteBatch)
-        {
-            var pixel = GetPixelTexture(spriteBatch.GraphicsDevice);
-            var bounds = AbsoluteBounds;
-            var borderColor = BorderColor * Alpha;
-
-            // T (top)
-            spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, BorderWidth), borderColor);
-            // B (bottmo)
-            spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Bottom - BorderWidth, bounds.Width, BorderWidth), borderColor);
-            // L (left)
-            spriteBatch.Draw(pixel, new Rectangle(bounds.X, bounds.Y, BorderWidth, bounds.Height), borderColor);
-            // R (right)
-            spriteBatch.Draw(pixel, new Rectangle(bounds.Right - BorderWidth, bounds.Y, BorderWidth, bounds.Height), borderColor);
-        }
-
-        protected static Texture2D GetPixelTexture(GraphicsDevice graphicsDevice)
-        {
-            if (pixelTexture == null)
-            {
-                pixelTexture = new Texture2D(graphicsDevice, 1, 1);
-                pixelTexture.SetData(new[] { Color.White });
-            }
-            return pixelTexture;
-        }
-
-        // mouse events
-        public virtual void OnMouseEnter()
-        {
-            IsHovered = true;
-        }
-
-        public virtual void OnMouseLeave()
-        {
-            IsHovered = false;
-        }
-
-        public virtual void OnMouseMove(Vector2 mousePosition)
-        {
-            // most components don't need mouse move, but sliders/drag operations do
-        }
-
-        public virtual void OnMouseDown(Vector2 mousePosition)
-        {
-            if (!CanReceiveInput || !IsEnabled) return;
-
-            IsPressed = true;
-
-            // request focus on mouse down, not click, for better UX
-            if (IsFocusable)
-            {
-                RequestFocus();
-            }
-        }
-
-        public virtual void OnMouseUp(Vector2 mousePosition)
-        {
-            if (!CanReceiveInput || !IsEnabled) return;
-
-            IsPressed = false;
-            // reset press state regardless of where mouse up occurs
-        }
-
-        public virtual void OnClick(Vector2 mousePosition)
-        {
-            if (!CanReceiveInput || !IsEnabled) return;
-
-            // click is mouse down + up on same component
-            // override in derived classes
-        }
-
-        // keyboard events
-        public virtual void OnKeyPressed(Keys key)
-        {
-            if (!CanReceiveInput || !IsEnabled || !IsFocused) return;
-
-            switch (key)
-            {
-                case Keys.Tab:
-                    MoveFocusToNext();
-                    break;
-                case Keys.Enter:
-                case Keys.Space:
-                    // enter/space activates component like clicking
-                    OnClick(Vector2.Zero);
-                    break;
-            }
-        }
-
-        public virtual void OnKeyReleased(Keys key)
-        {
-            if (!CanReceiveInput || !IsEnabled || !IsFocused) return;
-
-            // most components don't need key release events
-        }
-
-        public virtual void OnTextInput(char character)
-        {
-            if (!CanReceiveInput || !IsEnabled || !IsFocused) return;
-
-            // only text input components need this - textboxes, etc.
-        }
-
-        // focuz events
-        public virtual void OnGainedFocus()
-        {
-            IsFocused = true;
-            // override in derived classes
-        }
-
-        public virtual void OnLostFocus()
-        {
-            IsFocused = false;
-            // override in derived classes
-        }
-
-        // hit testing
-        public virtual bool ContainsPoint(Point point)
-        {
-            return AbsoluteBounds.Contains(point);
-        }
-
-        public virtual UIComponent GetComponentAt(Point point)
-        {
-            if (!IsVisible || !ContainsPoint(point)) return null;
-
-            // check children first cuz they render on top
-            for (int i = Children.Count - 1; i >= 0; i--)
-            {
-                var child = Children[i].GetComponentAt(point);
-                if (child != null) return child;
-            }
-
-            return CanReceiveInput ? this : null;
-        }
-
-        // util methods
-        public void SetPosition(float x, float y)
-        {
-            Position = new Vector2(x, y);
-        }
-
-        public void SetSize(float width, float height)
-        {
-            Size = new Vector2(width, height);
-        }
-
-        public void SetBounds(Rectangle bounds)
-        {
-            Position = new Vector2(bounds.X, bounds.Y);
-            Size = new Vector2(bounds.Width, bounds.Height);
-        }
-
-        // focus management
-        protected virtual void RequestFocus()
-        {
-            UIManager.Instance?.SetFocusedComponent(this);
-        }
-
-        protected virtual void MoveFocusToNext()
-        {
-            UIManager.Instance?.MoveFocusToNext();
-        }
-
-        public virtual void Cleanup()
-        {
-            RemoveFromParent();
-
-            foreach (var child in Children)
-            {
-                child.Cleanup();
-            }
-            Children.Clear();
-        }
-
-        // debug helper
-        public override string ToString()
-        {
-            return $"{GetType().Name}({Id ?? "unnamed"}) at {Position} size {Size}";
+            var bounds = Bounds;
+            var padding = Layout.Padding;
+            return new Rectangle(
+                bounds.X + (int)padding.Left,
+                bounds.Y + (int)padding.Top,
+                bounds.Width - (int)(padding.Left + padding.Right),
+                bounds.Height - (int)(padding.Top + padding.Bottom)
+            );
         }
     }
+    
+    public IUIComponent Parent 
+    { 
+        get => parent;
+        set
+        {
+            if (parent == value) return;
+            parent?.RemoveChild(this);
+            parent = value;
+            if (parent != null && !parent.Children.Contains(this))
+                parent.AddChild(this);
+            InvalidateLayout();
+        }
+    }
+    
+    public IReadOnlyList<IUIComponent> Children => children.AsReadOnly();
+    
+    // Events
+    public event System.Action<IUIComponent> OnClick;
+    public event System.Action<IUIComponent> OnFocusGained;
+    public event System.Action<IUIComponent> OnFocusLost;
+    public event System.Action<IUIComponent> OnMouseEntered;
+    public event System.Action<IUIComponent> OnMouseExited;
+    public event System.Action<IUIComponent> OnPressed;
+    public event System.Action<IUIComponent> OnReleased;
+    public event System.Action<IUIComponent> OnHovered;
+    
+    // Action Trigger Methods
+    public virtual void FocusGained()
+    {
+        if (!HasFocus)
+        {
+            HasFocus = true;
+            OnFocusGained?.Invoke(this);
+            OnFocusGainedInternal();
+        }
+    }
+    
+    public virtual void FocusLost()
+    {
+        if (HasFocus)
+        {
+            HasFocus = false;
+            OnFocusLost?.Invoke(this);
+            OnFocusLostInternal();
+        }
+    }
+    
+    public virtual void Clicked()
+    {
+        if (IsEnabled)
+        {
+            OnClick?.Invoke(this);
+            OnClickedInternal();
+        }
+    }
+    
+    public virtual void MouseEntered()
+    {
+        OnMouseEntered?.Invoke(this);
+        OnMouseEnteredInternal();
+    }
+    
+    public virtual void MouseExited()
+    {
+        OnMouseExited?.Invoke(this);
+        OnMouseExitedInternal();
+    }
+    
+    public virtual void Pressed()
+    {
+        if (IsEnabled)
+        {
+            OnPressed?.Invoke(this);
+            OnPressedInternal();
+        }
+    }
+    
+    public virtual void Released()
+    {
+        if (IsEnabled)
+        {
+            OnReleased?.Invoke(this);
+            OnReleasedInternal();
+        }
+    }
+    
+    public virtual void Hovered()
+    {
+        OnHovered?.Invoke(this);
+        OnHoveredInternal();
+    }
+    
+    // Protected virtual methods for derived classes to override
+    protected virtual void OnFocusGainedInternal() { }
+    protected virtual void OnFocusLostInternal() { }
+    protected virtual void OnClickedInternal() { }
+    protected virtual void OnMouseEnteredInternal() { }
+    protected virtual void OnMouseExitedInternal() { }
+    protected virtual void OnPressedInternal() { }
+    protected virtual void OnReleasedInternal() { }
+    protected virtual void OnHoveredInternal() { }
+    
+    public virtual void AddChild(IUIComponent child)
+    {
+        if (child == null || children.Contains(child) || child == this) return;
+        
+        child.Parent = this;
+        children.Add(child);
+        children.Sort((a, b) => a.RenderOrder.CompareTo(b.RenderOrder));
+        InvalidateLayout();
+    }
+    
+    public virtual void RemoveChild(IUIComponent child)
+    {
+        if (children.Remove(child))
+        {
+            child.Parent = null;
+            InvalidateLayout();
+        }
+    }
+    
+    public virtual void ClearChildren()
+    {
+        foreach (var child in children)
+            child.Parent = null;
+        children.Clear();
+        InvalidateLayout();
+    }
+    
+    public T FindChild<T>(string name = null) where T : class, IUIComponent
+    {
+        foreach (var child in children)
+        {
+            if (child is T match && (name == null || child.Name == name))
+                return match;
+            
+            var found = child.FindChild<T>(name);
+            if (found != null) return found;
+        }
+        return null;
+    }
+    
+    public virtual Vector2 LocalToWorld(Vector2 localPosition)
+    {
+        Vector2 worldPos = GetPositionInParent() + localPosition;
+        return Parent?.LocalToWorld(worldPos) ?? worldPos;
+    }
+    
+    public virtual Vector2 WorldToLocal(Vector2 worldPosition)
+    {
+        Vector2 localPos = Parent?.WorldToLocal(worldPosition) ?? worldPosition;
+        return localPos - GetPositionInParent();
+    }
+    
+    public virtual Rectangle GetWorldBounds()
+    {
+        Vector2 worldPos = LocalToWorld(Vector2.Zero);
+        var bounds = Bounds;
+        return new Rectangle((int)worldPos.X, (int)worldPos.Y, bounds.Width, bounds.Height);
+    }
+    
+    public virtual bool ContainsPoint(Vector2 worldPoint)
+    {
+        return GetWorldBounds().Contains((int)worldPoint.X, (int)worldPoint.Y);
+    }
+    
+    public virtual void InvalidateLayout()
+    {
+        layoutDirty = true;
+        foreach (var child in children)
+            child.InvalidateLayout();
+    }
+    
+    public virtual void UpdateLayout()
+    {
+        if (layoutDirty)
+        {
+            RecalculateBounds();
+            layoutDirty = false;
+        }
+        
+        foreach (var child in children)
+            child.UpdateLayout();
+    }
+    
+    private Rectangle RecalculateBounds()
+    {
+        Vector2 position = CalculatePosition();
+        Vector2 size = CalculateSize();
+        
+        cachedBounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+        return cachedBounds;
+    }
+    
+    private Vector2 CalculatePosition()
+    {
+        Vector2 position = Vector2.Zero;
+        
+        if (Parent != null)
+        {
+            var parentBounds = Parent.ContentBounds;
+            
+            if (Layout.RelativePosition.HasValue)
+            {
+                position = new Vector2(
+                    parentBounds.X + parentBounds.Width * Layout.RelativePosition.Value.X,
+                    parentBounds.Y + parentBounds.Height * Layout.RelativePosition.Value.Y
+                );
+            }
+            else
+            {
+                position = new Vector2(parentBounds.X, parentBounds.Y);
+            }
+            
+            position += GetAnchorOffset(parentBounds, Layout.Anchor);
+        }
+        
+        if (Layout.AbsolutePosition.HasValue)
+            position = Layout.AbsolutePosition.Value;
+        if (Layout.Offset.HasValue)
+            position += Layout.Offset.Value;
+        
+        // margins
+        position += new Vector2(Layout.Margin.Left, Layout.Margin.Top);
+        
+        // pivot offset
+        var size = CalculateSize();
+        position -= new Vector2(size.X * Layout.Pivot.X, size.Y * Layout.Pivot.Y);
+        
+        return position;
+    }
+    
+    private Vector2 CalculateSize()
+    {
+        Vector2 size = new Vector2(100, 50); // default
+        
+        if (Layout.AbsoluteSize.HasValue)
+        {
+            size = Layout.AbsoluteSize.Value;
+        }
+        else if (Layout.RelativeSize.HasValue && Parent != null)
+        {
+            var parentBounds = Parent.ContentBounds;
+            size = new Vector2(
+                parentBounds.Width * Layout.RelativeSize.Value.X,
+                parentBounds.Height * Layout.RelativeSize.Value.Y
+            );
+        }
+        else if (Layout.FillParent && Parent != null)
+        {
+            var parentBounds = Parent.ContentBounds;
+            size = new Vector2(
+                parentBounds.Width - Layout.Margin.Left - Layout.Margin.Right,
+                parentBounds.Height - Layout.Margin.Top - Layout.Margin.Bottom
+            );
+        }
+        
+        if (Layout.MinSize.HasValue)
+        {
+            size.X = MathHelper.Max(size.X, Layout.MinSize.Value.X);
+            size.Y = MathHelper.Max(size.Y, Layout.MinSize.Value.Y);
+        }
+        if (Layout.MaxSize.HasValue)
+        {
+            size.X = MathHelper.Min(size.X, Layout.MaxSize.Value.X);
+            size.Y = MathHelper.Min(size.Y, Layout.MaxSize.Value.Y);
+        }
+        
+        return size;
+    }
+    
+    private Vector2 GetPositionInParent()
+    {
+        var bounds = Bounds;
+        return new Vector2(bounds.X, bounds.Y);
+    }
+    
+    private Vector2 GetAnchorOffset(Rectangle parentBounds, Anchor anchor)
+    {
+        return anchor switch
+        {
+            Anchor.TopLeft => Vector2.Zero,
+            Anchor.TopCenter => new Vector2(parentBounds.Width * 0.5f, 0),
+            Anchor.TopRight => new Vector2(parentBounds.Width, 0),
+            Anchor.MiddleLeft => new Vector2(0, parentBounds.Height * 0.5f),
+            Anchor.MiddleCenter => new Vector2(parentBounds.Width * 0.5f, parentBounds.Height * 0.5f),
+            Anchor.MiddleRight => new Vector2(parentBounds.Width, parentBounds.Height * 0.5f),
+            Anchor.BottomLeft => new Vector2(0, parentBounds.Height),
+            Anchor.BottomCenter => new Vector2(parentBounds.Width * 0.5f, parentBounds.Height),
+            Anchor.BottomRight => new Vector2(parentBounds.Width, parentBounds.Height),
+            _ => Vector2.Zero
+        };
+    }
+    
+    public virtual void Update(InterfaceManager ui)
+    {
+        if (!IsVisible) return;
+        
+        UpdateLayout();
+        UpdateSelf(ui);
+        
+        bool mouseOver = IsEnabled && ContainsPoint(ui.MousePosition);
+        
+        if (mouseOver && !wasHovered)
+        {
+            wasHovered = true;
+            MouseEntered();
+        }
+        else if (!mouseOver && wasHovered)
+        {
+            wasHovered = false;
+            MouseExited();
+        }
+        
+        if (mouseOver)
+        {
+            Hovered();
+            
+            if (ui.IsLeftMousePressed())
+            {
+                wasPressed = true;
+                Pressed();
+            }
+            else if (ui.IsLeftMouseReleased() && wasPressed)
+            {
+                Released();
+                Clicked();
+                wasPressed = false;
+            }
+        }
+        else
+        {
+            if (wasPressed && ui.IsLeftMouseReleased())
+            {
+                Released();
+                wasPressed = false;
+            }
+        }
+        
+        // Global mouse release handling (cancel press if mouse released anywhere)
+        if (ui.IsLeftMouseReleased() && wasPressed)
+        {
+            wasPressed = false;
+        }
+        
+        // Update children (in reverse render order for proper event handling)
+        var sortedChildren = children.Where(c => c.IsVisible)
+                                   .OrderByDescending(c => c.RenderOrder)
+                                   .ToList();
+        
+        foreach (var child in sortedChildren)
+        {
+            child.Update(ui);
+        }
+    }
+    
+    public virtual void Render(InterfaceManager ui)
+    {
+        if (!IsVisible) return;
+        
+        RenderSelf(ui);
+        
+        foreach (var child in children.Where(c => c.IsVisible).OrderBy(c => c.RenderOrder))
+        {
+            child.Render(ui);
+        }
+    }
+    
+    protected abstract void UpdateSelf(InterfaceManager ui);
+    protected abstract void RenderSelf(InterfaceManager ui);
 }

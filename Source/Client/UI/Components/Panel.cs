@@ -10,7 +10,6 @@ public class Panel : UIComponent
     public Panel()
     {
         Layout.RelativeSize = new Vector2(1, 1);
-        Logger.Log("CelestialLeague", "created");
     }
 
     protected override void UpdateSelf(InterfaceManager ui)
@@ -20,7 +19,6 @@ public class Panel : UIComponent
 
     protected override void RenderSelf(InterfaceManager ui)
     {
-        Logger.Log("CelestialLeague", "rendered");
         var bounds = GetWorldBounds();
         
         if (DrawBackground)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 namespace CelestialLeague.Shared.Enums
 {
     public enum PlayerStatus
@@ -8,4 +9,16 @@ namespace CelestialLeague.Shared.Enums
         Playing = 4, // player is in an active match
         Spectating = 5, // player is spectating a match
     }
+=======
+namespace CelestialLeague.Shared.Enums
+{
+    public enum PlayerStatus
+    {
+        Offline = 1, // player is not in game or doesn't have his mod on
+        Online = 2, // player is online and has his mod on
+        InQueue = 3, // player is online and is waiting for a match
+        Playing = 4, // player is in an active match
+        Spectating = 5, // player is spectating a match
+    }
+>>>>>>> 48bc47b13401bb7e2dfc20bc611c767893bc8e52
 }

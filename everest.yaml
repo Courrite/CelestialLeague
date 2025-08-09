@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 - Name: Celestial League
   Version: 0.1.0
   DLL: CL.dll
   Dependencies:
     - Name: EverestCore
+=======
+- Name: Celestial League
+  Version: 0.1.0
+  DLL: CL.dll
+  Dependencies:
+    - Name: EverestCore
+>>>>>>> 48bc47b13401bb7e2dfc20bc611c767893bc8e52
       Version: 1.5421.0

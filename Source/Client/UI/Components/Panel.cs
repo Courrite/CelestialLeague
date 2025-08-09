@@ -1,34 +1,82 @@
 using Celeste.Mod;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using CelestialLeague.Client.Motion;
+using Monocle;
+using CelestialLeague.Client.UI.Core;
 
-public class Panel : UIComponent
+namespace CelestialLeague.Client.UI.Components
 {
-    public Color BackgroundColor { get; set; } = Color.DarkGray;
-    public bool DrawBackground { get; set; } = true;
-    public bool DrawBorder { get; set; } = true;
-
-    public Panel()
+    public class Panel : UIComponent
     {
-        Layout.RelativeSize = new Vector2(1, 1);
-    }
+        public Color BackgroundColor { get; set; } = Color.DarkGray;
+        public bool DrawBackground { get; set; } = true;
+        public bool DrawBorder { get; set; } = true;
 
-    protected override void UpdateSelf(InterfaceManager ui)
-    {
-        // this is just a container bruh
-    }
+        private Spring xSpring;
+        private Spring fadeSpring;
+        private bool wasTabPressed = false;
 
-    protected override void RenderSelf(InterfaceManager ui)
-    {
-        var bounds = GetWorldBounds();
-        
-        if (DrawBackground)
+        public Panel()
         {
-            ui.DrawRectangle(bounds, BackgroundColor);
+            Layout.RelativeSize = new Vector2(1, 1);
+
+            xSpring = new Spring(0f);
+            xSpring.Stiffness = 120f;
+            xSpring.Damping = 25f;
+
+            fadeSpring = new Spring(1f);
+            fadeSpring.Stiffness = 150f;
+            fadeSpring.Damping = 20f;
         }
-        
-        if (DrawBorder)
+
+        protected override void UpdateSelf(InterfaceManager ui)
         {
-            ui.DrawRectangleOutline(bounds, Color.Black, 1);
+            bool tabPressed = MInput.Keyboard.Check(Keys.Tab);
+            if (tabPressed && !wasTabPressed)
+            {
+                if (xSpring.Target == 0f)
+                {
+                    xSpring.Target = 800f;
+                    fadeSpring.Target = 0f;
+                }
+                else
+                {
+                    xSpring.Target = 0f;
+                    fadeSpring.Target = 1f;
+                }
+            }
+            wasTabPressed = tabPressed;
+
+            xSpring.Update(Engine.DeltaTime);
+            fadeSpring.Update(Engine.DeltaTime);
+        }
+
+        protected override void RenderSelf(InterfaceManager ui)
+        {
+            var baseBounds = GetWorldBounds();
+            
+            Rectangle animatedBounds = new Rectangle(
+                baseBounds.X + (int)xSpring.Value, 
+                baseBounds.Y, 
+                baseBounds.Width, 
+                baseBounds.Height
+            );
+            
+            float alpha = fadeSpring.Value;
+
+
+            if (DrawBackground)
+            {
+                Color fadedBg = BackgroundColor * alpha;
+                ui.DrawRectangle(animatedBounds, fadedBg);
+            }
+
+            if (DrawBorder)
+            {
+                Color fadedBorder = Color.Black * alpha;
+                ui.DrawRectangleOutline(animatedBounds, fadedBorder, 1);
+            }
         }
     }
 }

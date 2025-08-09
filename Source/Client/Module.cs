@@ -3,8 +3,8 @@ using Celeste.Mod;
 using CelestialLeague.Client.Core;
 using CelestialLeague.Client.Player;
 using CelestialLeague.Client.Services;
+using CelestialLeague.Client.UI.Core;
 using FMOD.Studio;
-using Monocle;
 using System;
 using System.Threading.Tasks;
 

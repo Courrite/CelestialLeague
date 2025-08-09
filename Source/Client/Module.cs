@@ -3,11 +3,8 @@ using Celeste.Mod;
 using CelestialLeague.Client.Core;
 using CelestialLeague.Client.Player;
 using CelestialLeague.Client.Services;
+using CelestialLeague.Client.UI.Core;
 using FMOD.Studio;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Monocle;
 using System;
 using System.Threading.Tasks;
 
@@ -32,8 +29,6 @@ namespace CelestialLeague.Client
                 _ = Task.Run(async () => await ConnectAsync(Settings.ServerHost, Settings.ServerPort));
             }
 
-            On.Monocle.Engine.RenderCore += OnEngineRender;
-
             On.Monocle.Scene.Begin += static (orig, self) =>
             {
                 orig(self);
@@ -51,138 +46,14 @@ namespace CelestialLeague.Client
                 }
             };
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague loaded");
+            Logger.Log(LogLevel.Info, "CelestialLeague", "Celestial League loaded");
         }
 
         public override void Unload()
         {
-            On.Monocle.Engine.RenderCore -= OnEngineRender;
-
             _ = Task.Run(async () => await DisconnectAsync("Mod unloading"));
 
             Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod unloaded");
-        }
-
-        private void OnEngineRender(On.Monocle.Engine.orig_RenderCore orig, Engine self)
-        {
-            orig(self);
-            InterfaceManager.Instance.Render();
-        }
-
-        private void AddTestingButtons(TextMenu menu, bool inGame)
-        {
-            menu.Add(new TextMenu.SubHeader("Testing Functions"));
-
-            menu.Add(new TextMenu.Button("Connect to Server").Pressed(() =>
-            {
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Connect button pressed");
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        var success = await ConnectAsync(Settings.ServerHost, Settings.ServerPort);
-                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Connect result: {success}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Connect error: {ex.Message}");
-                    }
-                });
-            }));
-
-            menu.Add(new TextMenu.Button("Disconnect from Server").Pressed(() =>
-            {
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Disconnect button pressed");
-                _ = Task.Run(async () => await DisconnectAsync("Manual disconnect"));
-            }));
-
-            menu.Add(new TextMenu.Button("Test Login").Pressed(() =>
-            {
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Test login button pressed");
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        var result = await AuthManager.Instance.LoginAsync(Settings.TestUsername, Settings.TestPassword);
-                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Login result: Success={result.Success}");
-                        if (result.Success && result.PlayerInfo != null)
-                        {
-                            Logger.Log(LogLevel.Info, "CelestialLeague", $"Player Info: ID={result.PlayerInfo.Id}, Username={result.PlayerInfo.Username}");
-                        }
-                        else if (!result.Success)
-                        {
-                            Logger.Log(LogLevel.Warn, "CelestialLeague", $"Login failed: {result.ErrorMessage}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Login error: {ex.Message}");
-                    }
-                });
-            }));
-
-            menu.Add(new TextMenu.Button("Test Register").Pressed(() =>
-            {
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Test register button pressed");
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        var result = await AuthManager.Instance.RegisterAsync(
-                            Settings.TestUsername,
-                            Settings.TestPassword
-                        );
-                        Logger.Log(LogLevel.Info, "CelestialLeague", $"Register result: Success={result.Success}");
-                        if (result.Success && result.PlayerInfo != null)
-                        {
-                            Logger.Log(LogLevel.Info, "CelestialLeague", $"Player Info: ID={result.PlayerInfo.Id}, Username={result.PlayerInfo.Username}");
-                        }
-                        else if (!result.Success)
-                        {
-                            Logger.Log(LogLevel.Warn, "CelestialLeague", $"Register failed: {result.ErrorMessage}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Register error: {ex.Message}");
-                    }
-                });
-            }));
-
-            menu.Add(new TextMenu.Button("Check Connection Status").Pressed(() =>
-            {
-                try
-                {
-                    var isConnected = GameClient?.IsConnected ?? false;
-                    var authStatus = LocalPlayer.Instance.IsAuthenticated ? "Authenticated" : "Not Authenticated";
-                    var currentPlayer = LocalPlayer.Instance.Username ?? "None";
-
-                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Connection Status: {isConnected}");
-                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Auth Status: {authStatus}");
-                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Current Player: {currentPlayer}");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log(LogLevel.Error, "CelestialLeague", $"Check status error: {ex.Message}");
-                }
-            }));
-
-            menu.Add(new TextMenu.Button("Test Logout").Pressed(() =>
-            {
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Test logout button pressed");
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        await AuthManager.Instance.LogoutAsync();
-                        Logger.Log(LogLevel.Info, "CelestialLeague", "Logout completed");
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Logout error: {ex.Message}");
-                    }
-                });
-            }));
         }
 
         public async Task<bool> ConnectAsync(string host, int port)
@@ -207,7 +78,7 @@ namespace CelestialLeague.Client
                 {
                     Logger.Log(LogLevel.Warn, "CelestialLeague", "Failed to connect to server");
                     GameClient?.Dispose();
-                    GameClient = null;
+                    GameClient = new GameClient();
                 }
 
                 return success;
@@ -216,7 +87,7 @@ namespace CelestialLeague.Client
             {
                 Logger.Log(LogLevel.Error, "CelestialLeague", $"Connection error: {ex.Message}");
                 GameClient?.Dispose();
-                GameClient = null;
+                GameClient = new GameClient();
                 return false;
             }
         }
@@ -230,9 +101,6 @@ namespace CelestialLeague.Client
                     Logger.Log(LogLevel.Info, "CelestialLeague", $"Disconnecting from server: {reason}");
                     await GameClient.DisconnectAsync();
                 }
-
-                GameClient?.Dispose();
-                GameClient = null;
 
                 if (LocalPlayer.Instance.IsAuthenticated)
                 {
@@ -250,9 +118,6 @@ namespace CelestialLeague.Client
         public override void CreateModMenuSection(TextMenu menu, bool inGame, EventInstance snapshot)
         {
             base.CreateModMenuSection(menu, inGame, snapshot);
-
-            Logger.Log(LogLevel.Info, "CelestialLeague", "Adding testing buttons to mod menu");
-            AddTestingButtons(menu, inGame);
 
             if (GameClient?.IsConnected == true)
             {

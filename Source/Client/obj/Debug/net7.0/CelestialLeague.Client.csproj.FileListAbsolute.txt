@@ -1,0 +1,5 @@
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net7.0\CelestialLeague.Client.csproj.AssemblyReference.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net7.0\CelestialLeague.Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net7.0\CelestialLeague.Client.AssemblyInfoInputs.cache
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net7.0\CelestialLeague.Client.AssemblyInfo.cs
+C:\Users\sg\Desktop\Workspace\Development\Coding\C#\Modding\Celeste\CelestialLeague\Source\Client\obj\Debug\net7.0\CelestialLeague.Client.csproj.CoreCompileInputs.cache

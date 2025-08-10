@@ -3,5 +3,4 @@
   DLL: CL.dll
   Dependencies:
     - Name: EverestCore
-
       Version: 1.5421.0

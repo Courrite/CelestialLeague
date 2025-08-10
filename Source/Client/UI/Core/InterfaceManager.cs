@@ -69,6 +69,11 @@ namespace CelestialLeague.Client.UI.Core
             Panel panel = new Panel();
             AddChild(panel);
 
+            // Components.Text text = new Components.Text();
+            // text.Font = new PixelFont("Content/Fonts/Montserrat/Montserrat-Regular.ttf");
+            // text.Content = "test";
+            // text.Layout.AbsolutePosition = new Vector2(50, 50);
+
             Logger.Log(LogLevel.Info, "CelestialLeague", "InterfaceManager initialized and ready");
         }
 

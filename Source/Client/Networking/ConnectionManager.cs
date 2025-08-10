@@ -40,7 +40,6 @@ namespace CelestialLeague.Client.Networking
 
         public event EventHandler<PacketReceivedEventArgs> OnPacketReceived;
         public event EventHandler<DisconnectedEventArgs> OnDisconnected;
-        public event EventHandler<ConnectionQualityChangedEventArgs> OnConnectionQualityChanged;
 
         public ConnectionManager(GameClient gameClient, NetworkClient networkClient)
         {
@@ -530,13 +529,6 @@ namespace CelestialLeague.Client.Networking
             RequestTime = DateTime.UtcNow;
             CancellationRegistration = cancellationToken.Register(() => CompletionSource.TrySetCanceled());
         }
-    }
-
-    public class ConnectionQualityChangedEventArgs : EventArgs
-    {
-        public ConnectionQuality OldQuality { get; set; }
-        public ConnectionQuality NewQuality { get; set; }
-        public DateTime ChangedAt { get; set; }
     }
 
     public class PacketReceivedEventArgs : EventArgs

@@ -13,69 +13,30 @@ namespace CelestialLeague.Client.UI.Components
         public bool DrawBackground { get; set; } = true;
         public bool DrawBorder { get; set; } = true;
 
-        private Spring xSpring;
-        private Spring fadeSpring;
-        private bool wasTabPressed = false;
-
         public Panel()
         {
-            Layout.RelativeSize = new Vector2(1, 1);
-
-            xSpring = new Spring(0f);
-            xSpring.Stiffness = 120f;
-            xSpring.Damping = 25f;
-
-            fadeSpring = new Spring(1f);
-            fadeSpring.Stiffness = 150f;
-            fadeSpring.Damping = 20f;
+            Layout.AbsoluteSize = new Vector2(50, 50);
         }
 
         protected override void UpdateSelf(InterfaceManager ui)
         {
-            bool tabPressed = MInput.Keyboard.Check(Keys.Tab);
-            if (tabPressed && !wasTabPressed)
-            {
-                if (xSpring.Target == 0f)
-                {
-                    xSpring.Target = 800f;
-                    fadeSpring.Target = 0f;
-                }
-                else
-                {
-                    xSpring.Target = 0f;
-                    fadeSpring.Target = 1f;
-                }
-            }
-            wasTabPressed = tabPressed;
-
-            xSpring.Update(Engine.DeltaTime);
-            fadeSpring.Update(Engine.DeltaTime);
+            // this is a container so we dont do anything here
         }
 
         protected override void RenderSelf(InterfaceManager ui)
         {
-            var baseBounds = GetWorldBounds();
-            
-            Rectangle animatedBounds = new Rectangle(
-                baseBounds.X + (int)xSpring.Value, 
-                baseBounds.Y, 
-                baseBounds.Width, 
-                baseBounds.Height
-            );
-            
-            float alpha = fadeSpring.Value;
-
+            var bounds = GetWorldBounds();
 
             if (DrawBackground)
             {
-                Color fadedBg = BackgroundColor * alpha;
-                ui.DrawRectangle(animatedBounds, fadedBg);
+                Color fadedBg = BackgroundColor * BackgroundTransparency;
+                ui.DrawRectangle(bounds, fadedBg);
             }
 
             if (DrawBorder)
             {
-                Color fadedBorder = Color.Black * alpha;
-                ui.DrawRectangleOutline(animatedBounds, fadedBorder, 1);
+                Color fadedBorder = Color.Black * BackgroundTransparency;
+                ui.DrawRectangleOutline(bounds, fadedBorder, 1);
             }
         }
     }

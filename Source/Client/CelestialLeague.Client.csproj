@@ -36,6 +36,18 @@
         <Copy SourceFiles="$(OutputPath)\$(AssemblyName).pdb" DestinationFolder="..\bin" />
     </Target>
 
+    <Target Name="CopyContent" AfterTargets="CopyFiles">
+        <Message Text="Copying Content folder..." Importance="high" />
+        <ItemGroup>
+            <ContentFiles Include="..\..\Content\**\*.*" />
+        </ItemGroup>
+        <Message Text="Found @(ContentFiles->Count()) content files" Importance="high" />
+        <Copy SourceFiles="@(ContentFiles)" 
+              DestinationFolder="$(OutputPath)\Content\%(RecursiveDir)" 
+              SkipUnchangedFiles="false" />
+        <Message Text="Content copy completed" Importance="high" />
+    </Target>
+
     <Target Name="PackageMod" AfterTargets="CopyFiles" Inputs="$(ZippedFiles)" Outputs="..\CelestialLeague.zip" Condition="'$(Configuration)' == 'Release'">
         <ItemGroup>
             <FilesToPackage Include="$(ZippedFiles)" />
@@ -90,7 +102,7 @@
                     Uri relativeUri = fromUri.MakeRelativeUri(toUri);
                     string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
                 
-                    if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureInvariantCultureIgnoreCase))
+                    if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
                     {
                         relativePath = relativePath.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
                     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Celeste.Mod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -188,9 +189,13 @@ namespace CelestialLeague.Client.UI.Core
 
         public virtual Rectangle GetWorldBounds()
         {
-            Vector2 worldPos = LocalToWorld(Vector2.Zero);
             var bounds = Bounds;
-            return new Rectangle((int)worldPos.X, (int)worldPos.Y, bounds.Width, bounds.Height);
+            var localToWorld = LocalToWorld(Vector2.Zero);
+
+            Logger.Info("CelestialLeague",
+                $"{Name}: Bounds={bounds}, LocalToWorld={localToWorld}");
+
+            return bounds; // Use this instead of the transformation
         }
 
         public virtual bool ContainsPoint(Vector2 worldPoint)

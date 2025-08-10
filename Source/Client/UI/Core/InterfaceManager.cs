@@ -67,12 +67,17 @@ namespace CelestialLeague.Client.UI.Core
             CreateRootContainer();
 
             Panel panel = new Panel();
+            panel.Layout.RelativePosition = Vector2.Zero;
             AddChild(panel);
+            LayoutHelper.DebugLayout(panel, "panel");
 
-            // Components.Text text = new Components.Text();
-            // text.Font = new PixelFont("Content/Fonts/Montserrat/Montserrat-Regular.ttf");
-            // text.Content = "test";
-            // text.Layout.AbsolutePosition = new Vector2(50, 50);
+            Components.Text text = new Components.Text();
+            text.Font = new PixelFont("Content/Fonts/montserrat");
+            text.Content = "test";
+            text.Layout.Anchor = Anchor.MiddleCenter;
+            text.Layout.RelativePosition = Vector2.Zero;
+            AddChild(text);
+            LayoutHelper.DebugLayout(text, "text");
 
             Logger.Log(LogLevel.Info, "CelestialLeague", "InterfaceManager initialized and ready");
         }

@@ -3,18 +3,20 @@ using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 using System;
 using CelestialLeague.Client.UI.Core;
+using Celeste.Mod;
+using System.Linq;
 
 namespace CelestialLeague.Client.UI.Components
 {
     public class Text : UIComponent
     {
         private string text = "";
-        private object font;
+        private PixelFont font;
         private Vector2 measuredSize;
         private bool sizeDirty = true;
         private float textScale = 1.0f;
 
-        private const float PixelFontBaseSize = 12f;
+        private PixelFontSize cachedPixelFontSize = null;
 
         public string Content
         {
@@ -30,7 +32,7 @@ namespace CelestialLeague.Client.UI.Components
             }
         }
 
-        public object Font
+        public PixelFont Font
         {
             get => font;
             set
@@ -38,6 +40,7 @@ namespace CelestialLeague.Client.UI.Components
                 if (font != value)
                 {
                     font = value;
+                    cachedPixelFontSize = null;
                     sizeDirty = true;
                     InvalidateLayout();
                 }
@@ -65,9 +68,12 @@ namespace CelestialLeague.Client.UI.Components
         public bool AutoSize { get; set; } = true;
         public float LineSpacing { get; set; } = 1.0f;
 
-        public Text() : this("") { }
+        public Text() : this("")
+        {
+            Layout.AbsoluteSize = new Vector2(50, 50);
+        }
 
-        public Text(string content)
+        public Text(string content) : base()
         {
             Content = content;
             CanReceiveFocus = false;
@@ -84,7 +90,7 @@ namespace CelestialLeague.Client.UI.Components
 
         protected override void RenderSelf(InterfaceManager ui)
         {
-            if (string.IsNullOrEmpty(text) || Font == null) return;
+            if (string.IsNullOrEmpty(text) || font == null) return;
 
             var bounds = GetWorldBounds();
             var contentBounds = GetContentBounds(bounds);
@@ -142,41 +148,74 @@ namespace CelestialLeague.Client.UI.Components
             }
         }
 
+        private PixelFontSize GetPixelFontSize()
+        {
+            if (cachedPixelFontSize != null)
+                return cachedPixelFontSize;
+
+            if (font == null)
+                return null;
+
+            try
+            {
+                if (font.Sizes?.Count > 0)
+                {
+                    cachedPixelFontSize = font.Sizes.First();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to get PixelFont size: {ex.Message}");
+            }
+
+            return cachedPixelFontSize;
+        }
+
         private Vector2 MeasureText(string text)
         {
-            if (font is SpriteFont spriteFont)
-                return spriteFont.MeasureString(text);
-            else if (font is PixelFont pixelFont)
+            if (string.IsNullOrEmpty(text)) return Vector2.Zero;
+
+            try
             {
-                var fontSize = pixelFont.Get(PixelFontBaseSize);
-                return fontSize.Measure(text);
+                var pixelFontSize = GetPixelFontSize();
+                return pixelFontSize?.Measure(text) ?? Vector2.Zero;
             }
-            else
+            catch (Exception ex)
+            {
+                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to measure text with PixelFont: {ex.Message}");
                 return Vector2.Zero;
+            }
         }
 
         private float GetLineHeight()
         {
-            if (font is SpriteFont spriteFont)
-                return spriteFont.LineSpacing;
-            else if (font is PixelFont pixelFont)
+            try
             {
-                var fontSize = pixelFont.Get(PixelFontBaseSize);
-                return fontSize.LineHeight;
+                var pixelFontSize = GetPixelFontSize();
+                return pixelFontSize?.LineHeight ?? 0f;
             }
-            else
-                return 0;
+            catch (Exception ex)
+            {
+                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to get line height with PixelFont: {ex.Message}");
+                return 0f;
+            }
         }
 
         private void DrawText(InterfaceManager ui, string text, Vector2 position, Color color)
         {
-            if (font is SpriteFont spriteFont)
+            if (string.IsNullOrEmpty(text) || font == null) return;
+
+            try
             {
-                ui.SpriteBatch.DrawString(spriteFont, text, position, color, 0f, Vector2.Zero, TextScale, SpriteEffects.None, 0f);
+                var pixelFontSize = GetPixelFontSize();
+                if (pixelFontSize != null)
+                {
+                    font.Draw(pixelFontSize.Size, text, position, Vector2.Zero, Vector2.One * TextScale, color);
+                }
             }
-            else if (font is PixelFont pixelFont)
+            catch (Exception ex)
             {
-                pixelFont.Draw(PixelFontBaseSize, text, position, Vector2.Zero, Vector2.One * TextScale, color);
+                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to draw text with PixelFont: {ex.Message}");
             }
         }
 
@@ -241,30 +280,38 @@ namespace CelestialLeague.Client.UI.Components
 
         private void RecalculateSize()
         {
-            if (string.IsNullOrEmpty(text) || Font == null)
+            if (string.IsNullOrEmpty(text) || font == null)
             {
                 measuredSize = Vector2.Zero;
                 return;
             }
 
-            if (WordWrap && Layout.AbsoluteSize.HasValue)
+            try
             {
-                var contentWidth = Layout.AbsoluteSize.Value.X - Layout.Padding.Left - Layout.Padding.Right;
-                var lines = WrapText(text, (int)(contentWidth / TextScale));
-                float totalHeight = lines.Length * GetLineHeight() * LineSpacing * TextScale;
-                measuredSize = new Vector2(contentWidth, totalHeight);
-            }
-            else
-            {
-                measuredSize = MeasureText(text) * TextScale;
-            }
+                if (WordWrap && Layout.AbsoluteSize.HasValue)
+                {
+                    var contentWidth = Layout.AbsoluteSize.Value.X - Layout.Padding.Left - Layout.Padding.Right;
+                    var lines = WrapText(text, (int)(contentWidth / TextScale));
+                    float totalHeight = lines.Length * GetLineHeight() * LineSpacing * TextScale;
+                    measuredSize = new Vector2(contentWidth, totalHeight);
+                }
+                else
+                {
+                    measuredSize = MeasureText(text) * TextScale;
+                }
 
-            if (AutoSize && !Layout.AbsoluteSize.HasValue && !Layout.RelativeSize.HasValue)
+                if (AutoSize && !Layout.AbsoluteSize.HasValue && !Layout.RelativeSize.HasValue)
+                {
+                    Layout.AbsoluteSize = measuredSize + new Vector2(
+                        Layout.Padding.Left + Layout.Padding.Right,
+                        Layout.Padding.Top + Layout.Padding.Bottom
+                    );
+                }
+            }
+            catch (Exception ex)
             {
-                Layout.AbsoluteSize = measuredSize + new Vector2(
-                    Layout.Padding.Left + Layout.Padding.Right,
-                    Layout.Padding.Top + Layout.Padding.Bottom
-                );
+                Logger.Log(LogLevel.Error, "CelestialLeague", $"Failed to recalculate text size: {ex.Message}");
+                measuredSize = Vector2.Zero;
             }
         }
 

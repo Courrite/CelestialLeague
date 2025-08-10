@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © Celestial League Team 2024")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Dedicated server for Celestial League multiplayer racing")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+371aa14823f0b0d6a78fa28b01b23d394851390a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bdf5f0ae3656e5f09d81c384a9769c988ad50de1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Celestial League")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Celestial League Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

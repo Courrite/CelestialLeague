@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Net;
 using CelestialLeague.Server.Models;
-using CelestialLeague.Shared.Enums;
+using CelestialLeague.Shared.Enum;
 
 namespace CelestialLeague.Server.Services
 {

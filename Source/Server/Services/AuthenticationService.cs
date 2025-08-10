@@ -1,7 +1,7 @@
 using System.Globalization;
 using CelestialLeague.Server.Models;
 using CelestialLeague.Server.Utils;
-using CelestialLeague.Shared.Enums;
+using CelestialLeague.Shared.Enum;
 using CelestialLeague.Shared.Utils;
 using Microsoft.EntityFrameworkCore;
 using CelestialLeague.Server.Database.Context;
@@ -49,7 +49,7 @@ namespace CelestialLeague.Server.Services
             catch (Exception ex)
             {
                 _logger.Error($"Registration failed for {username}: {ex.Message}");
-                return AuthResult.DatabaseError;
+                return AuthResult.InternalError;
             }
         }
 
@@ -84,7 +84,7 @@ namespace CelestialLeague.Server.Services
             catch (Exception ex)
             {
                 _logger.Error($"Login failed for {username}: {ex.Message}");
-                return (AuthResult.DatabaseError, null!, null);
+                return (AuthResult.InternalError, null!, null);
             }
         }
 
@@ -183,8 +183,8 @@ namespace CelestialLeague.Server.Services
             if (string.IsNullOrWhiteSpace(username))
                 return false;
 
-            if (username.Length < GameConstants.MinUsernameLength ||
-                username.Length > GameConstants.MaxUsernameLength)
+            if (username.Length < Shared.Constants.Game.MinUsernameLength ||
+                username.Length > Shared.Constants.Game.MaxUsernameLength)
                 return false;
 
             var allowedCharactersRegex = new Regex(@"^[a-zA-Z0-9_]+$");
@@ -214,9 +214,8 @@ namespace CelestialLeague.Server.Services
                 AuthResult.UsernameTaken => "Username is already taken",
                 AuthResult.InvalidUsername => "Username is invalid or contains forbidden characters",
                 AuthResult.TooManyAttempts => "Too many failed login attempts",
-                AuthResult.SessionExpired => "Session has expired",
-                AuthResult.DatabaseError => "Database connection failed",
-                AuthResult.AccountLocked => "Account is temporarily locked",
+                AuthResult.InternalError => "Database connection failed",
+                AuthResult.AccountDisabled => "Account is disabled.",
                 _ => "Unknown error occurred"
             };
         }

@@ -362,3 +362,5 @@ MigrationBackup/
 Documentation/
 Test
 *.db
+obj
+bin

@@ -70,10 +70,6 @@ namespace CelestialLeague.Client.UI.Core
 
             CreateRootContainer();
 
-            var debugger = new Debug.UIDebugger();
-            debugger.SetDebugFont(FontLoader.LoadFont("montserrat"));
-            AddChild(debugger);
-
             Panel panel = new Panel();
             panel.Layout.RelativePosition = Vector2.Zero;
             AddChild(panel);

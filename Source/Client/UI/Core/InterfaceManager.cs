@@ -1,11 +1,13 @@
 using Celeste;
 using Celeste.Mod;
+using CelestialLeague.Client.Resources;
 using CelestialLeague.Client.UI.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monocle;
 using System;
+using System.IO;
 
 namespace CelestialLeague.Client.UI.Core
 {
@@ -53,6 +55,8 @@ namespace CelestialLeague.Client.UI.Core
         {
             base.Added(scene);
 
+            FontLoader.Initialize();
+
             wasMouseVisible = Engine.Instance.IsMouseVisible;
             MInput.Active = true;
             MInput.Disabled = false;
@@ -66,13 +70,16 @@ namespace CelestialLeague.Client.UI.Core
 
             CreateRootContainer();
 
+            var debugger = new Debug.UIDebugger();
+            debugger.SetDebugFont(FontLoader.LoadFont("montserrat"));
+            AddChild(debugger);
+
             Panel panel = new Panel();
             panel.Layout.RelativePosition = Vector2.Zero;
             AddChild(panel);
 
             Components.Text text = new Components.Text();
-            text.Font = Dialog.Languages["english"].Font;
-            Logger.Log(LogLevel.Info, "CelestialLeague", "Successfully loaded Dialog font");
+            text.Font = FontLoader.LoadFont("montserrat");
             text.Content = "test";
             text.Layout.Anchor = Anchor.MiddleCenter;
             text.Layout.RelativePosition = Vector2.Zero;

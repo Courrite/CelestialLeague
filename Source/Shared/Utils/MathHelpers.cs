@@ -44,7 +44,7 @@ namespace CelestialLeague.Shared.Utils
         {
             return a.X * b.X + a.Y * b.Y;
         }
-        
+
         public static Vector2 Rotate(Vector2 vector, float angle)
         {
             float cos = (float)Math.Cos(angle);
@@ -54,7 +54,6 @@ namespace CelestialLeague.Shared.Utils
                 vector.X * sin + vector.Y * cos
             );
         }
-
         // game math
         public static int CalculateEloChange(int playerRating, int opponentRating, bool playerWon)
         {

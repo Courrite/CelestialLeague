@@ -190,9 +190,6 @@ namespace CelestialLeague.Client.UI.Core
             var bounds = Bounds;
             var localToWorld = LocalToWorld(Vector2.Zero);
 
-            Logger.Info("CelestialLeague",
-                $"{Name}: Bounds={bounds}, LocalToWorld={localToWorld}");
-
             return bounds;
         }
 

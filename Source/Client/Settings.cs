@@ -37,6 +37,19 @@ namespace CelestialLeague.Client
         [SettingName("Test Password")]
         [SettingSubText("Password for testing")]
         public string TestPassword { get; set; } = "testpass";
+
+        [SettingName("Show Debug Info")]
+        [SettingSubText("Display debug information in the mod menu")]
+        public bool ShowDebugInfo { get; set; } = true;
+
+        [SettingName("UI Scale")]
+        [SettingSubText("Scale factor for the UI (0.5 - 2.0)")]
+        [SettingRange(5, 20)]
+        public float UIScale { get; set; } = 10;
+
+        [SettingName("Show UI")]
+        [SettingSubText("Enable or disable the mod UI")]
+        public bool ShowUI { get; set; } = true;
     }
 }
 

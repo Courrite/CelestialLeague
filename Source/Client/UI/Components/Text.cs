@@ -163,15 +163,21 @@ namespace CelestialLeague.Client.UI.Components
                 if (font.Sizes?.Count > 0)
                 {
                     cachedPixelFontSize = font.Sizes.First();
+                    Logger.Info("CelestialLeague", $"Using PixelFont size: {cachedPixelFontSize.Size}");
+                }
+                else
+                {
+                    Logger.Info("CelestialLeague", "No font sizes available in PixelFont.");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to get PixelFont size: {ex.Message}");
+                Logger.Info("CelestialLeague", $"Failed to get PixelFont size: {ex.Message}");
             }
 
             return cachedPixelFontSize;
         }
+
 
         private Vector2 MeasureText(string text)
         {

@@ -4,7 +4,9 @@ using CelestialLeague.Client.Core;
 using CelestialLeague.Client.Player;
 using CelestialLeague.Client.Services;
 using CelestialLeague.Client.UI.Core;
+using CelestialLeague.Client.Resources;
 using FMOD.Studio;
+using Monocle;
 using System;
 using System.Threading.Tasks;
 
@@ -29,22 +31,7 @@ namespace CelestialLeague.Client
                 _ = Task.Run(async () => await ConnectAsync(Settings.ServerHost, Settings.ServerPort));
             }
 
-            On.Monocle.Scene.Begin += static (orig, self) =>
-            {
-                orig(self);
-
-                if (self is Level || self is Overworld)
-                {
-                    if (InterfaceManager.Instance == null)
-                    {
-                        self.Add(new InterfaceManager());
-                    }
-                    else
-                    {
-                        self.Add(InterfaceManager.Instance);
-                    }
-                }
-            };
+            On.Monocle.Scene.Begin += OnSceneBegin;
 
             Logger.Log(LogLevel.Info, "CelestialLeague", "Celestial League loaded");
         }
@@ -53,7 +40,33 @@ namespace CelestialLeague.Client
         {
             _ = Task.Run(async () => await DisconnectAsync("Mod unloading"));
 
+            On.Monocle.Scene.Begin -= OnSceneBegin;
+
             Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod unloaded");
+        }
+
+        private static void OnSceneBegin(On.Monocle.Scene.orig_Begin orig, Scene self)
+        {
+            orig(self);
+
+            if (self is Level || self is Overworld)
+            {
+                if (InterfaceManager.Instance == null)
+                {
+                    self.Add(new InterfaceManager());
+                    Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Created InterfaceManager for {self.GetType().Name}");
+                }
+                else
+                {
+                    if (InterfaceManager.Instance.Scene != self)
+                    {
+                        InterfaceManager.Instance.RemoveSelf();
+
+                        self.Add(InterfaceManager.Instance);
+                        Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Moved InterfaceManager to {self.GetType().Name}");
+                    }
+                }
+            }
         }
 
         public async Task<bool> ConnectAsync(string host, int port)
@@ -133,7 +146,61 @@ namespace CelestialLeague.Client
                     _ = Task.Run(async () => await ConnectAsync(Settings.ServerHost, Settings.ServerPort));
                 }));
             }
+
+            menu.Add(new TextMenu.SubHeader("UI Controls"));
+
+            var uiManager = InterfaceManager.Instance;
+            if (uiManager != null)
+            {
+                var toggleUIButton = new TextMenu.Button(uiManager.IsVisible ? "Hide UI" : "Show UI");
+                toggleUIButton.Pressed(() =>
+                {
+                    uiManager?.Toggle();
+                    toggleUIButton.Label = uiManager?.IsVisible == true ? "Hide UI" : "Show UI";
+                });
+                menu.Add(toggleUIButton);
+
+                menu.Add(new TextMenu.Button("Reset UI").Pressed(() =>
+                {
+                    try
+                    {
+                        uiManager?.ClearChildren();
+                        Logger.Log(LogLevel.Info, "CelestialLeague", "UI reset");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Error resetting UI: {ex.Message}");
+                    }
+                }));
+            }
+            else
+            {
+                menu.Add(new TextMenu.Button("UI: Not Active"));
+            }
+
+            menu.Add(new TextMenu.Button("Reload Fonts").Pressed(() =>
+            {
+                try
+                {
+                    Logger.Log(LogLevel.Info, "CelestialLeague", "Font cache cleared");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(LogLevel.Error, "CelestialLeague", $"Error clearing font cache: {ex.Message}");
+                }
+            }));
+
+            if (Settings.ShowDebugInfo)
+            {
+                menu.Add(new TextMenu.SubHeader("Debug Info"));
+                menu.Add(new TextMenu.Button($"UI Manager: {(uiManager != null ? "Active" : "None")}"));
+
+                if (uiManager != null)
+                {
+                    menu.Add(new TextMenu.Button($"UI Visible: {uiManager.IsVisible}"));
+                    menu.Add(new TextMenu.Button($"UI Scene: {uiManager.Scene?.GetType().Name ?? "None"}"));
+                }
+            }
         }
     }
-
 }

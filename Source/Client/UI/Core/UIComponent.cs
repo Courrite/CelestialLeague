@@ -17,7 +17,6 @@ namespace CelestialLeague.Client.UI.Core
         bool IsEnabled { get; set; }
         bool CanReceiveFocus { get; set; }
         bool HasFocus { get; set; }
-        float BackgroundTransparency { get; set; }
 
         // Layout and rendering
         int RenderOrder { get; }
@@ -83,7 +82,6 @@ namespace CelestialLeague.Client.UI.Core
         public bool IsEnabled { get; set; } = true;
         public bool CanReceiveFocus { get; set; } = false;
         public bool HasFocus { get; set; } = false;
-        public float BackgroundTransparency { get; set; } = 0f;
 
         // Selection navigation for console/gamepad support
         public IUIComponent NextSelection { get; set; }
@@ -195,7 +193,7 @@ namespace CelestialLeague.Client.UI.Core
             Logger.Info("CelestialLeague",
                 $"{Name}: Bounds={bounds}, LocalToWorld={localToWorld}");
 
-            return bounds; // Use this instead of the transformation
+            return bounds;
         }
 
         public virtual bool ContainsPoint(Vector2 worldPoint)

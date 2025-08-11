@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace CelestialLeague.Client.UI.Components
 {
-    public class Text : UIComponent
+    public class Text : Panel
     {
         private string text = "";
         private PixelFont font;
@@ -90,6 +90,8 @@ namespace CelestialLeague.Client.UI.Components
 
         protected override void RenderSelf(InterfaceManager ui)
         {
+            base.RenderSelf(ui);
+
             if (string.IsNullOrEmpty(text) || font == null) return;
 
             var bounds = GetWorldBounds();

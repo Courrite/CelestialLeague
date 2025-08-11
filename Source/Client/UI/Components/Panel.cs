@@ -9,36 +9,40 @@ namespace CelestialLeague.Client.UI.Components
 {
     public class Panel : UIComponent
     {
+        private Color backgroundRgba => new Color(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, (int)((1.0f - BackgroundTransparency) * 255));
+        private Color borderRgba => new Color(BorderColor.R, BorderColor.G, BorderColor.B, (int)((1.0f - BorderTransparency) * 255));
+
         public Color BackgroundColor { get; set; } = Color.DarkGray;
-        public bool DrawBackground { get; set; } = true;
-        public bool DrawBorder { get; set; } = true;
+        public Color BorderColor { get; set; } = Color.Black;
+        
+        public float BackgroundTransparency { get; set; } = 0.0f;
+        public float BorderTransparency { get; set; } = 0.0f;
+        
+        public int BorderWidth { get; set; } = 1;
 
         public Panel()
         {
-            Layout.AbsoluteSize = new Vector2(50, 50);
+            Layout.RelativeSize = new Vector2(0.1f, 0.1f);
         }
 
         protected override void UpdateSelf(InterfaceManager ui)
         {
-            // this is a container so we dont do anything here
+            // this is a container so it doesnt need updates
         }
 
         protected override void RenderSelf(InterfaceManager ui)
         {
             var bounds = GetWorldBounds();
 
-            if (DrawBackground)
+            if (BackgroundTransparency < 1.0f)
             {
-                Color fadedBg = BackgroundColor * BackgroundTransparency;
-                ui.DrawRectangle(bounds, fadedBg);
+                ui.DrawRectangle(bounds, backgroundRgba);
             }
 
-            if (DrawBorder)
+            if (BorderTransparency < 1.0f && BorderWidth > 0)
             {
-                Color fadedBorder = Color.Black * BackgroundTransparency;
-                ui.DrawRectangleOutline(bounds, fadedBorder, 1);
+                ui.DrawRectangleOutline(bounds, borderRgba, BorderWidth);
             }
         }
     }
-
 }

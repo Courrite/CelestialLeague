@@ -69,15 +69,15 @@ namespace CelestialLeague.Client.UI.Core
             Panel panel = new Panel();
             panel.Layout.RelativePosition = Vector2.Zero;
             AddChild(panel);
-            LayoutHelper.DebugLayout(panel, "panel");
 
             Components.Text text = new Components.Text();
-            text.Font = new PixelFont("Content/Fonts/montserrat");
+            text.Font = Dialog.Languages["english"].Font;
+            Logger.Log(LogLevel.Info, "CelestialLeague", "Successfully loaded Dialog font");
             text.Content = "test";
             text.Layout.Anchor = Anchor.MiddleCenter;
             text.Layout.RelativePosition = Vector2.Zero;
+            text.BackgroundTransparency = 0.5f;
             AddChild(text);
-            LayoutHelper.DebugLayout(text, "text");
 
             Logger.Log(LogLevel.Info, "CelestialLeague", "InterfaceManager initialized and ready");
         }
@@ -87,8 +87,7 @@ namespace CelestialLeague.Client.UI.Core
             rootContainer = new Panel
             {
                 Name = "RootContainer",
-                DrawBackground = false,
-                DrawBorder = false
+                BackgroundTransparency = 1,
             };
 
             rootContainer.Layout.AbsoluteSize = new Vector2(ScreenWidth, ScreenHeight);

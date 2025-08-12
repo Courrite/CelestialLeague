@@ -39,11 +39,11 @@
     <Target Name="CopyContent" AfterTargets="CopyFiles">
         <Message Text="Copying Content folder..." Importance="high" />
         <ItemGroup>
-            <ContentFiles Include="..\..\Content\**\*.*" />
+            <ContentFiles Include="..\..\Dialog\**\*.*" />
         </ItemGroup>
         <Message Text="Found @(ContentFiles->Count()) content files" Importance="high" />
         <Copy SourceFiles="@(ContentFiles)" 
-              DestinationFolder="$(OutputPath)\Content\%(RecursiveDir)" 
+              DestinationFolder="$(OutputPath)\Dialog\%(RecursiveDir)" 
               SkipUnchangedFiles="false" />
         <Message Text="Content copy completed" Importance="high" />
     </Target>

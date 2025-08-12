@@ -24,7 +24,7 @@ namespace CelestialLeague.Client.Networking
 
         public NetworkClient()
         {
-            Logger.Debug("CelestialLeague", "NetworkClient initialized");
+            Logger.Debug("Celestial League", "NetworkClient initialized");
         }
 
         public async Task<bool> SendPacketAsync<T>(T packet, NetworkStream stream) where T : BasePacket
@@ -34,7 +34,7 @@ namespace CelestialLeague.Client.Networking
 
             if (stream == null || !stream.CanWrite)
             {
-                Logger.Warn("CelestialLeague", "Cannot send packet: Stream is null or not writable");
+                Logger.Warn("Celestial League", "Cannot send packet: Stream is null or not writable");
                 return false;
             }
 
@@ -44,7 +44,7 @@ namespace CelestialLeague.Client.Networking
 
                 if (packetData.Length > Shared.Constants.Network.MaxPacketSize)
                 {
-                    Logger.Error("CelestialLeague", $"Packet too large: {packetData.Length} bytes (max: {Shared.Constants.Network.MaxPacketSize})");
+                    Logger.Error("Celestial League", $"Packet too large: {packetData.Length} bytes (max: {Shared.Constants.Network.MaxPacketSize})");
                     SendErrors++;
                     return false;
                 }
@@ -65,24 +65,24 @@ namespace CelestialLeague.Client.Networking
                 PacketsSent++;
                 LastActivity = DateTime.UtcNow;
 
-                Logger.Debug("CelestialLeague", $"Sent {typeof(T).Name} ({packetData.Length} bytes)");
+                Logger.Debug("Celestial League", $"Sent {typeof(T).Name} ({packetData.Length} bytes)");
                 return true;
             }
             catch (IOException ex)
             {
-                Logger.Error("CelestialLeague", $"IO error sending {typeof(T).Name}: {ex.Message}");
+                Logger.Error("Celestial League", $"IO error sending {typeof(T).Name}: {ex.Message}");
                 SendErrors++;
                 return false;
             }
             catch (ObjectDisposedException)
             {
-                Logger.Error("CelestialLeague", $"Stream disposed while sending {typeof(T).Name}");
+                Logger.Error("Celestial League", $"Stream disposed while sending {typeof(T).Name}");
                 SendErrors++;
                 return false;
             }
             catch (Exception ex)
             {
-                Logger.Error("CelestialLeague", $"Unexpected error sending {typeof(T).Name}: {ex.Message}");
+                Logger.Error("Celestial League", $"Unexpected error sending {typeof(T).Name}: {ex.Message}");
                 SendErrors++;
                 return false;
             }
@@ -96,7 +96,7 @@ namespace CelestialLeague.Client.Networking
 
             if (stream == null || !stream.CanRead)
             {
-                Logger.Warn("CelestialLeague", "Cannot receive packet: Stream is null or not readable");
+                Logger.Warn("Celestial League", "Cannot receive packet: Stream is null or not readable");
                 return null;
             }
 
@@ -107,7 +107,7 @@ namespace CelestialLeague.Client.Networking
 
                 if (bytesRead != 4)
                 {
-                    Logger.Warn("CelestialLeague", "Failed to read packet length header");
+                    Logger.Warn("Celestial League", "Failed to read packet length header");
                     ReceiveErrors++;
                     return null;
                 }
@@ -116,14 +116,14 @@ namespace CelestialLeague.Client.Networking
 
                 if (packetLength <= 0 || packetLength > Shared.Constants.Network.MaxPacketSize)
                 {
-                    Logger.Error("CelestialLeague", $"Invalid packet length: {packetLength}");
+                    Logger.Error("Celestial League", $"Invalid packet length: {packetLength}");
                     ReceiveErrors++;
                     return null;
                 }
 
                 if (buffer.Length < packetLength)
                 {
-                    Logger.Error("CelestialLeague", $"Buffer too small for packet: {buffer.Length} < {packetLength}");
+                    Logger.Error("Celestial League", $"Buffer too small for packet: {buffer.Length} < {packetLength}");
                     ReceiveErrors++;
                     return null;
                 }
@@ -132,7 +132,7 @@ namespace CelestialLeague.Client.Networking
 
                 if (bytesRead != packetLength)
                 {
-                    Logger.Warn("CelestialLeague", $"Incomplete packet received: {bytesRead}/{packetLength} bytes");
+                    Logger.Warn("Celestial League", $"Incomplete packet received: {bytesRead}/{packetLength} bytes");
                     ReceiveErrors++;
                     return null;
                 }
@@ -144,7 +144,7 @@ namespace CelestialLeague.Client.Networking
 
                 if (packet == null)
                 {
-                    Logger.Error("CelestialLeague", "Failed to deserialize received packet");
+                    Logger.Error("Celestial League", "Failed to deserialize received packet");
                     ReceiveErrors++;
                     return null;
                 }
@@ -152,7 +152,7 @@ namespace CelestialLeague.Client.Networking
                 PacketsReceived++;
                 LastActivity = DateTime.UtcNow;
 
-                Logger.Debug("CelestialLeague", $"Received {packet.Type} ({packetLength} bytes)");
+                Logger.Debug("Celestial League", $"Received {packet.Type} ({packetLength} bytes)");
                 return packet;
             }
             catch (OperationCanceledException)
@@ -162,19 +162,19 @@ namespace CelestialLeague.Client.Networking
             }
             catch (IOException ex)
             {
-                Logger.Error("CelestialLeague", $"IO error receiving packet: {ex.Message}");
+                Logger.Error("Celestial League", $"IO error receiving packet: {ex.Message}");
                 ReceiveErrors++;
                 return null;
             }
             catch (ObjectDisposedException)
             {
-                Logger.Warn("CelestialLeague", "Stream disposed while receiving packet");
+                Logger.Warn("Celestial League", "Stream disposed while receiving packet");
                 ReceiveErrors++;
                 return null;
             }
             catch (Exception ex)
             {
-                Logger.Error("CelestialLeague", $"Unexpected error receiving packet: {ex.Message}");
+                Logger.Error("Celestial League", $"Unexpected error receiving packet: {ex.Message}");
                 ReceiveErrors++;
                 return null;
             }
@@ -234,7 +234,7 @@ namespace CelestialLeague.Client.Networking
             ReceiveErrors = 0;
             LastActivity = DateTime.UtcNow;
 
-            Logger.Debug("CelestialLeague", "Network statistics reset");
+            Logger.Debug("Celestial League", "Network statistics reset");
         }
 
         public NetworkStatistics GetStatistics()

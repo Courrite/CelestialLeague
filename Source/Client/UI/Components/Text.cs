@@ -163,16 +163,16 @@ namespace CelestialLeague.Client.UI.Components
                 if (font.Sizes?.Count > 0)
                 {
                     cachedPixelFontSize = font.Sizes.First();
-                    Logger.Info("CelestialLeague", $"Using PixelFont size: {cachedPixelFontSize.Size}");
+                    Logger.Info("Celestial League", $"Using PixelFont size: {cachedPixelFontSize.Size}");
                 }
                 else
                 {
-                    Logger.Info("CelestialLeague", "No font sizes available in PixelFont.");
+                    Logger.Info("Celestial League", "No font sizes available in PixelFont.");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Info("CelestialLeague", $"Failed to get PixelFont size: {ex.Message}");
+                Logger.Info("Celestial League", $"Failed to get PixelFont size: {ex.Message}");
             }
 
             return cachedPixelFontSize;
@@ -190,7 +190,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to measure text with PixelFont: {ex.Message}");
+                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to measure text with PixelFont: {ex.Message}");
                 return Vector2.Zero;
             }
         }
@@ -204,7 +204,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to get line height with PixelFont: {ex.Message}");
+                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to get line height with PixelFont: {ex.Message}");
                 return 0f;
             }
         }
@@ -223,7 +223,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", $"Failed to draw text with PixelFont: {ex.Message}");
+                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to draw text with PixelFont: {ex.Message}");
             }
         }
 
@@ -318,7 +318,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Failed to recalculate text size: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Failed to recalculate text size: {ex.Message}");
                 measuredSize = Vector2.Zero;
             }
         }

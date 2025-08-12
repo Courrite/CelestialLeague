@@ -70,11 +70,11 @@ namespace CelestialLeague.Client.Services
             try
             {
                 var testJson = JsonSerializer.ToJson(packet);
-                Logger.Log(LogLevel.Debug, "CelestialLeague", $"Login request JSON: {testJson}");
+                Logger.Log(LogLevel.Debug, "Celestial League", $"Login request JSON: {testJson}");
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Login serialization test failed: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Login serialization test failed: {ex.Message}");
             }
 
             try
@@ -86,11 +86,11 @@ namespace CelestialLeague.Client.Services
 
                 if (response == null)
                 {
-                    Logger.Log(LogLevel.Warn, "CelestialLeague", "Login request timed out or failed");
+                    Logger.Log(LogLevel.Warn, "Celestial League", "Login request timed out or failed");
                     return AuthResult.Timeout;
                 }
 
-                Logger.Log(LogLevel.Info, "CelestialLeague", $"Login response received: Success={response.Success}");
+                Logger.Log(LogLevel.Info, "Celestial League", $"Login response received: Success={response.Success}");
 
                 var result = response.Success
                     ? AuthResult.CreateSuccess(response.Player, response.SessionToken)
@@ -100,17 +100,17 @@ namespace CelestialLeague.Client.Services
             }
             catch (InvalidOperationException ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Login request error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Login request error: {ex.Message}");
                 return AuthResult.UnknownError;
             }
             catch (OperationCanceledException)
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", "Login request was cancelled");
+                Logger.Log(LogLevel.Warn, "Celestial League", "Login request was cancelled");
                 return AuthResult.Timeout;
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Unexpected login error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Unexpected login error: {ex.Message}");
                 return AuthResult.UnknownError;
             }
         }
@@ -136,11 +136,11 @@ namespace CelestialLeague.Client.Services
             try
             {
                 var testJson = JsonSerializer.ToJson(packet);
-                Logger.Log(LogLevel.Debug, "CelestialLeague", $"Register request JSON: {testJson}");
+                Logger.Log(LogLevel.Debug, "Celestial League", $"Register request JSON: {testJson}");
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Register serialization test failed: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Register serialization test failed: {ex.Message}");
             }
 
             try
@@ -152,11 +152,11 @@ namespace CelestialLeague.Client.Services
 
                 if (response == null)
                 {
-                    Logger.Log(LogLevel.Warn, "CelestialLeague", "Register request timed out or failed");
+                    Logger.Log(LogLevel.Warn, "Celestial League", "Register request timed out or failed");
                     return AuthResult.Timeout;
                 }
 
-                Logger.Log(LogLevel.Info, "CelestialLeague", $"Register response received: Success={response.Success}");
+                Logger.Log(LogLevel.Info, "Celestial League", $"Register response received: Success={response.Success}");
 
                 var result = response.Success
                     ? AuthResult.CreateSuccess(response.Player, response.SessionToken)
@@ -166,17 +166,17 @@ namespace CelestialLeague.Client.Services
             }
             catch (InvalidOperationException ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Register request error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Register request error: {ex.Message}");
                 return AuthResult.UnknownError;
             }
             catch (OperationCanceledException)
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", "Register request was cancelled");
+                Logger.Log(LogLevel.Warn, "Celestial League", "Register request was cancelled");
                 return AuthResult.Timeout;
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Unexpected register error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Unexpected register error: {ex.Message}");
                 return AuthResult.UnknownError;
             }
         }
@@ -191,12 +191,12 @@ namespace CelestialLeague.Client.Services
                 var packet = new LogoutRequestPacket();
                 var success = await _connectionManager.SendPacketAsync<LogoutRequestPacket>(packet).ConfigureAwait(false);
 
-                Logger.Log(LogLevel.Info, "CelestialLeague", $"Logout request sent: {success}");
+                Logger.Log(LogLevel.Info, "Celestial League", $"Logout request sent: {success}");
                 return success;
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Logout error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Logout error: {ex.Message}");
                 return false;
             }
         }

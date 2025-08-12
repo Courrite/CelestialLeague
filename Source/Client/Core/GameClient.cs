@@ -52,7 +52,7 @@ namespace CelestialLeague.Client.Core
 
             try
             {
-                Logger.Info("CelestialLeague", $"Connecting to {host}:{port}...");
+                Logger.Info("Celestial League", $"Connecting to {host}:{port}...");
 
                 _tcpClient = new TcpClient();
 
@@ -65,7 +65,7 @@ namespace CelestialLeague.Client.Core
 
                 if (!_tcpClient.Connected)
                 {
-                    Logger.Error("CelestialLeague", "Failed to connect to server");
+                    Logger.Error("Celestial League", "Failed to connect to server");
                     return false;
                 }
 
@@ -75,25 +75,25 @@ namespace CelestialLeague.Client.Core
                 await ConnectionManager!.StartAsync(_networkStream, serverEndpoint);
 
                 _isConnected = true;
-                Logger.Info("CelestialLeague", $"Connected to {serverEndpoint}");
+                Logger.Info("Celestial League", $"Connected to {serverEndpoint}");
 
                 return true;
             }
             catch (SocketException ex)
             {
-                Logger.Error("CelestialLeague", $"Socket error connecting to {host}:{port}: {ex.Message}");
+                Logger.Error("Celestial League", $"Socket error connecting to {host}:{port}: {ex.Message}");
                 await CleanupConnectionAsync();
                 return false;
             }
             catch (OperationCanceledException)
             {
-                Logger.Error("CelestialLeague", $"Connection to {host}:{port} timed out");
+                Logger.Error("Celestial League", $"Connection to {host}:{port} timed out");
                 await CleanupConnectionAsync();
                 return false;
             }
             catch (Exception ex)
             {
-                Logger.Error("CelestialLeague", $"Unexpected error connecting to {host}:{port}: {ex.Message}");
+                Logger.Error("Celestial League", $"Unexpected error connecting to {host}:{port}: {ex.Message}");
                 await CleanupConnectionAsync();
                 return false;
             }
@@ -104,7 +104,7 @@ namespace CelestialLeague.Client.Core
             if (!_isConnected)
                 return;
 
-            Logger.Info("CelestialLeague", $"Disconnecting: {reason}");
+            Logger.Info("Celestial League", $"Disconnecting: {reason}");
 
             _isConnected = false;
 
@@ -117,7 +117,7 @@ namespace CelestialLeague.Client.Core
             }
             catch (Exception ex)
             {
-                Logger.Warn("CelestialLeague", $"Error during disconnect: {ex.Message}");
+                Logger.Warn("Celestial League", $"Error during disconnect: {ex.Message}");
             }
             finally
             {
@@ -186,7 +186,7 @@ namespace CelestialLeague.Client.Core
             }
             catch (Exception ex)
             {
-                Logger.Warn("CelestialLeague", $"Error during connection cleanup: {ex.Message}");
+                Logger.Warn("Celestial League", $"Error during connection cleanup: {ex.Message}");
             }
         }
 
@@ -211,11 +211,11 @@ namespace CelestialLeague.Client.Core
 
                 _cancellationTokenSource?.Dispose();
 
-                Logger.Info("CelestialLeague", "GameClient disposed");
+                Logger.Info("Celestial League", "GameClient disposed");
             }
             catch (Exception ex)
             {
-                Logger.Error("CelestialLeague", $"Error during GameClient disposal: {ex.Message}");
+                Logger.Error("Celestial League", $"Error during GameClient disposal: {ex.Message}");
             }
         }
     }

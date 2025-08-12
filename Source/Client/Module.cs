@@ -4,7 +4,6 @@ using CelestialLeague.Client.Core;
 using CelestialLeague.Client.Player;
 using CelestialLeague.Client.Services;
 using CelestialLeague.Client.UI.Core;
-using CelestialLeague.Client.Resources;
 using FMOD.Studio;
 using Monocle;
 using System;
@@ -33,7 +32,12 @@ namespace CelestialLeague.Client
 
             On.Monocle.Scene.Begin += OnSceneBegin;
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "Celestial League loaded");
+            Logger.Log(LogLevel.Info, "Celestial League", "Celestial League loaded");
+        }
+
+        public override void LoadContent(bool firstLoad)
+        {
+            base.LoadContent(firstLoad);
         }
 
         public override void Unload()
@@ -42,7 +46,7 @@ namespace CelestialLeague.Client
 
             On.Monocle.Scene.Begin -= OnSceneBegin;
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "CelestialLeague mod unloaded");
+            Logger.Log(LogLevel.Info, "Celestial League", "CelestialLeague mod unloaded");
         }
 
         private static void OnSceneBegin(On.Monocle.Scene.orig_Begin orig, Scene self)
@@ -54,7 +58,7 @@ namespace CelestialLeague.Client
                 if (InterfaceManager.Instance == null)
                 {
                     self.Add(new InterfaceManager());
-                    Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Created InterfaceManager for {self.GetType().Name}");
+                    Logger.Log(LogLevel.Verbose, "Celestial League", $"Created InterfaceManager for {self.GetType().Name}");
                 }
                 else
                 {
@@ -63,7 +67,7 @@ namespace CelestialLeague.Client
                         InterfaceManager.Instance.RemoveSelf();
 
                         self.Add(InterfaceManager.Instance);
-                        Logger.Log(LogLevel.Verbose, "CelestialLeague", $"Moved InterfaceManager to {self.GetType().Name}");
+                        Logger.Log(LogLevel.Verbose, "Celestial League", $"Moved InterfaceManager to {self.GetType().Name}");
                     }
                 }
             }
@@ -75,21 +79,21 @@ namespace CelestialLeague.Client
             {
                 if (GameClient?.IsConnected == true)
                 {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", "Already connected to server");
+                    Logger.Log(LogLevel.Info, "Celestial League", "Already connected to server");
                     return true;
                 }
 
-                Logger.Log(LogLevel.Info, "CelestialLeague", $"Connecting to {host}:{port}...");
+                Logger.Log(LogLevel.Info, "Celestial League", $"Connecting to {host}:{port}...");
 
                 var success = await GameClient.ConnectAsync(host, port, TimeSpan.FromSeconds(Settings.ConnectionTimeout));
 
                 if (success)
                 {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", "Successfully connected to server");
+                    Logger.Log(LogLevel.Info, "Celestial League", "Successfully connected to server");
                 }
                 else
                 {
-                    Logger.Log(LogLevel.Warn, "CelestialLeague", "Failed to connect to server");
+                    Logger.Log(LogLevel.Warn, "Celestial League", "Failed to connect to server");
                     GameClient?.Dispose();
                     GameClient = new GameClient();
                 }
@@ -98,7 +102,7 @@ namespace CelestialLeague.Client
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Connection error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Connection error: {ex.Message}");
                 GameClient?.Dispose();
                 GameClient = new GameClient();
                 return false;
@@ -111,7 +115,7 @@ namespace CelestialLeague.Client
             {
                 if (GameClient?.IsConnected == true)
                 {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", $"Disconnecting from server: {reason}");
+                    Logger.Log(LogLevel.Info, "Celestial League", $"Disconnecting from server: {reason}");
                     await GameClient.DisconnectAsync();
                 }
 
@@ -120,11 +124,11 @@ namespace CelestialLeague.Client
                     await AuthManager.Instance.LogoutAsync();
                 }
 
-                Logger.Log(LogLevel.Info, "CelestialLeague", "Disconnected from server");
+                Logger.Log(LogLevel.Info, "Celestial League", "Disconnected from server");
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Error, "CelestialLeague", $"Disconnect error: {ex.Message}");
+                Logger.Log(LogLevel.Error, "Celestial League", $"Disconnect error: {ex.Message}");
             }
         }
 
@@ -165,11 +169,11 @@ namespace CelestialLeague.Client
                     try
                     {
                         uiManager?.ClearChildren();
-                        Logger.Log(LogLevel.Info, "CelestialLeague", "UI reset");
+                        Logger.Log(LogLevel.Info, "Celestial League", "UI reset");
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log(LogLevel.Error, "CelestialLeague", $"Error resetting UI: {ex.Message}");
+                        Logger.Log(LogLevel.Error, "Celestial League", $"Error resetting UI: {ex.Message}");
                     }
                 }));
             }
@@ -182,11 +186,11 @@ namespace CelestialLeague.Client
             {
                 try
                 {
-                    Logger.Log(LogLevel.Info, "CelestialLeague", "Font cache cleared");
+                    Logger.Log(LogLevel.Info, "Celestial League", "Font cache cleared");
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(LogLevel.Error, "CelestialLeague", $"Error clearing font cache: {ex.Message}");
+                    Logger.Log(LogLevel.Error, "Celestial League", $"Error clearing font cache: {ex.Message}");
                 }
             }));
 

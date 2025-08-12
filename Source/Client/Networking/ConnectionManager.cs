@@ -94,7 +94,7 @@ namespace CelestialLeague.Client.Networking
             }
             catch (Exception ex)
             {
-                Logger.Warn("CelestialLeague", "Exception during task cleanup: " + ex.Message);
+                Logger.Warn("Celestial League", "Exception during task cleanup: " + ex.Message);
             }
 
             var pendingRequests = _pendingRequests.Values.ToArray();
@@ -119,7 +119,7 @@ namespace CelestialLeague.Client.Networking
             }
             catch (Exception ex)
             {
-                Logger.Warn("CelestialLeague", "Exception during task cleanup: " + ex.Message);
+                Logger.Warn("Celestial League", "Exception during task cleanup: " + ex.Message);
             }
 
             _connectedAt = null;

@@ -1,6 +1,5 @@
 using Celeste;
 using Celeste.Mod;
-using CelestialLeague.Client.Resources;
 using CelestialLeague.Client.UI.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -47,15 +46,14 @@ namespace CelestialLeague.Client.UI.Core
             Depth = -100000;
             instance = this;
             IsVisible = true;
-
-            Logger.Log(LogLevel.Info, "CelestialLeague", "InterfaceManager constructor called");
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
 
-            FontLoader.Initialize();
+            FontLoader.LoadFonts();
+            LogAvailableFonts();
 
             wasMouseVisible = Engine.Instance.IsMouseVisible;
             MInput.Active = true;
@@ -75,14 +73,29 @@ namespace CelestialLeague.Client.UI.Core
             AddChild(panel);
 
             Components.Text text = new Components.Text();
-            text.Font = FontLoader.LoadFont("montserrat");
-            text.Content = "test";
+            text.Font = Fonts.Get("Montserrat Regular");
+            text.Content = "cl_test_text".DialogClean();
             text.Layout.Anchor = Anchor.MiddleCenter;
             text.Layout.RelativePosition = Vector2.Zero;
             text.BackgroundTransparency = 0.5f;
             AddChild(text);
+        }
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "InterfaceManager initialized and ready");
+        private void LogAvailableFonts()
+        {
+            Logger.Info("CelestialLeague", "=== Available Font Paths ===");
+
+            if (Fonts.paths != null)
+            {
+                foreach (var fontPath in Fonts.paths.Keys)
+                {
+                    Logger.Info("CelestialLeague", $"Available font path: {fontPath}");
+                }
+            }
+            else
+            {
+                Logger.Warn("CelestialLeague", "Fonts.paths is null");
+            }
         }
 
         private void CreateRootContainer()
@@ -97,7 +110,7 @@ namespace CelestialLeague.Client.UI.Core
             rootContainer.Layout.AbsolutePosition = Vector2.Zero;
             rootContainer.Parent = null;
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", $"Root container created with size {ScreenWidth}x{ScreenHeight}");
+            Logger.Log(LogLevel.Info, "Celestial League", $"Root container created with size {ScreenWidth}x{ScreenHeight}");
         }
 
         public override void Removed(Scene scene)
@@ -112,7 +125,7 @@ namespace CelestialLeague.Client.UI.Core
             if (instance == this)
                 instance = null;
 
-            Logger.Log(LogLevel.Info, "CelestialLeague", "InterfaceManager removed from scene");
+            Logger.Log(LogLevel.Info, "Celestial League", "InterfaceManager removed from scene");
         }
 
         // component management
@@ -120,12 +133,12 @@ namespace CelestialLeague.Client.UI.Core
         {
             if (rootContainer != null)
             {
-                Logger.Log(LogLevel.Info, "CelestialLeague", $"Adding child: {child.GetType().Name}");
+                Logger.Log(LogLevel.Info, "Celestial League", $"Adding child: {child.GetType().Name}");
                 rootContainer.AddChild(child);
             }
             else
             {
-                Logger.Log(LogLevel.Warn, "CelestialLeague", "Cannot add child - root container is null");
+                Logger.Log(LogLevel.Warn, "Celestial League", "Cannot add child - root container is null");
             }
         }
 
@@ -342,5 +355,4 @@ namespace CelestialLeague.Client.UI.Core
         Right,
         Middle
     }
-
 }

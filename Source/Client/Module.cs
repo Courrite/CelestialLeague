@@ -35,11 +35,6 @@ namespace CelestialLeague.Client
             Logger.Log(LogLevel.Info, "Celestial League", "Celestial League loaded");
         }
 
-        public override void LoadContent(bool firstLoad)
-        {
-            base.LoadContent(firstLoad);
-        }
-
         public override void Unload()
         {
             _ = Task.Run(async () => await DisconnectAsync("Mod unloading"));

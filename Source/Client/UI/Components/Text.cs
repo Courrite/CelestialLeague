@@ -163,11 +163,6 @@ namespace CelestialLeague.Client.UI.Components
                 if (font.Sizes?.Count > 0)
                 {
                     cachedPixelFontSize = font.Sizes.First();
-                    Logger.Info("Celestial League", $"Using PixelFont size: {cachedPixelFontSize.Size}");
-                }
-                else
-                {
-                    Logger.Info("Celestial League", "No font sizes available in PixelFont.");
                 }
             }
             catch (Exception ex)

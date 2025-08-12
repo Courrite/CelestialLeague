@@ -46,14 +46,24 @@ namespace CelestialLeague.Client.UI.Core
             Depth = -100000;
             instance = this;
             IsVisible = true;
+
+            var fontPaths = Fonts.paths;
+
+            foreach (string key in fontPaths.Keys)
+            {
+                Logger.Info("Celestial League", $"Loading {key} font.");
+                if (Fonts.Get(key) == null && !Fonts.loadedFonts.ContainsKey(key))
+                {
+                    Fonts.Load(key);
+                    Logger.Info("Celestial League", $"Loaded {key} font.");
+                }
+            }
+
         }
 
         public override void Added(Scene scene)
         {
             base.Added(scene);
-
-            FontLoader.LoadFonts();
-            LogAvailableFonts();
 
             wasMouseVisible = Engine.Instance.IsMouseVisible;
             MInput.Active = true;
@@ -75,27 +85,12 @@ namespace CelestialLeague.Client.UI.Core
             Components.Text text = new Components.Text();
             text.Font = Fonts.Get("Montserrat Regular");
             text.Content = "cl_test_text".DialogClean();
-            text.Layout.Anchor = Anchor.MiddleCenter;
+            text.Layout.Anchor = Anchor.TopLeft;
             text.Layout.RelativePosition = Vector2.Zero;
-            text.BackgroundTransparency = 0.5f;
+            text.BackgroundTransparency = 1f;
+            text.BorderTransparency = 1f;
+            text.TextScale = 0.5f;
             AddChild(text);
-        }
-
-        private void LogAvailableFonts()
-        {
-            Logger.Info("CelestialLeague", "=== Available Font Paths ===");
-
-            if (Fonts.paths != null)
-            {
-                foreach (var fontPath in Fonts.paths.Keys)
-                {
-                    Logger.Info("CelestialLeague", $"Available font path: {fontPath}");
-                }
-            }
-            else
-            {
-                Logger.Warn("CelestialLeague", "Fonts.paths is null");
-            }
         }
 
         private void CreateRootContainer()

@@ -62,6 +62,7 @@
        <ProjectReference Include="..\CelestialLeague.Client.UI\CelestialLeague.Client.UI.csproj" />
        <ProjectReference Include="..\CelestialLeague.Client.Networking\CelestialLeague.Client.Networking.csproj" />
        <ProjectReference Include="..\CelestialLeague.Client.Services\CelestialLeague.Client.Services.csproj" />
+       <ProjectReference Include="..\CelestialLeague.Client.Motion\CelestialLeague.Client.Motion.csproj" />
     </ItemGroup>
 
     <!-- Inline task used to create a .zip for the mod -->

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <AssemblyName>CelestialLeague.Client.UI</AssemblyName>
+        <RootNamespace>Celeste.Mod.CelestialLeague.Client.UI</RootNamespace>
+        <LangVersion>latest</LangVersion>
+        <CelestePrefix Condition="'$(CelestePrefix)' == '' And Exists('..\..\..\Celeste.dll')">..\..\..</CelestePrefix>
+        <CelestePrefix Condition="'$(CelestePrefix)' == ''">..\lib-stripped</CelestePrefix>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    </PropertyGroup>
+
+    <!--Disable "Copy Local" for all references-->
+    <ItemDefinitionGroup>
+        <PackageReference PrivateAssets="all" ExcludeAssets="runtime" />
+        <Reference Private="false" />
+    </ItemDefinitionGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="25.2.3" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="MonoMod.Patcher" Version="25.0.0-prerelease.2" />
+        <PackageReference Include="CelesteAnalyzer" Version="*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CelesteMod.Publicizer" Version="*" CelesteAssembly="$(CelestePrefix)\Celeste.dll" />
+        <Reference Include="$(CelestePrefix)\MMHOOK_Celeste.dll" Private="false" Condition="Exists('$(CelestePrefix)\MMHOOK_Celeste.dll')" />
+        <Reference Include="$(CelestePrefix)\FNA.dll" Private="false" Condition="Exists('$(CelestePrefix)\FNA.dll')" />
+    </ItemGroup>
+    
+    <!-- Project References -->
+    <ItemGroup>
+        <ProjectReference Include="..\..\Shared\CelestialLeague.Shared.csproj" />
+       <ProjectReference Include="..\CelestialLeague.Client.Motion\CelestialLeague.Client.Motion.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -34,7 +34,7 @@ namespace CelestialLeague.Client.Player
         public bool IsAuthenticated => _isAuthenticated;
         public string SessionToken => _sessionToken;
         public int PlayerId => _playerInfo?.Id ?? 0;
-        public string Username => _playerInfo?.Username;
+        public string Username => _playerInfo?.Username ?? "???";
         public PlayerStatus Status => _playerInfo?.PlayerStatus ?? PlayerStatus.Offline;
         public UserRole Role => _playerInfo?.UserRole ?? UserRole.None;
 

@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Sockets;
-using CelestialLeague.Server.Core;
 using CelestialLeague.Server.Models;
 using CelestialLeague.Server.Utils;
 using CelestialLeague.Shared.Enum;

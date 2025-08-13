@@ -6,7 +6,6 @@ using CelestialLeague.Shared.Utils;
 using Microsoft.EntityFrameworkCore;
 using CelestialLeague.Server.Database.Context;
 using System.Text.RegularExpressions;
-using CelestialLeague.Server.Core;
 using System.Threading.Tasks;
 using CelestialLeague.Shared.Models;
 
@@ -14,14 +13,15 @@ namespace CelestialLeague.Server.Services
 {
     public class AuthenticationService
     {
-        private readonly GameServer _gameServer;
-        private GameDbContext _context => _gameServer.GameDbContext;
-        private Logger _logger => _gameServer.Logger;
-        private SessionManager _sessionManager => _gameServer.SessionManager;
+        private readonly GameDbContext _context;
+        private readonly Logger _logger;
+        private readonly SessionManager _sessionManager;
 
-        public AuthenticationService(GameServer gameServer)
+        public AuthenticationService(GameDbContext context, Logger logger, SessionManager sessionManager)
         {
-            _gameServer = gameServer ?? throw new ArgumentNullException(nameof(gameServer));
+            _context = context;
+            _logger = logger;
+            _sessionManager = sessionManager;
         }
 
         public async Task<AuthResult> RegisterAsync(string username, string password)

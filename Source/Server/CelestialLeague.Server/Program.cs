@@ -1,5 +1,5 @@
 using System.Net;
-using CelestialLeague.Server.Core;
+using CelestialLeague.Server.Networking;
 using CelestialLeague.Server.Utils;
 
 namespace CelestialLeague.Server

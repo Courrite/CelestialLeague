@@ -1,6 +1,6 @@
 - Name: Celestial League
   Version: 0.1.0
-  DLL: CL.dll
+  DLL: CelestialLeague.Client.dll
   Dependencies:
     - Name: EverestCore
       Version: 1.5421.0

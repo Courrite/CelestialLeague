@@ -1,15 +1,14 @@
 using System.Reflection;
-using CelestialLeague.Server.Core;
 using CelestialLeague.Server.Networking.PacketHandlers;
 
-namespace CelestialLeague.Server.Utils
+namespace CelestialLeague.Server.Networking
 {
     public static class HandlerFactory
     {
         public static BaseHandler[] CreateAllHandlers(GameServer gameServer)
         {
             var handlers = new List<BaseHandler>();
-            
+
             var handlerTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(BaseHandler)) && !t.IsAbstract)

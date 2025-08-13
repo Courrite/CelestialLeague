@@ -48,27 +48,12 @@
   <!-- Project References -->
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\CelestialLeague.Shared.csproj" />
+    <ProjectReference Include="..\CelestialLeague.Server.Networking\CelestialLeague.Server.Networking.csproj" />
+    <ProjectReference Include="..\CelestialLeague.Server.Utils\CelestialLeague.Server.Utils.csproj" />
   </ItemGroup>
 
   <!-- Core Dependencies -->
   <ItemGroup>
-    <!-- Database -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.14">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    
-    <!-- Database Providers -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    
     <!-- Caching -->
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5" />

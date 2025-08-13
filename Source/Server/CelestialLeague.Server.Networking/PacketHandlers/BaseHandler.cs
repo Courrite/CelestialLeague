@@ -1,4 +1,3 @@
-using CelestialLeague.Server.Core;
 using CelestialLeague.Server.Utils;
 
 namespace CelestialLeague.Server.Networking.PacketHandlers

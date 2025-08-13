@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>CelestialLeague.Server.Networking</AssemblyName>
+    <RootNamespace>CelestialLeague.Server.Networking</RootNamespace>
+    
+    <!-- Debug settings -->
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Project References -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\CelestialLeague.Shared.csproj" />
+    <ProjectReference Include="..\CelestialLeague.Server.Database\CelestialLeague.Server.Database.csproj" />
+    <ProjectReference Include="..\CelestialLeague.Server.Services\CelestialLeague.Server.Services.csproj" />
+    <ProjectReference Include="..\CelestialLeague.Server.Models\CelestialLeague.Server.Models.csproj" />
+    <ProjectReference Include="..\CelestialLeague.Server.Utils\CelestialLeague.Server.Utils.csproj" />
+  </ItemGroup>
+
+    <!-- Core Dependencies -->
+  <ItemGroup>
+    <!-- Networking -->
+    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
+

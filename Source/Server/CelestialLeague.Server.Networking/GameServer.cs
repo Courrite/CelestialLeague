@@ -8,7 +8,7 @@ using CelestialLeague.Server.Networking;
 using CelestialLeague.Server.Services;
 using CelestialLeague.Server.Utils;
 
-namespace CelestialLeague.Server.Core
+namespace CelestialLeague.Server.Networking
 {
     public sealed class GameServer : IDisposable
     {
@@ -38,7 +38,7 @@ namespace CelestialLeague.Server.Core
             Logger = logger ?? new Logger();
             SessionManager = new SessionManager();
             GameDbContext = new GameDbContextFactory().CreateDbContext([connectionString ?? "Data Source=celestial_league.db"]);
-            AuthenticationService = new AuthenticationService(this);
+            AuthenticationService = new AuthenticationService(GameDbContext, Logger, SessionManager);
             PacketProcessor = new PacketProcessor(this, HandlerFactory.CreateAllHandlers(this));
         }
 

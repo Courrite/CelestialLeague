@@ -117,4 +117,11 @@
         </Task>
     </UsingTask>
 
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Message Text="Building Celestial League Client v$(Version)..." Importance="high" />
+    </Target>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Message Text="Client build completed successfully!" Importance="high" />
+    </Target>
 </Project>

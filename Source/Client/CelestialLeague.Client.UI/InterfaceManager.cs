@@ -203,7 +203,19 @@ namespace CelestialLeague.Client.UI.Core
             base.Render();
             if (!IsVisible || rootContainer == null) return;
 
+            SpriteBatch.Begin(
+                SpriteSortMode.Deferred,
+                BlendState.AlphaBlend,
+                SamplerState.PointClamp,
+                DepthStencilState.None,
+                RasterizerState.CullNone,
+                null,
+                Matrix.Identity
+            );
+
             rootContainer.Render(this);
+
+            SpriteBatch.End();
         }
 
         // Input helper methods

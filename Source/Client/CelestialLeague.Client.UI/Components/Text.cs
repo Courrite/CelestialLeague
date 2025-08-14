@@ -5,6 +5,7 @@ using System;
 using CelestialLeague.Client.UI.Core;
 using Celeste.Mod;
 using System.Linq;
+using Celeste;
 
 namespace CelestialLeague.Client.UI.Components
 {
@@ -156,7 +157,7 @@ namespace CelestialLeague.Client.UI.Components
                 return cachedPixelFontSize;
 
             if (font == null)
-                return null;
+                font = Dialog.Languages["english"].Font;
 
             try
             {

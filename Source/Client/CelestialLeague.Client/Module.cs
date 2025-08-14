@@ -1,7 +1,6 @@
 using Celeste;
 using Celeste.Mod;
 using CelestialLeague.Client.Networking;
-using CelestialLeague.Client.Player;
 using CelestialLeague.Client.Services;
 using CelestialLeague.Client.UI.Core;
 using FMOD.Studio;
@@ -112,11 +111,6 @@ namespace CelestialLeague.Client
                 {
                     Logger.Log(LogLevel.Info, "Celestial League", $"Disconnecting from server: {reason}");
                     await GameClient.DisconnectAsync();
-                }
-
-                if (LocalPlayer.Instance.IsAuthenticated)
-                {
-                    await AuthManager.Instance.LogoutAsync();
                 }
 
                 Logger.Log(LogLevel.Info, "Celestial League", "Disconnected from server");

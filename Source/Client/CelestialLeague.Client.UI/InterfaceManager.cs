@@ -77,20 +77,6 @@ namespace CelestialLeague.Client.UI.Core
             PixelTexture.SetData(new[] { Color.White });
 
             CreateRootContainer();
-
-            Panel panel = new Panel();
-            panel.Layout.RelativePosition = Vector2.Zero;
-            AddChild(panel);
-
-            Components.Text text = new Components.Text();
-            text.Font = Fonts.Get("Montserrat Regular");
-            text.Content = "cl_test_text".DialogClean();
-            text.Layout.Anchor = Anchor.TopLeft;
-            text.Layout.RelativePosition = Vector2.Zero;
-            text.BackgroundTransparency = 1f;
-            text.BorderTransparency = 1f;
-            text.TextScale = 0.5f;
-            AddChild(text);
         }
 
         private void CreateRootContainer()
@@ -124,12 +110,12 @@ namespace CelestialLeague.Client.UI.Core
         }
 
         // component management
-        public void AddChild(IUIComponent child)
+        public void Add(IUIComponent child)
         {
             if (rootContainer != null)
             {
                 Logger.Log(LogLevel.Info, "Celestial League", $"Adding child: {child.GetType().Name}");
-                rootContainer.AddChild(child);
+                rootContainer.Add(child);
             }
             else
             {
@@ -137,7 +123,7 @@ namespace CelestialLeague.Client.UI.Core
             }
         }
 
-        public void RemoveChild(IUIComponent child) => rootContainer?.RemoveChild(child);
+        public void Remove(IUIComponent child) => rootContainer?.Remove(child);
         public void ClearChildren() => rootContainer?.ClearChildren();
         public T FindChild<T>(string name = null) where T : class, IUIComponent => rootContainer?.FindChild<T>(name);
 
@@ -217,19 +203,7 @@ namespace CelestialLeague.Client.UI.Core
             base.Render();
             if (!IsVisible || rootContainer == null) return;
 
-            SpriteBatch.Begin(
-                SpriteSortMode.Deferred,
-                BlendState.AlphaBlend,
-                SamplerState.PointClamp,
-                DepthStencilState.None,
-                RasterizerState.CullNone,
-                null,
-                Matrix.Identity
-            );
-
             rootContainer.Render(this);
-
-            SpriteBatch.End();
         }
 
         // Input helper methods

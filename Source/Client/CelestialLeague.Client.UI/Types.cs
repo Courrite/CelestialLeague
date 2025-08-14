@@ -46,5 +46,11 @@ namespace CelestialLeague.Client.UI.Core
     {
         None, Horizontal, Vertical, Grid
     }
-
+    
+    public enum TextAlignment
+    {
+        Left,
+        Center,
+        Right
+    }
 }

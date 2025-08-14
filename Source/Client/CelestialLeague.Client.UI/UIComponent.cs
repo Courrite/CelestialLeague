@@ -27,8 +27,8 @@ namespace CelestialLeague.Client.UI.Core
         // Hierarchy
         IUIComponent Parent { get; set; }
         IReadOnlyList<IUIComponent> Children { get; }
-        void AddChild(IUIComponent child);
-        void RemoveChild(IUIComponent child);
+        void Add(IUIComponent child);
+        void Remove(IUIComponent child);
         void ClearChildren();
         T FindChild<T>(string name = null) where T : class, IUIComponent;
 
@@ -112,10 +112,10 @@ namespace CelestialLeague.Client.UI.Core
             set
             {
                 if (parent == value) return;
-                parent?.RemoveChild(this);
+                parent?.Remove(this);
                 parent = value;
                 if (parent != null && !parent.Children.Contains(this))
-                    parent.AddChild(this);
+                    parent.Add(this);
                 InvalidateLayout();
             }
         }
@@ -132,7 +132,7 @@ namespace CelestialLeague.Client.UI.Core
         public event Action<IUIComponent, Keys> OnKeyPressed;
 
         // Hierarchy management
-        public virtual void AddChild(IUIComponent child)
+        public virtual void Add(IUIComponent child)
         {
             if (child == null || children.Contains(child) || child == this) return;
 
@@ -142,7 +142,7 @@ namespace CelestialLeague.Client.UI.Core
             InvalidateLayout();
         }
 
-        public virtual void RemoveChild(IUIComponent child)
+        public virtual void Remove(IUIComponent child)
         {
             if (children.Remove(child))
             {

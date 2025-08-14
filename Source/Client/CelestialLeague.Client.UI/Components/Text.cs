@@ -328,11 +328,4 @@ namespace CelestialLeague.Client.UI.Components
             return measuredSize;
         }
     }
-
-    public enum TextAlignment
-    {
-        Left,
-        Center,
-        Right
-    }
 }

@@ -1,1 +1,2 @@
-- Implement a REST Api on Server
+- Divide Networking project into classes more thoroughly (this will be harder to extend like rn)
+- Implement a REST Api

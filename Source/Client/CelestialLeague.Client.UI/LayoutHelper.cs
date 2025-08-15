@@ -1,3 +1,4 @@
+using Celeste.Mod;
 using Microsoft.Xna.Framework;
 
 namespace CelestialLeague.Client.UI.Core
@@ -10,17 +11,15 @@ namespace CelestialLeague.Client.UI.Core
 
             Vector2 basePosition = CalculateBasePosition(component);
 
-            if (layout.Offset.HasValue)
-                basePosition += layout.Offset.Value;
+            var contentSize = CalculateSize(component);
+
+            Vector2 pivotOffset = GetAnchorOffset(contentSize, layout.Anchor);
+            basePosition -= pivotOffset;
 
             basePosition += new Vector2(layout.Margin.Left, layout.Margin.Top);
 
-            var componentSize = CalculateSize(component);
-            Vector2 pivotOffset = new Vector2(
-                componentSize.X * layout.Pivot.X,
-                componentSize.Y * layout.Pivot.Y
-            );
-            basePosition -= pivotOffset;
+            if (layout.Offset.HasValue)
+                basePosition += layout.Offset.Value;
 
             return basePosition;
         }
@@ -28,13 +27,9 @@ namespace CelestialLeague.Client.UI.Core
         public static Vector2 CalculateSize(IUIComponent component)
         {
             var layout = component.Layout;
-            Vector2 size = new Vector2(100, 50);
+            Vector2 size;
 
-            if (layout.AbsoluteSize.HasValue)
-            {
-                size = layout.AbsoluteSize.Value;
-            }
-            else if (layout.RelativeSize.HasValue && component.Parent != null)
+            if (layout.RelativeSize.HasValue && component.Parent != null)
             {
                 var parentBounds = component.Parent.ContentBounds;
                 size = new Vector2(
@@ -49,6 +44,15 @@ namespace CelestialLeague.Client.UI.Core
                     parentBounds.Width - layout.Margin.Left - layout.Margin.Right,
                     parentBounds.Height - layout.Margin.Top - layout.Margin.Bottom
                 );
+            }
+            else
+            {
+                size = Vector2.Zero;
+            }
+
+            if (layout.AbsoluteSize.HasValue)
+            {
+                size += layout.AbsoluteSize.Value;
             }
 
             if (layout.MinSize.HasValue)
@@ -78,33 +82,32 @@ namespace CelestialLeague.Client.UI.Core
                 return Vector2.Zero;
 
             var parentBounds = component.Parent.ContentBounds;
-            Vector2 parentOrigin = new Vector2(parentBounds.X, parentBounds.Y);
-            Vector2 anchorPosition = GetAnchorOffset(parentBounds, layout.Anchor);
+            Vector2 position = new Vector2(parentBounds.X, parentBounds.Y);
 
             if (layout.RelativePosition.HasValue)
             {
-                anchorPosition += new Vector2(
+                position += new Vector2(
                     parentBounds.Width * layout.RelativePosition.Value.X,
                     parentBounds.Height * layout.RelativePosition.Value.Y
                 );
             }
 
-            return parentOrigin + anchorPosition;
+            return position;
         }
 
-        private static Vector2 GetAnchorOffset(Rectangle parentBounds, Anchor anchor)
+        private static Vector2 GetAnchorOffset(Vector2 size, Anchor anchor)
         {
             return anchor switch
             {
                 Anchor.TopLeft => Vector2.Zero,
-                Anchor.TopCenter => new Vector2(parentBounds.Width * 0.5f, 0),
-                Anchor.TopRight => new Vector2(parentBounds.Width, 0),
-                Anchor.MiddleLeft => new Vector2(0, parentBounds.Height * 0.5f),
-                Anchor.MiddleCenter => new Vector2(parentBounds.Width * 0.5f, parentBounds.Height * 0.5f),
-                Anchor.MiddleRight => new Vector2(parentBounds.Width, parentBounds.Height * 0.5f),
-                Anchor.BottomLeft => new Vector2(0, parentBounds.Height),
-                Anchor.BottomCenter => new Vector2(parentBounds.Width * 0.5f, parentBounds.Height),
-                Anchor.BottomRight => new Vector2(parentBounds.Width, parentBounds.Height),
+                Anchor.TopCenter => new Vector2(size.X * 0.5f, 0),
+                Anchor.TopRight => new Vector2(size.X, 0),
+                Anchor.MiddleLeft => new Vector2(0, size.Y * 0.5f),
+                Anchor.MiddleCenter => new Vector2(size.X * 0.5f, size.Y * 0.5f),
+                Anchor.MiddleRight => new Vector2(size.X, size.Y * 0.5f),
+                Anchor.BottomLeft => new Vector2(0, size.Y),
+                Anchor.BottomCenter => new Vector2(size.X * 0.5f, size.Y),
+                Anchor.BottomRight => new Vector2(size.X, size.Y),
                 _ => Vector2.Zero
             };
         }
@@ -121,7 +124,7 @@ namespace CelestialLeague.Client.UI.Core
             System.Console.WriteLine($"  Size: {size}");
             System.Console.WriteLine($"  Bounds: {bounds}");
             System.Console.WriteLine($"  AbsolutePosition: {layout.AbsolutePosition}");
-            System.Console.WriteLine($"  RelativePosition: {layout.RelativePosition} (as percentage 0-1)");
+            System.Console.WriteLine($"  RelativePosition: {layout.RelativePosition}");
             System.Console.WriteLine($"  Anchor: {layout.Anchor}");
 
             if (component.Parent != null)
@@ -138,6 +141,9 @@ namespace CelestialLeague.Client.UI.Core
                     System.Console.WriteLine($"  Relative Offset (pixels): {relativeOffset}");
                 }
             }
+
+            var pivotOffset = GetAnchorOffset(size, layout.Anchor);
+            System.Console.WriteLine($"  Pivot Offset: {pivotOffset}");
             System.Console.WriteLine();
         }
     }

@@ -12,9 +12,6 @@ namespace CelestialLeague.Client.UI.Core
 {
     public class InterfaceManager : Entity
     {
-        private static InterfaceManager instance;
-        public static InterfaceManager Instance => instance;
-
         private IUIComponent rootContainer;
         private IUIComponent focusedComponent;
 
@@ -44,7 +41,6 @@ namespace CelestialLeague.Client.UI.Core
         {
             Tag = Tags.HUD | Tags.Global;
             Depth = -100000;
-            instance = this;
             IsVisible = true;
 
             var fontPaths = Fonts.paths;
@@ -58,7 +54,6 @@ namespace CelestialLeague.Client.UI.Core
                     Logger.Info("Celestial League", $"Loaded {key} font.");
                 }
             }
-
         }
 
         public override void Added(Scene scene)
@@ -77,6 +72,17 @@ namespace CelestialLeague.Client.UI.Core
             PixelTexture.SetData(new[] { Color.White });
 
             CreateRootContainer();
+
+            Engine.Instance.Window.ClientSizeChanged += OnClientSizeChanged;
+
+            // ui here
+            var menu = new MainMenu();
+            Add(menu);
+        }
+
+        private void OnClientSizeChanged(object sender, EventArgs e)
+        {
+            rootContainer.InvalidateLayout();
         }
 
         private void CreateRootContainer()
@@ -103,8 +109,7 @@ namespace CelestialLeague.Client.UI.Core
             PixelTexture?.Dispose();
             SpriteBatch?.Dispose();
 
-            if (instance == this)
-                instance = null;
+            Engine.Instance.Window.ClientSizeChanged -= OnClientSizeChanged;
 
             Logger.Log(LogLevel.Info, "Celestial League", "InterfaceManager removed from scene");
         }

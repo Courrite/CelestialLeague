@@ -50,8 +50,6 @@ namespace CelestialLeague.Client.Networking
 
             try
             {
-                Logger.Info("Celestial League", $"Connecting to {host}:{port}...");
-
                 _tcpClient = new TcpClient();
 
                 var connectTimeout = timeout ?? TimeSpan.FromSeconds(10);
@@ -73,7 +71,6 @@ namespace CelestialLeague.Client.Networking
                 await ConnectionManager!.StartAsync(_networkStream, serverEndpoint);
 
                 _isConnected = true;
-                Logger.Info("Celestial League", $"Connected to {serverEndpoint}");
 
                 return true;
             }
@@ -101,8 +98,6 @@ namespace CelestialLeague.Client.Networking
         {
             if (!_isConnected)
                 return;
-
-            Logger.Info("Celestial League", $"Disconnecting: {reason}");
 
             _isConnected = false;
 
@@ -208,8 +203,6 @@ namespace CelestialLeague.Client.Networking
                 CleanupConnectionAsync().Wait(TimeSpan.FromSeconds(1));
 
                 _cancellationTokenSource?.Dispose();
-
-                Logger.Info("Celestial League", "GameClient disposed");
             }
             catch (Exception ex)
             {

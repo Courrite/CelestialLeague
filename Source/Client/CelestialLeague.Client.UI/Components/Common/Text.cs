@@ -71,7 +71,6 @@ namespace CelestialLeague.Client.UI.Components
 
         public Text() : this("")
         {
-            Layout.AbsoluteSize = new Vector2(50, 50);
         }
 
         public Text(string content) : base()

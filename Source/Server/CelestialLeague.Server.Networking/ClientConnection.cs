@@ -344,4 +344,3 @@ namespace CelestialLeague.Server.Networking
         }
     }
 }
-//

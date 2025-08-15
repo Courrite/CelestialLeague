@@ -314,6 +314,11 @@ namespace CelestialLeague.Client.UI.Core
             SpriteBatch.Draw(PixelTexture, new Rectangle(rect.X + rect.Width - thickness, rect.Y, thickness, rect.Height), color);
         }
 
+        public void DrawTexture(Texture2D texture, Rectangle destinationRectangle, Color color)
+        {
+            SpriteBatch.Draw(texture, destinationRectangle, color);
+        }
+
         // ui state management
         public void Show()
         {

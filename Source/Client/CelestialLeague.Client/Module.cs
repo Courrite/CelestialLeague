@@ -47,23 +47,23 @@ namespace CelestialLeague.Client
             InterfaceManager = null;
         }
 
-        private void OnSceneBegin(On.Monocle.Scene.orig_Begin orig, Scene self)
+        private static void OnSceneBegin(On.Monocle.Scene.orig_Begin orig, Scene self)
         {
             orig(self);
 
             if (self is Level || self is Overworld)
             {
-                if (InterfaceManager == null || InterfaceManager.Scene != self)
+                if (Instance.InterfaceManager == null || Instance.InterfaceManager.Scene != self)
                 {
-                    InterfaceManager?.RemoveSelf();
-                    InterfaceManager = new InterfaceManager();
-                    self.Add(InterfaceManager);
+                    Instance.InterfaceManager?.RemoveSelf();
+                    Instance.InterfaceManager = new InterfaceManager();
+                    self.Add(Instance.InterfaceManager);
                 }
             }
-            else if (InterfaceManager != null)
+            else if (Instance.InterfaceManager != null)
             {
-                InterfaceManager.RemoveSelf();
-                InterfaceManager = null;
+                Instance.InterfaceManager.RemoveSelf();
+                Instance.InterfaceManager = null;
             }
         }
 

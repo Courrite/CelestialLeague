@@ -73,12 +73,12 @@ namespace CelestialLeague.Client.UI.Core
             PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             PixelTexture.SetData(new[] { Color.White });
 
-            CreateRootContainer();
-
             Engine.Instance.Window.ClientSizeChanged += OnClientSizeChanged;
             ClearCelesteHudEntities();
 
             // ui here
+            CreateRootContainer();
+
             var menu = new MainMenu();
             Add(menu);
         }
@@ -90,11 +90,17 @@ namespace CelestialLeague.Client.UI.Core
 
         private void ClearCelesteHudEntities()
         {
+            var scene = Engine.Instance.scene as Overworld;
             var hudEntities = new List<Entity>();
 
-            foreach (Entity entity in Engine.Instance.scene.Entities)
+            scene.Remove(scene.Snow);
+            foreach (Entity entity in scene.Entities)
             {
-                if (entity != this && (entity.Tag & Tags.HUD) != 0)
+                Logger.Info("Celestial League", entity.ToString());
+                if (entity != this &&
+                    ((entity.Tag & Tags.HUD) != 0 ||
+                     (entity.Tag & Tags.Global) != 0 ||
+                     (entity.Tag & Tags.Persistent) != 0))
                 {
                     hudEntities.Add(entity);
                 }

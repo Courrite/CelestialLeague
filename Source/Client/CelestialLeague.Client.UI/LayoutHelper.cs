@@ -1,7 +1,7 @@
 using Celeste.Mod;
 using Microsoft.Xna.Framework;
 
-namespace CelestialLeague.Client.UI.Core
+namespace CelestialLeague.Client.UI
 {
     public static class LayoutHelper
     {

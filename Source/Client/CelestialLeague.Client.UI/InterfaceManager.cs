@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace CelestialLeague.Client.UI.Core
+namespace CelestialLeague.Client.UI
 {
     public class InterfaceManager : Entity
     {

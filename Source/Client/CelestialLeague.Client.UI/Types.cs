@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace CelestialLeague.Client.UI.Core
+namespace CelestialLeague.Client.UI
 {
     public class LayoutInfo
     {

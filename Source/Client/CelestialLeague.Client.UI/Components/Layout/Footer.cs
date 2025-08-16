@@ -1,5 +1,5 @@
 using Celeste;
-using CelestialLeague.Client.UI.Core;
+using CelestialLeague.Client.UI;
 using Microsoft.Xna.Framework;
 
 namespace CelestialLeague.Client.UI.Components
@@ -9,8 +9,10 @@ namespace CelestialLeague.Client.UI.Components
         public Footer()
         {
             BackgroundColor = Color.White;
-            BorderColor = new Color(100, 80, 110, 255);
-            BorderWidth = 4;
+        
+            PanelBorders.Top.Width = 4;
+            PanelBorders.Top.Color = new Color(100, 80, 110, 255);
+
             Layout.Anchor = Anchor.BottomLeft;
             Layout.RelativeSize = new Vector2(1f, 0);
             Layout.AbsoluteSize = new Vector2(0, 80);
@@ -22,7 +24,6 @@ namespace CelestialLeague.Client.UI.Components
             Motd.AutoSize = true;
             Motd.TextScale = 0.5f;
             Motd.TextColor = new Color(188, 157, 215);
-            Motd.BorderColor = Color.Transparent;
             Motd.BackgroundColor = Color.Transparent;
             Motd.Layout.RelativePosition = new Vector2(0.02f, 0.5f);
             Motd.Layout.Anchor = Anchor.MiddleLeft;

@@ -5,7 +5,7 @@ using Celeste.Mod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace CelestialLeague.Client.UI.Core
+namespace CelestialLeague.Client.UI
 {
     public interface IUIComponent
     {

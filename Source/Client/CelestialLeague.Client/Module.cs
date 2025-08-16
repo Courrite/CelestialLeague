@@ -2,7 +2,7 @@ using Celeste;
 using Celeste.Mod;
 using CelestialLeague.Client.Networking;
 using CelestialLeague.Client.Services;
-using CelestialLeague.Client.UI.Core;
+using CelestialLeague.Client.UI;
 using FMOD.Studio;
 using Monocle;
 using System;

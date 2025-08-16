@@ -31,15 +31,16 @@
     </ItemGroup>
 
     <Target Name="CopyContent">
-        <Message Text="Copying Content folder..." Importance="high" />
+        <Message Text="Copying folders..." Importance="high" />
         <ItemGroup>
             <ContentFiles Include="..\..\..\Dialog\**\*.*" />
+            <GraphicsFiles Include="..\..\..\Graphics\**\*.*" />
         </ItemGroup>
         <Message Text="Found @(ContentFiles->Count()) content files" Importance="high" />
         <Copy SourceFiles="@(ContentFiles)" 
               DestinationFolder="$(OutputPath)\Dialog\%(RecursiveDir)" 
               SkipUnchangedFiles="false" />
-        <Message Text="Content copy completed" Importance="high" />
+        <Message Text="Copy completed" Importance="high" />
     </Target>
 
     <!-- Project References -->

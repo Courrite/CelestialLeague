@@ -1,4 +1,4 @@
-using CelestialLeague.Client.UI.Core;
+using CelestialLeague.Client.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

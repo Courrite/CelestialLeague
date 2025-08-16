@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using CelestialLeague.Client.UI.Core;
+using CelestialLeague.Client.UI;
 using Celeste.Mod;
 using Celeste;
 

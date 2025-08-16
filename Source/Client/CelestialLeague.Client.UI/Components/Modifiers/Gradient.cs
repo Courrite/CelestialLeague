@@ -35,7 +35,7 @@ namespace CelestialLeague.Client.UI.Components
                 new GradientAlphaPoint(0f, 0f),
                 new GradientAlphaPoint(0f, 0f)
             };
-            Rotation = 0f;
+            Rotation = 90f;
             Offset = Vector2.Zero;
         }
 

@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Monocle;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace CelestialLeague.Client.UI.Core
 {
@@ -74,6 +76,7 @@ namespace CelestialLeague.Client.UI.Core
             CreateRootContainer();
 
             Engine.Instance.Window.ClientSizeChanged += OnClientSizeChanged;
+            ClearCelesteHudEntities();
 
             // ui here
             var menu = new MainMenu();
@@ -85,12 +88,30 @@ namespace CelestialLeague.Client.UI.Core
             rootContainer.InvalidateLayout();
         }
 
+        private void ClearCelesteHudEntities()
+        {
+            var hudEntities = new List<Entity>();
+
+            foreach (Entity entity in Engine.Instance.scene.Entities)
+            {
+                if (entity != this && (entity.Tag & Tags.HUD) != 0)
+                {
+                    hudEntities.Add(entity);
+                }
+            }
+
+            foreach (var entity in hudEntities)
+            {
+                entity.RemoveSelf();
+            }
+        }
+
         private void CreateRootContainer()
         {
             rootContainer = new Panel
             {
                 Name = "RootContainer",
-                BackgroundTransparency = 1,
+                BackgroundColor = Color.Transparent,
             };
 
             rootContainer.Layout.AbsoluteSize = new Vector2(ScreenWidth, ScreenHeight);
@@ -211,7 +232,7 @@ namespace CelestialLeague.Client.UI.Core
             SpriteBatch.Begin(
                 SpriteSortMode.Deferred,
                 BlendState.AlphaBlend,
-                SamplerState.PointClamp,
+                SamplerState.LinearClamp,
                 DepthStencilState.None,
                 RasterizerState.CullNone,
                 null,

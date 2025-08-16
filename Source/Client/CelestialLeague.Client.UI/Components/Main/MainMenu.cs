@@ -8,7 +8,7 @@ namespace CelestialLeague.Client.UI.Components
         public MainMenu()
         {
             Layout.RelativeSize = new Vector2(1f, 1f);
-            BackgroundTransparency = 1f;
+            BackgroundColor = Color.Black;
 
             var Footer = new Footer();
             Add(Footer);

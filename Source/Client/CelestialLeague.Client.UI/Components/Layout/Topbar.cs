@@ -9,15 +9,18 @@ namespace CelestialLeague.Client.UI.Components
         public Topbar()
         {
             BackgroundColor = Color.White;
+            BorderColor = new Color(100, 80, 110, 255);
+            BorderWidth = 4;
             Layout.Anchor = Anchor.TopLeft;
             Layout.RelativeSize = new Vector2(1f, 0);
             Layout.AbsoluteSize = new Vector2(0, 80);
 
             var ActiveMenu = new Text();
             ActiveMenu.Content = "MAIN MENU";
+            ActiveMenu.TextColor = new Color(188, 157, 215);
             ActiveMenu.AutoSize = true;
-            ActiveMenu.BorderTransparency = 1;
-            ActiveMenu.BackgroundTransparency = 1;
+            ActiveMenu.BorderColor = Color.Transparent;
+            ActiveMenu.BackgroundColor = Color.Transparent;
             ActiveMenu.Layout.RelativePosition = new Vector2(0.02f, 0.5f);
             ActiveMenu.Layout.Anchor = Anchor.MiddleLeft;
             ActiveMenu.Font = Fonts.Get("Montserrat Regular");
@@ -25,9 +28,10 @@ namespace CelestialLeague.Client.UI.Components
 
             var Gradient = new Gradient();
             Gradient.SetColors(
-                new GradientColorPoint(0, Color.Black),
-                new GradientColorPoint(1, new Color(224, 176, 255))
+                new GradientColorPoint(0, new Color(58, 46, 66)),
+                new GradientColorPoint(1, new Color(91, 75, 104))
             );
+            Gradient.Rotation = 90f;
             Add(Gradient);
 
             LayoutHelper.DebugLayout(this);

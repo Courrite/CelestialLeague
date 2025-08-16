@@ -9,16 +9,21 @@ namespace CelestialLeague.Client.UI.Components
         public Footer()
         {
             BackgroundColor = Color.White;
+            BorderColor = new Color(100, 80, 110, 255);
+            BorderWidth = 4;
             Layout.Anchor = Anchor.BottomLeft;
             Layout.RelativeSize = new Vector2(1f, 0);
             Layout.AbsoluteSize = new Vector2(0, 80);
             Layout.RelativePosition = new Vector2(0, 1f);
 
             var Motd = new Text();
-            Motd.Content = "Welcome to Celestial League!";
+            Motd.UseRichText = true;
+            Motd.Content = "WELCOME TO [bold][scale=1.3]CELESTIAL LEAGUE[/scale][/bold]!";
             Motd.AutoSize = true;
-            Motd.BorderTransparency = 1;
-            Motd.BackgroundTransparency = 1;
+            Motd.TextScale = 0.5f;
+            Motd.TextColor = new Color(188, 157, 215);
+            Motd.BorderColor = Color.Transparent;
+            Motd.BackgroundColor = Color.Transparent;
             Motd.Layout.RelativePosition = new Vector2(0.02f, 0.5f);
             Motd.Layout.Anchor = Anchor.MiddleLeft;
             Motd.Font = Fonts.Get("Montserrat Regular");
@@ -26,9 +31,10 @@ namespace CelestialLeague.Client.UI.Components
 
             var Gradient = new Gradient();
             Gradient.SetColors(
-                new GradientColorPoint(0, Color.Black),
-                new GradientColorPoint(1, new Color(224, 176, 255))
+                new GradientColorPoint(0, new Color(58, 46, 66)),
+                new GradientColorPoint(1, new Color(91, 75, 104))
             );
+            Gradient.Rotation = 270f;
             Add(Gradient);
             
             LayoutHelper.DebugLayout(this);

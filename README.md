@@ -3,4 +3,4 @@
 
 ---
 
-paused
+development is paused

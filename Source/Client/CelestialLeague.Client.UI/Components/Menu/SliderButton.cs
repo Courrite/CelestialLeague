@@ -31,19 +31,21 @@ namespace CelestialLeague.Client.UI.Components
         public float RestScale { get; set; } = 1.0f;
 
         private Spring widthSpring = new Spring(1f);
-        private Vector2 originalSize;
+        private DimensionUnit2 originalSize;
 
         public SliderButton()
         {
-            Vector2 size = new Vector2(0.5f, 0);
-            
+            DimensionUnit2 size = new DimensionUnit2(0.5f, 0, 0, 125);
+
             BackgroundColor = Color.White;
-            Layout.RelativeSize = size;
+            Layout.Size = size;
             originalSize = size;
-            Layout.AbsoluteSize = new Vector2(0, 125);
 
             OnMouseEnter += (component) => OnHoverEnter();
             OnMouseExit += (component) => OnHoverExit();
+
+            widthSpring.Stiffness = 4f;
+            widthSpring.Damping = (float)(2 * Math.Sqrt(widthSpring.Stiffness));
         }
 
         private void OnHoverEnter()
@@ -65,9 +67,8 @@ namespace CelestialLeague.Client.UI.Components
         {
             float scaleX = MathHelper.Clamp(widthSpring.Value, 0.01f, 10f);
 
-            Vector2 scaledRelativeSize = new Vector2(originalSize.X * scaleX, originalSize.Y);
-
-            Layout.RelativeSize = scaledRelativeSize;
+            DimensionUnit2 scaledRelativeSize = new DimensionUnit2(originalSize.X.Scale * scaleX, 0, originalSize.Y.Scale, originalSize.Y.Offset);
+            Layout.Size = scaledRelativeSize;
 
             base.RenderSelf(ui);
         }

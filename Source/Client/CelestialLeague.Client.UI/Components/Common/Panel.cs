@@ -18,7 +18,7 @@ namespace CelestialLeague.Client.UI.Components
 
         public Panel()
         {
-            Layout.RelativeSize = new Vector2(0.1f, 0.1f);
+            Layout.Size = new DimensionUnit2(0.1f, 0, 0.1f, 0);
         }
 
         protected override void UpdateSelf(InterfaceManager ui)
@@ -28,7 +28,13 @@ namespace CelestialLeague.Client.UI.Components
 
         protected override void RenderSelf(InterfaceManager ui)
         {
-            var bounds = GetWorldBounds();
+            // Use the cached absolute values for rendering.
+            var bounds = new Rectangle(
+                (int)Layout.AbsolutePosition.X,
+                (int)Layout.AbsolutePosition.Y,
+                (int)Layout.AbsoluteSize.X,
+                (int)Layout.AbsoluteSize.Y
+            );
 
             if (BackgroundColor.A > 0)
             {
@@ -156,7 +162,7 @@ namespace CelestialLeague.Client.UI.Components
             {
                 for (int y = bounds.Y; y < bounds.Y + bounds.Height; y += spacing)
                 {
-                    Rectangle dot = new Rectangle(bounds.X + (bounds.Width - dotSize) / 2, y, dotSize, dotSize);
+                    Rectangle dot = new Rectangle(bounds.X + (bounds.Width - dotSize) / 2, y, bounds.Width, dotSize);
                     ui.DrawRectangle(dot, color);
                 }
             }
@@ -183,14 +189,14 @@ namespace CelestialLeague.Client.UI.Components
 
         private void RenderChildrenWithClipping(InterfaceManager ui)
         {
-            var contentBounds = ContentBounds;
-            if (contentBounds.Width <= 0 || contentBounds.Height <= 0) return;
+            var bounds = Bounds;
+            if (bounds.Width <= 0 || bounds.Height <= 0) return;
 
             ui.SpriteBatch.End();
 
             var oldScissor = ui.GraphicsDevice.ScissorRectangle;
 
-            var newScissor = oldScissor == Rectangle.Empty ? contentBounds : Rectangle.Intersect(oldScissor, contentBounds);
+            var newScissor = oldScissor == Rectangle.Empty ? bounds : Rectangle.Intersect(oldScissor, bounds);
             ui.GraphicsDevice.ScissorRectangle = newScissor;
 
             ui.SpriteBatch.Begin(
@@ -220,71 +226,6 @@ namespace CelestialLeague.Client.UI.Components
                 null,
                 Matrix.Identity
             );
-        }
-
-        public override void InvalidateLayout()
-        {
-            base.InvalidateLayout();
-            // no render target here anymore
-        }
-
-        public class Border
-        {
-            public int Width { get; set; }
-            public Color Color { get; set; } = Color.Black;
-            public BorderStyle Style { get; set; } = BorderStyle.Solid;
-
-            public Border() { }
-
-            public Border(int width, Color color = default, BorderStyle style = BorderStyle.Solid)
-            {
-                Width = width;
-                Color = (color == default) ? Color.Black : color;
-                Style = style;
-            }
-
-            public bool IsVisible => Width > 0 && Color.A > 0;
-        }
-
-        public class Borders
-        {
-            public bool Enabled = true;
-
-            public Border Top { get; set; } = new Border();
-            public Border Right { get; set; } = new Border();
-            public Border Bottom { get; set; } = new Border();
-            public Border Left { get; set; } = new Border();
-
-            public Borders() { }
-
-            public Borders(int width) : this(width, width, width, width) { }
-
-            public Borders(int vertical, int horizontal) : this(vertical, horizontal, vertical, horizontal) { }
-
-            public Borders(int top, int right, int bottom, int left)
-            {
-                Top = new Border(top);
-                Right = new Border(right);
-                Bottom = new Border(bottom);
-                Left = new Border(left);
-            }
-
-            public bool HasTop => Top.IsVisible;
-            public bool HasRight => Right.IsVisible;
-            public bool HasBottom => Bottom.IsVisible;
-            public bool HasLeft => Left.IsVisible;
-            public bool HasAnyBorder => HasTop || HasRight || HasBottom || HasLeft;
-
-            public int TotalHorizontal => Left.Width + Right.Width;
-            public int TotalVertical => Top.Width + Bottom.Width;
-        }
-
-        public enum BorderStyle
-        {
-            None,
-            Solid,
-            Dashed,
-            Dotted
         }
     }
 }

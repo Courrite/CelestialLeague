@@ -22,7 +22,6 @@ namespace CelestialLeague.Client.UI
         int RenderOrder { get; }
         LayoutInfo Layout { get; set; }
         Rectangle Bounds { get; }
-        Rectangle ContentBounds { get; }
 
         // Hierarchy
         IUIComponent Parent { get; set; }
@@ -91,20 +90,6 @@ namespace CelestialLeague.Client.UI
         public LayoutInfo Layout { get; set; } = new LayoutInfo();
 
         public virtual Rectangle Bounds => layoutDirty ? RecalculateBounds() : cachedBounds;
-        public virtual Rectangle ContentBounds
-        {
-            get
-            {
-                var bounds = Bounds;
-                var padding = Layout.Padding;
-                return new Rectangle(
-                    bounds.X + (int)padding.Left,
-                    bounds.Y + (int)padding.Top,
-                    bounds.Width - (int)(padding.Left + padding.Right),
-                    bounds.Height - (int)(padding.Top + padding.Bottom)
-                );
-            }
-        }
 
         public IUIComponent Parent
         {
@@ -364,7 +349,17 @@ namespace CelestialLeague.Client.UI
             Vector2 position = LayoutHelper.CalculatePosition(this);
             Vector2 size = LayoutHelper.CalculateSize(this);
 
+            if (Parent != null)
+            {
+                position.X += Parent.Bounds.X;
+                position.Y += Parent.Bounds.Y;
+            }
+
+            Layout.AbsolutePosition = position;
+            Layout.AbsoluteSize = size;
+
             cachedBounds = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+
             return cachedBounds;
         }
     }

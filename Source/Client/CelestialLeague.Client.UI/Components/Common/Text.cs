@@ -116,7 +116,7 @@ namespace CelestialLeague.Client.UI.Components
 
         public Color TextColor { get; set; } = Color.White;
         public float TextTransparency { get; set; } = 0.0f;
-        public TextAlignment Alignment { get; set; } = TextAlignment.Left;
+        public HorizontalAlignment Alignment { get; set; } = HorizontalAlignment.Left;
         public bool WordWrap { get; set; } = false;
         public bool AutoSize { get; set; } = true;
         public float LineSpacing { get; set; } = 1.0f;
@@ -154,33 +154,28 @@ namespace CelestialLeague.Client.UI.Components
             if (string.IsNullOrEmpty(text) || font == null) return;
 
             var bounds = GetWorldBounds();
-            var contentBounds = GetContentBounds(bounds);
-
             if (useRichText && segments.Count > 0)
             {
-                Color renderColor = TextColor * (1.0f - TextTransparency);
-                
-                if (WordWrap && contentBounds.Width > 0)
+                if (WordWrap && bounds.Width > 0)
                 {
-                    RenderWrappedRichText(ui, contentBounds);
+                    RenderWrappedRichText(ui, bounds);
                 }
                 else
                 {
-                    RenderSingleLineRichText(ui, contentBounds);
+                    RenderSingleLineRichText(ui, bounds);
                 }
             }
             else
             {
-                // original text rendering
                 Color renderColor = TextColor * (1.0f - TextTransparency);
 
-                if (WordWrap && contentBounds.Width > 0)
+                if (WordWrap && bounds.Width > 0)
                 {
-                    RenderWrappedText(ui, contentBounds, renderColor);
+                    RenderWrappedText(ui, bounds, renderColor);
                 }
                 else
                 {
-                    RenderSingleLineText(ui, contentBounds, renderColor);
+                    RenderSingleLineText(ui, bounds, renderColor);
                 }
             }
         }
@@ -190,7 +185,7 @@ namespace CelestialLeague.Client.UI.Components
         private void ParseRichText()
         {
             segments.Clear();
-            
+
             if (string.IsNullOrEmpty(text))
                 return;
 
@@ -202,26 +197,22 @@ namespace CelestialLeague.Client.UI.Components
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to parse rich text: {ex.Message}");
-                segments.Add(new RichTextSegment(text, TextColor, TextStyle.Normal, 1.0f)); // fallback
+                segments.Add(new RichTextSegment(text, TextColor, TextStyle.Normal, 1.0f));
             }
         }
 
         private List<RichTextSegment> ParseTextRecursively(string text, Color currentColor, TextStyle currentStyle, float currentScale)
         {
             var result = new List<RichTextSegment>();
-            
-            // find complete tag pairs first
             var processedText = text;
             var currentPos = 0;
             var tagStack = new Stack<(Color color, TextStyle style, float scale)>();
-            
+
             while (currentPos < processedText.Length)
             {
-                // find next opening or closing tag
                 int nextTagStart = processedText.IndexOf('[', currentPos);
                 if (nextTagStart == -1)
                 {
-                    // no more tags, add remaining text
                     string remainingText = processedText.Substring(currentPos);
                     if (!string.IsNullOrEmpty(remainingText))
                     {
@@ -230,7 +221,6 @@ namespace CelestialLeague.Client.UI.Components
                     break;
                 }
 
-                // add text before the tag
                 if (nextTagStart > currentPos)
                 {
                     string beforeText = processedText.Substring(currentPos, nextTagStart - currentPos);
@@ -243,16 +233,14 @@ namespace CelestialLeague.Client.UI.Components
                 int tagEnd = processedText.IndexOf(']', nextTagStart);
                 if (tagEnd == -1)
                 {
-                    // malformed tag, treat as regular text
                     result.Add(new RichTextSegment(processedText.Substring(nextTagStart), currentColor, currentStyle, currentScale));
                     break;
                 }
 
                 string tagContent = processedText.Substring(nextTagStart + 1, tagEnd - nextTagStart - 1);
-                
+
                 if (tagContent.StartsWith("/"))
                 {
-                    // closing tag - pop from stack
                     if (tagStack.Count > 0)
                     {
                         var (prevColor, prevStyle, prevScale) = tagStack.Pop();
@@ -263,9 +251,8 @@ namespace CelestialLeague.Client.UI.Components
                 }
                 else
                 {
-                    // opening tag - push current state and update
                     tagStack.Push((currentColor, currentStyle, currentScale));
-                    
+
                     if (tagContent.StartsWith("color="))
                     {
                         string colorValue = tagContent.Substring(6);
@@ -281,7 +268,6 @@ namespace CelestialLeague.Client.UI.Components
                     }
                     else
                     {
-                        // style tag
                         currentStyle = ParseStyle(tagContent);
                     }
                 }
@@ -296,7 +282,6 @@ namespace CelestialLeague.Client.UI.Components
         {
             try
             {
-                // handle named colors
                 var namedColors = new Dictionary<string, Color>(StringComparer.OrdinalIgnoreCase)
                 {
                     {"red", Color.Red}, {"green", Color.Green}, {"blue", Color.Blue},
@@ -308,13 +293,11 @@ namespace CelestialLeague.Client.UI.Components
                 if (namedColors.TryGetValue(colorStr, out Color namedColor))
                     return namedColor;
 
-                // handle hex colors
                 if (colorStr.StartsWith("#"))
                     colorStr = colorStr.Substring(1);
 
                 if (colorStr.Length == 3)
                 {
-                    // convert RGB to RRGGBB
                     colorStr = $"{colorStr[0]}{colorStr[0]}{colorStr[1]}{colorStr[1]}{colorStr[2]}{colorStr[2]}";
                 }
 
@@ -363,10 +346,10 @@ namespace CelestialLeague.Client.UI.Components
 
             switch (Alignment)
             {
-                case TextAlignment.Center:
+                case HorizontalAlignment.Center:
                     currentX += (contentBounds.Width - totalWidth) * 0.5f;
                     break;
-                case TextAlignment.Right:
+                case HorizontalAlignment.Right:
                     currentX += contentBounds.Width - totalWidth;
                     break;
             }
@@ -379,7 +362,7 @@ namespace CelestialLeague.Client.UI.Components
 
                 string processedText = ProcessTextStyle(segment.Text, segment.Style);
                 Vector2 segmentSize = MeasureSegmentText(processedText, segment.Style, segment.Scale * TextScale);
-                
+
                 Color renderColor = segment.Color * (1.0f - TextTransparency);
                 Vector2 position = new Vector2(currentX, baselineY - segmentSize.Y * 0.5f);
 
@@ -409,10 +392,10 @@ namespace CelestialLeague.Client.UI.Components
 
             switch (Alignment)
             {
-                case TextAlignment.Center:
+                case HorizontalAlignment.Center:
                     currentX += (contentBounds.Width - totalWidth) * 0.5f;
                     break;
-                case TextAlignment.Right:
+                case HorizontalAlignment.Right:
                     currentX += contentBounds.Width - totalWidth;
                     break;
             }
@@ -439,7 +422,7 @@ namespace CelestialLeague.Client.UI.Components
             foreach (var segment in segments)
             {
                 var words = segment.Text.Split(' ');
-                
+
                 foreach (var word in words)
                 {
                     string processedWord = ProcessTextStyle(word, segment.Style);
@@ -448,7 +431,6 @@ namespace CelestialLeague.Client.UI.Components
 
                     if (currentLineWidth + wordWidth > maxWidth && currentLine.Count > 0)
                     {
-                        // start new line
                         lines.Add(currentLine);
                         currentLine = new List<RichTextSegment>();
                         currentLineWidth = 0f;
@@ -457,7 +439,6 @@ namespace CelestialLeague.Client.UI.Components
                     currentLine.Add(wordSegment);
                     currentLineWidth += wordWidth;
 
-                    // add space if not the last word
                     if (word != words.Last())
                     {
                         var spaceSegment = new RichTextSegment(" ", segment.Color, segment.Style, segment.Scale);
@@ -504,12 +485,10 @@ namespace CelestialLeague.Client.UI.Components
                 var pixelFontSize = GetPixelFontSize();
                 if (pixelFontSize == null) return;
 
-                // draw main text
                 font.Draw(pixelFontSize.Size, text, position, Vector2.Zero, Vector2.One * scale, color);
 
-                // add style effects
                 var textSize = pixelFontSize.Measure(text) * scale;
-                
+
                 switch (style)
                 {
                     case TextStyle.Underline:
@@ -529,9 +508,9 @@ namespace CelestialLeague.Client.UI.Components
         private void DrawUnderline(InterfaceManager ui, Vector2 position, Vector2 textSize, Color color)
         {
             Rectangle underlineRect = new Rectangle(
-                (int)position.X, 
-                (int)(position.Y + textSize.Y + 2), 
-                (int)textSize.X, 
+                (int)position.X,
+                (int)(position.Y + textSize.Y + 2),
+                (int)textSize.X,
                 1
             );
             ui.DrawRectangle(underlineRect, color);
@@ -540,9 +519,9 @@ namespace CelestialLeague.Client.UI.Components
         private void DrawStrikethrough(InterfaceManager ui, Vector2 position, Vector2 textSize, Color color)
         {
             Rectangle strikeRect = new Rectangle(
-                (int)position.X, 
-                (int)(position.Y + textSize.Y * 0.5f), 
-                (int)textSize.X, 
+                (int)position.X,
+                (int)(position.Y + textSize.Y * 0.5f),
+                (int)textSize.X,
                 1
             );
             ui.DrawRectangle(strikeRect, color);
@@ -550,24 +529,11 @@ namespace CelestialLeague.Client.UI.Components
 
         #endregion
 
-        #region Original Text Methods
-
-        private Rectangle GetContentBounds(Rectangle bounds)
-        {
-            var padding = Layout.Padding;
-            return new Rectangle(
-                bounds.X + (int)padding.Left,
-                bounds.Y + (int)padding.Top,
-                bounds.Width - (int)(padding.Left + padding.Right),
-                bounds.Height - (int)(padding.Top + padding.Bottom)
-            );
-        }
-
+        #region Text Rendering Methods
         private void RenderSingleLineText(InterfaceManager ui, Rectangle contentBounds, Color renderColor)
         {
             Vector2 textSize = MeasureText(text) * TextScale;
             Vector2 position = CalculateTextPosition(contentBounds, textSize);
-
             DrawText(ui, text, position, renderColor);
         }
 
@@ -627,7 +593,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to measure text with PixelFont: {ex.Message}");
+                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to measure text: {ex.Message}");
                 return Vector2.Zero;
             }
         }
@@ -641,7 +607,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to get line height with PixelFont: {ex.Message}");
+                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to get line height: {ex.Message}");
                 return 0f;
             }
         }
@@ -660,7 +626,7 @@ namespace CelestialLeague.Client.UI.Components
             }
             catch (Exception ex)
             {
-                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to draw text with PixelFont: {ex.Message}");
+                Logger.Log(LogLevel.Warn, "Celestial League", $"Failed to draw text: {ex.Message}");
             }
         }
 
@@ -668,7 +634,6 @@ namespace CelestialLeague.Client.UI.Components
         {
             float x = CalculateHorizontalAlignment(bounds, textSize.X);
             float y = bounds.Y + (bounds.Height - textSize.Y) * 0.5f;
-
             return new Vector2(x, y);
         }
 
@@ -676,9 +641,9 @@ namespace CelestialLeague.Client.UI.Components
         {
             return Alignment switch
             {
-                TextAlignment.Left => bounds.X,
-                TextAlignment.Center => bounds.X + (bounds.Width - textWidth) * 0.5f,
-                TextAlignment.Right => bounds.X + bounds.Width - textWidth,
+                HorizontalAlignment.Left => bounds.X,
+                HorizontalAlignment.Center => bounds.X + (bounds.Width - textWidth) * 0.5f,
+                HorizontalAlignment.Right => bounds.X + bounds.Width - textWidth,
                 _ => bounds.X
             };
         }
@@ -687,7 +652,7 @@ namespace CelestialLeague.Client.UI.Components
         {
             if (maxWidth <= 0) return new[] { text };
 
-            var lines = new System.Collections.Generic.List<string>();
+            var lines = new List<string>();
             var words = text.Split(' ');
             var currentLine = "";
 
@@ -737,19 +702,19 @@ namespace CelestialLeague.Client.UI.Components
             {
                 if (useRichText && segments.Count > 0)
                 {
-                    if (WordWrap && Layout.AbsoluteSize.HasValue)
+                    if (WordWrap && Layout.Size.X.IsSet)
                     {
-                        var contentWidth = Layout.AbsoluteSize.Value.X - Layout.Padding.Left - Layout.Padding.Right;
+                        var parentSize = Parent != null ? LayoutHelper.CalculateSize(Parent) : Vector2.Zero;
+                        var contentWidth = Layout.Size.X.Resolve(parentSize.X);
                         var lines = WrapRichText(segments, contentWidth);
                         float totalHeight = lines.Count * GetLineHeight() * LineSpacing * TextScale;
                         measuredSize = new Vector2(contentWidth, totalHeight);
                     }
                     else
                     {
-                        // single line - sum all segment widths
                         float totalWidth = 0f;
                         float maxHeight = 0f;
-                        
+
                         foreach (var segment in segments)
                         {
                             string processedText = ProcessTextStyle(segment.Text, segment.Style);
@@ -757,16 +722,16 @@ namespace CelestialLeague.Client.UI.Components
                             totalWidth += segmentSize.X;
                             maxHeight = Math.Max(maxHeight, segmentSize.Y);
                         }
-                        
+
                         measuredSize = new Vector2(totalWidth, maxHeight);
                     }
                 }
                 else
                 {
-                    // original text measurement
-                    if (WordWrap && Layout.AbsoluteSize.HasValue)
+                    if (WordWrap && Layout.Size.X.IsSet)
                     {
-                        var contentWidth = Layout.AbsoluteSize.Value.X - Layout.Padding.Left - Layout.Padding.Right;
+                        var parentSize = Parent != null ? LayoutHelper.CalculateSize(Parent) : Vector2.Zero;
+                        var contentWidth = Layout.Size.X.Resolve(parentSize.X);
                         var lines = WrapText(text, (int)(contentWidth / TextScale));
                         float totalHeight = lines.Length * GetLineHeight() * LineSpacing * TextScale;
                         measuredSize = new Vector2(contentWidth, totalHeight);
@@ -777,12 +742,9 @@ namespace CelestialLeague.Client.UI.Components
                     }
                 }
 
-                if (AutoSize && !Layout.AbsoluteSize.HasValue && !Layout.RelativeSize.HasValue)
+                if (AutoSize && !Layout.Size.X.IsSet && !Layout.Size.Y.IsSet)
                 {
-                    Layout.AbsoluteSize = measuredSize + new Vector2(
-                        Layout.Padding.Left + Layout.Padding.Right,
-                        Layout.Padding.Top + Layout.Padding.Bottom
-                    );
+                    Layout.AbsoluteSize = measuredSize;
                 }
             }
             catch (Exception ex)

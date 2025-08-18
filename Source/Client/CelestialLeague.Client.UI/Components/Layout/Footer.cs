@@ -13,10 +13,9 @@ namespace CelestialLeague.Client.UI.Components
             PanelBorders.Top.Width = 4;
             PanelBorders.Top.Color = new Color(100, 80, 110, 255);
 
-            Layout.Anchor = Anchor.BottomLeft;
-            Layout.RelativeSize = new Vector2(1f, 0);
-            Layout.AbsoluteSize = new Vector2(0, 80);
-            Layout.RelativePosition = new Vector2(0, 1f);
+            Layout.Anchor = new Vector2(0, 1);
+            Layout.Size = new DimensionUnit2(1f, 0, 0, 80);
+            Layout.Position = new DimensionUnit2(0, 0, 1f, 0);
 
             var Motd = new Text();
             Motd.UseRichText = true;
@@ -25,8 +24,8 @@ namespace CelestialLeague.Client.UI.Components
             Motd.TextScale = 0.5f;
             Motd.TextColor = new Color(188, 157, 215);
             Motd.BackgroundColor = Color.Transparent;
-            Motd.Layout.RelativePosition = new Vector2(0.02f, 0.5f);
-            Motd.Layout.Anchor = Anchor.MiddleLeft;
+            Motd.Layout.Position = new DimensionUnit2(0.02f, 0, 0.5f, 0);
+            Motd.Layout.Anchor = new Vector2(0, 0.5f);
             Motd.Font = Fonts.Get("Montserrat Regular");
             Add(Motd);
 

@@ -120,8 +120,8 @@ namespace CelestialLeague.Client.UI
                 BackgroundColor = Color.Transparent,
             };
 
-            rootContainer.Layout.AbsoluteSize = new Vector2(ScreenWidth, ScreenHeight);
-            rootContainer.Layout.AbsolutePosition = Vector2.Zero;
+            rootContainer.Layout.Size = new DimensionUnit2(0, ScreenWidth, 0, ScreenHeight);
+            rootContainer.Layout.Position = DimensionUnit2.Zero;
             rootContainer.Parent = null;
 
             Logger.Log(LogLevel.Info, "Celestial League", $"Root container created with size {ScreenWidth}x{ScreenHeight}");
@@ -166,7 +166,7 @@ namespace CelestialLeague.Client.UI
 
             if (IsVisible && rootContainer != null)
             {
-                rootContainer.Layout.AbsoluteSize = new Vector2(ScreenWidth, ScreenHeight);
+                rootContainer.Layout.Size = new DimensionUnit2(0, ScreenWidth, 0, ScreenHeight);
 
                 rootContainer.Update(this);
                 HandleFocus();

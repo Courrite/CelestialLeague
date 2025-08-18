@@ -13,17 +13,16 @@ namespace CelestialLeague.Client.UI.Components
             PanelBorders.Bottom.Width = 4;
             PanelBorders.Bottom.Color = new Color(100, 80, 110, 255);
 
-            Layout.Anchor = Anchor.TopLeft;
-            Layout.RelativeSize = new Vector2(1f, 0);
-            Layout.AbsoluteSize = new Vector2(0, 80);
+            Layout.Anchor = Vector2.Zero;
+            Layout.Size = new DimensionUnit2(1f, 0, 0, 80);
 
             var ActiveMenu = new Text();
             ActiveMenu.Content = "MAIN MENU";
             ActiveMenu.TextColor = new Color(188, 157, 215);
             ActiveMenu.AutoSize = true;
             ActiveMenu.BackgroundColor = Color.Transparent;
-            ActiveMenu.Layout.RelativePosition = new Vector2(0.02f, 0.5f);
-            ActiveMenu.Layout.Anchor = Anchor.MiddleLeft;
+            ActiveMenu.Layout.Position = new DimensionUnit2(0.02f, 0, 0.5f, 0);
+            ActiveMenu.Layout.Anchor = new Vector2(0, 0.5f);
             ActiveMenu.Font = Fonts.Get("Montserrat Regular");
             Add(ActiveMenu);
 

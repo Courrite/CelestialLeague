@@ -39,7 +39,6 @@ namespace CelestialLeague.Client.UI.Components
             Offset = Vector2.Zero;
         }
 
-
         public override void InvalidateLayout()
         {
             base.InvalidateLayout();
@@ -83,9 +82,8 @@ namespace CelestialLeague.Client.UI.Components
         {
             if (Parent != null)
             {
-                var parentBounds = Parent.Bounds;
-                Layout.RelativePosition = Vector2.Zero;
-                Layout.RelativePosition = new Vector2(1f, 1f);
+                Layout.Size = DimensionUnit2.Zero;
+                Layout.Position = new DimensionUnit2(1f, 0, 1f, 0);
             }
         }
 
@@ -94,7 +92,7 @@ namespace CelestialLeague.Client.UI.Components
             if (!IsVisible || Parent == null) return;
 
             Rectangle targetBounds = Parent.GetWorldBounds();
-            
+
             if (targetBounds.Width <= 0 || targetBounds.Height <= 0) return;
 
             int texWidth = Math.Min(targetBounds.Width, MAX_GRADIENT_RESOLUTION);
@@ -110,7 +108,7 @@ namespace CelestialLeague.Client.UI.Components
             {
                 // end current spritebatch to change blend mode
                 ui.SpriteBatch.End();
-                
+
                 // begin with multiply blend to apply gradient as overlay
                 ui.SpriteBatch.Begin(
                     SpriteSortMode.Deferred,
@@ -123,7 +121,7 @@ namespace CelestialLeague.Client.UI.Components
                 );
 
                 ui.SpriteBatch.Draw(cachedGradientTexture, targetBounds, Color.White);
-                
+
                 // end and restart normal rendering
                 ui.SpriteBatch.End();
                 ui.SpriteBatch.Begin(
@@ -179,10 +177,10 @@ namespace CelestialLeague.Client.UI.Components
 
                     Color baseColor = SampleGradient(gradientPosition);
                     float transparency = SampleTransparency(gradientPosition);
-                    
+
                     // create gradient effect - transparent areas let parent show through
                     Color finalColor = Color.Lerp(Color.Transparent, baseColor, 1f - transparency);
-                    
+
                     pixelData[y * width + x] = finalColor;
                 }
             }

@@ -28,7 +28,6 @@ namespace CelestialLeague.Client.UI.Components
 
         protected override void RenderSelf(InterfaceManager ui)
         {
-            // Use the cached absolute values for rendering.
             var bounds = new Rectangle(
                 (int)Layout.AbsolutePosition.X,
                 (int)Layout.AbsolutePosition.Y,

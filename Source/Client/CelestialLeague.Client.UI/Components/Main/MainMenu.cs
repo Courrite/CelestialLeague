@@ -11,51 +11,61 @@ namespace CelestialLeague.Client.UI.Components
             Name = "MainMenu";
             Layout.Size = new DimensionUnit2(1f, 0, 1f, 0);
             BackgroundColor = Color.Black;
-            LayoutHelper.DebugLayout(this, "Main Menu");
 
-            var Footer = new Footer();
-            Footer.Name = "Footer";
+            var Footer = new Footer
+            {
+                Name = "Footer"
+            };
             Add(Footer);
-            LayoutHelper.DebugLayout(Footer, "Footer");
 
-            var Topbar = new Topbar();
-            Topbar.Name = "Topbar";
+            var Topbar = new Topbar
+            {
+                Name = "Topbar"
+            };
             Add(Topbar);
-            LayoutHelper.DebugLayout(Topbar, "Topbar");
 
-            var ButtonContainerPanel = new Panel();
-            ButtonContainerPanel.Name = "ButtonContainerPanel";
-            ButtonContainerPanel.BackgroundColor = Color.Transparent;
-            ButtonContainerPanel.Layout.Size = new DimensionUnit2(1f, 0, 0.85f, 0);
-            ButtonContainerPanel.Layout.Position = new DimensionUnit2(1f, 0, 0.5f, 0);
-            ButtonContainerPanel.Layout.Anchor = new Vector2(1, 0.5f);
+            var ButtonContainerPanel = new Panel
+            {
+                Name = "ButtonContainerPanel",
+                BackgroundColor = Color.Transparent,
+                Layout = new()
+                {
+                    Size = new DimensionUnit2(1f, 0, 0.85f, 0),
+                    Position = new DimensionUnit2(1f, 0, 0.5f, 0),
+                    Anchor = new Vector2(1, 0.5f),
+                }
+            };
             Add(ButtonContainerPanel);
-            LayoutHelper.DebugLayout(ButtonContainerPanel, "Button Container");
 
-            var ListLayout = new ListLayout();
-            ListLayout.Name = "ListLayout";
-            ListLayout.VerticalAlignment = VerticalAlignment.Top;
-            ListLayout.HorizontalAlignment = HorizontalAlignment.Right;
-            ListLayout.Padding = new Vector2(0, 15);
+            var ListLayout = new ListLayout
+            {
+                Name = "ListLayout",
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Padding = new Vector2(0, 15)
+            };
             ButtonContainerPanel.Add(ListLayout);
 
-            var Button1 = new SliderButton();
-            Button1.Name = "Button1";
-            Button1.BackgroundColor = Color.Salmon;
+            var Button1 = new SliderButton("TEST 1", "This is test button number 1")
+            {
+                Name = "Button1",
+                BackgroundColor = Color.Salmon
+            };
             ButtonContainerPanel.Add(Button1);
-            LayoutHelper.DebugLayout(Button1, "Button 1");
 
-            var Button2 = new SliderButton();
-            Button2.Name = "Button2";
-            Button2.BackgroundColor = Color.Green;
+            var Button2 = new SliderButton("TEST 2", "This is a test button numbered 2")
+            {
+                Name = "Button2",
+                BackgroundColor = Color.Green
+            };
             ButtonContainerPanel.Add(Button2);
-            LayoutHelper.DebugLayout(Button2, "Button 2");
 
-            var Button3 = new SliderButton();
-            Button3.Name = "Button3";
-            Button3.BackgroundColor = Color.Blue;
+            var Button3 = new SliderButton("TEST 3", "This is Test button No. 3")
+            {
+                Name = "Button3",
+                BackgroundColor = Color.Blue
+            };
             ButtonContainerPanel.Add(Button3);
-            LayoutHelper.DebugLayout(Button3, "Button 3");
         }
 
         protected override void UpdateSelf(InterfaceManager ui) { /* soon */ }

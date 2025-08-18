@@ -14,8 +14,6 @@ namespace CelestialLeague.Client.UI.Components
     public enum TextStyle
     {
         Normal,
-        Bold,
-        Italic,
         Underline,
         Strikethrough,
         AllCaps
@@ -321,8 +319,6 @@ namespace CelestialLeague.Client.UI.Components
         {
             return styleStr.ToLower() switch
             {
-                "bold" => TextStyle.Bold,
-                "italic" => TextStyle.Italic,
                 "underline" => TextStyle.Underline,
                 "strike" => TextStyle.Strikethrough,
                 "caps" => TextStyle.AllCaps,

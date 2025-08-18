@@ -12,7 +12,6 @@ namespace CelestialLeague.Client.UI.Components
         public List<GradientAlphaPoint> TransparencySequence { get; set; }
         public float Rotation { get; set; } // degrees
         public Vector2 Offset { get; set; }
-        public BlendState BlendMode { get; set; } = BlendState.AlphaBlend;
 
         private Texture2D cachedGradientTexture;
         private int cachedWidth;
@@ -80,11 +79,7 @@ namespace CelestialLeague.Client.UI.Components
 
         protected override void UpdateSelf(InterfaceManager interfaceManager)
         {
-            if (Parent != null)
-            {
-                Layout.Size = DimensionUnit2.Zero;
-                Layout.Position = new DimensionUnit2(1f, 0, 1f, 0);
-            }
+            /* na */
         }
 
         public override void Render(InterfaceManager ui)
@@ -106,33 +101,7 @@ namespace CelestialLeague.Client.UI.Components
 
             if (cachedGradientTexture != null)
             {
-                // end current spritebatch to change blend mode
-                ui.SpriteBatch.End();
-
-                // begin with multiply blend to apply gradient as overlay
-                ui.SpriteBatch.Begin(
-                    SpriteSortMode.Deferred,
-                    BlendMode,
-                    SamplerState.LinearClamp,
-                    DepthStencilState.None,
-                    RasterizerState.CullNone,
-                    null,
-                    Matrix.Identity
-                );
-
                 ui.SpriteBatch.Draw(cachedGradientTexture, targetBounds, Color.White);
-
-                // end and restart normal rendering
-                ui.SpriteBatch.End();
-                ui.SpriteBatch.Begin(
-                    SpriteSortMode.Deferred,
-                    BlendState.AlphaBlend,
-                    SamplerState.PointClamp,
-                    DepthStencilState.None,
-                    RasterizerState.CullNone,
-                    null,
-                    Matrix.Identity
-                );
             }
         }
 

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 using System;
+using Celeste;
 
 namespace CelestialLeague.Client.UI.Components
 {
@@ -21,6 +22,12 @@ namespace CelestialLeague.Client.UI.Components
                 PanelBorders.Left.Color = Color.Multiply(value, 0.9f);
                 PanelBorders.Right.Color = Color.Multiply(value, 0.9f);
                 PanelBorders.Bottom.Color = Color.Multiply(value, 0.8f);
+
+                var Title = FindChild<Text>("Title");
+                Title.TextColor = Color.Multiply(value, 1.15f);
+
+                var Description = FindChild<Text>("Description");
+                Description.TextColor = Color.Multiply(value, 1.1f);
             }
         }
 
@@ -30,20 +37,57 @@ namespace CelestialLeague.Client.UI.Components
         public float MaxScale { get; set; } = 1.5f;
         public float RestScale { get; set; } = 1.0f;
 
-        private Spring widthSpring = new Spring(1f);
+        private Motion.Spring widthSpring = new(1f);
         private DimensionUnit2 originalSize;
 
-        public SliderButton()
+        public SliderButton(string Title, string Description)
         {
-            DimensionUnit2 size = new DimensionUnit2(0.5f, 0, 0, 125);
+            Text TitleText = new(Description.ToUpper())
+            {
+                Name = "Title",
+                Font = Fonts.Get("Montserrat Bold"),
+                BackgroundColor = Color.Transparent,
+                Alignment = HorizontalAlignment.Center,
+                Layout = new()
+                {
+                    Size = new DimensionUnit2(1, 0, 0.25f, 0),
+                }
+            };
+            Add(TitleText);
 
-            BackgroundColor = Color.White;
+            Text DescriptionText = new(Description)
+            {
+                Name = "Description",
+                Font = Fonts.Get("Montserrat Regular"),
+                BackgroundColor = Color.Transparent,
+                TextColor = BackgroundColor,
+                TextScale = 0.5f,
+                Alignment = HorizontalAlignment.Center,
+                Layout = new()
+                {
+                    Size = new DimensionUnit2(1, 0, 0.75f, 0),
+                    Position = new DimensionUnit2(0, 0, 1, 0),
+                    Anchor = new Vector2(0, 1),
+                }
+            };
+            Add(DescriptionText);
+
+            ListLayout ListLayout = new()
+            {
+                Name = "ListLayout",
+            };
+            Add(ListLayout);
+
+            DimensionUnit2 size = new(0.5f, 0, 0, 125);
+
             Layout.Size = size;
-            originalSize = size;
+            PanelBorders = new Borders(4);
+            BackgroundColor = Color.White;
 
             OnMouseEnter += (component) => OnHoverEnter();
             OnMouseExit += (component) => OnHoverExit();
 
+            originalSize = size;
             widthSpring.Stiffness = 4f;
             widthSpring.Damping = (float)(2 * Math.Sqrt(widthSpring.Stiffness));
         }
@@ -67,7 +111,7 @@ namespace CelestialLeague.Client.UI.Components
         {
             float scaleX = MathHelper.Clamp(widthSpring.Value, 0.01f, 10f);
 
-            DimensionUnit2 scaledRelativeSize = new DimensionUnit2(originalSize.X.Scale * scaleX, 0, originalSize.Y.Scale, originalSize.Y.Offset);
+            DimensionUnit2 scaledRelativeSize = new(originalSize.X.Scale * scaleX, 0, originalSize.Y.Scale, originalSize.Y.Offset);
             Layout.Size = scaledRelativeSize;
 
             base.RenderSelf(ui);

@@ -1,9 +1,8 @@
 using CelestialLeague.Client.UI;
-using IL.Monocle;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace CelestialLeague.Client.UI.Components
 {
@@ -32,10 +31,9 @@ namespace CelestialLeague.Client.UI.Components
         public Button()
         {
             CanReceiveFocus = true;
-            base.BackgroundColor = NormalColor; // ensure base initial value
+            base.BackgroundColor = NormalColor;
             PanelBorders = new Borders(1);
 
-            // wire up events
             OnMouseEnter += (component) => UpdateButtonState(ButtonComponentState.Hover);
             OnMouseExit += (component) => UpdateButtonState(ButtonComponentState.Normal);
             OnPressed += (component) => UpdateButtonState(ButtonComponentState.Pressed);
@@ -48,7 +46,6 @@ namespace CelestialLeague.Client.UI.Components
         {
             base.UpdateSelf(ui);
 
-            // update state based on enabled status
             if (!IsEnabled && currentState != ButtonComponentState.Disabled)
             {
                 UpdateButtonState(ButtonComponentState.Disabled);
@@ -66,7 +63,7 @@ namespace CelestialLeague.Client.UI.Components
 
             currentState = newState;
 
-            BackgroundColor = currentState switch
+            base.BackgroundColor = currentState switch
             {
                 ButtonComponentState.Normal => NormalColor,
                 ButtonComponentState.Hover => HoverColor,
@@ -78,10 +75,9 @@ namespace CelestialLeague.Client.UI.Components
 
         private void ApplyAutoColors(Color baseColor)
         {
-            // Simple heuristic for state colors; tweak multipliers to taste
             NormalColor = baseColor;
-            HoverColor = Adjust(baseColor, 1.08f);   // slightly lighter
-            PressedColor = Adjust(baseColor, 0.92f); // slightly darker
+            HoverColor = Adjust(baseColor, 1.08f);
+            PressedColor = Adjust(baseColor, 0.92f);
             DisabledColor = new Color(
                 (int)(baseColor.R * 0.6f),
                 (int)(baseColor.G * 0.6f),

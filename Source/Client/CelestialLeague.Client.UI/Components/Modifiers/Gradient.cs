@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CelestialLeague.Client.UI.Components
 {
-    public class Gradient : UIComponent, IDisposable
+    public class Gradient : UIComponent
     {
         public List<GradientColorPoint> ColorSequence { get; set; }
         public List<GradientAlphaPoint> TransparencySequence { get; set; }
@@ -24,16 +24,16 @@ namespace CelestialLeague.Client.UI.Components
 
         public Gradient()
         {
-            ColorSequence = new List<GradientColorPoint>
-            {
+            ColorSequence =
+            [
                 new GradientColorPoint(0f, Color.White),
                 new GradientColorPoint(1f, Color.Black)
-            };
-            TransparencySequence = new List<GradientAlphaPoint>
-            {
+            ];
+            TransparencySequence =
+            [
                 new GradientAlphaPoint(0f, 0f),
                 new GradientAlphaPoint(0f, 0f)
-            };
+            ];
             Rotation = 90f;
             Offset = Vector2.Zero;
         }
@@ -167,7 +167,7 @@ namespace CelestialLeague.Client.UI.Components
 
             // find surrounding points
             GradientColorPoint prev = ColorSequence[0];
-            GradientColorPoint next = ColorSequence[ColorSequence.Count - 1];
+            GradientColorPoint next = ColorSequence[^1];
 
             for (int i = 0; i < ColorSequence.Count - 1; i++)
             {
@@ -181,8 +181,8 @@ namespace CelestialLeague.Client.UI.Components
 
             // handle edge cases
             if (position <= ColorSequence[0].Time) return ColorSequence[0].Color;
-            if (position >= ColorSequence[ColorSequence.Count - 1].Time)
-                return ColorSequence[ColorSequence.Count - 1].Color;
+            if (position >= ColorSequence[^1].Time)
+                return ColorSequence[^1].Color;
 
             // interpolate between points
             float t = (position - prev.Time) / (next.Time - prev.Time);
@@ -196,7 +196,7 @@ namespace CelestialLeague.Client.UI.Components
 
             // find surrounding points
             GradientAlphaPoint prev = TransparencySequence[0];
-            GradientAlphaPoint next = TransparencySequence[TransparencySequence.Count - 1];
+            GradientAlphaPoint next = TransparencySequence[^1];
 
             for (int i = 0; i < TransparencySequence.Count - 1; i++)
             {
@@ -210,42 +210,24 @@ namespace CelestialLeague.Client.UI.Components
 
             // handle edge cases
             if (position <= TransparencySequence[0].Time) return TransparencySequence[0].Alpha;
-            if (position >= TransparencySequence[TransparencySequence.Count - 1].Time)
-                return TransparencySequence[TransparencySequence.Count - 1].Alpha;
+            if (position >= TransparencySequence[^1].Time)
+                return TransparencySequence[^1].Alpha;
 
             // interpolate between points
             float t = (position - prev.Time) / (next.Time - prev.Time);
             return MathHelper.Lerp(prev.Alpha, next.Alpha, t);
         }
-
-        public void Dispose()
-        {
-            cachedGradientTexture?.Dispose();
-            cachedGradientTexture = null;
-        }
     }
 
-    public struct GradientColorPoint
+    public struct GradientColorPoint(float time, Color color)
     {
-        public float Time { get; set; }
-        public Color Color { get; set; }
-
-        public GradientColorPoint(float time, Color color)
-        {
-            Time = MathHelper.Clamp(time, 0f, 1f);
-            Color = color;
-        }
+        public float Time { get; set; } = MathHelper.Clamp(time, 0f, 1f);
+        public Color Color { get; set; } = color;
     }
 
-    public struct GradientAlphaPoint
+    public struct GradientAlphaPoint(float time, float alpha)
     {
-        public float Time { get; set; }
-        public float Alpha { get; set; }
-
-        public GradientAlphaPoint(float time, float alpha)
-        {
-            Time = MathHelper.Clamp(time, 0f, 1f);
-            Alpha = MathHelper.Clamp(alpha, 0f, 1f);
-        }
+        public float Time { get; set; } = MathHelper.Clamp(time, 0f, 1f);
+        public float Alpha { get; set; } = MathHelper.Clamp(alpha, 0f, 1f);
     }
 }

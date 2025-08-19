@@ -10,7 +10,6 @@ namespace CelestialLeague.Client.UI.Components
         public Vector2 Padding { get; set; } = Vector2.Zero;
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Left;
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Top;
-        public SortOrder SortOrder { get; set; } = SortOrder.LayoutOrder;
 
         public ListLayout()
         {
@@ -24,16 +23,6 @@ namespace CelestialLeague.Client.UI.Components
             Vector2 currentPosition = Vector2.Zero;
 
             var siblings = Parent.Children.Where(c => c != this).ToList();
-
-            switch (SortOrder)
-            {
-                case SortOrder.Name:
-                    siblings = siblings.OrderBy(c => c.Name).ToList();
-                    break;
-                case SortOrder.LayoutOrder:
-                    // no sorting needed, the list is already in its default, added order.
-                    break;
-            }
 
             foreach (var child in siblings)
             {
@@ -61,7 +50,7 @@ namespace CelestialLeague.Client.UI.Components
                     child.Layout.Position = new DimensionUnit2(new DimensionUnit((int)horizontalOffset), new DimensionUnit((int)currentPosition.Y));
                     child.Layout.Anchor = Vector2.Zero;
 
-                    currentPosition.Y += childSize.Y + Padding.Y;
+                    currentPosition.Y += childSize.Y / 2+ Padding.Y;
                 }
                 else if (Direction == LayoutDirection.Horizontal)
                 {
@@ -82,7 +71,7 @@ namespace CelestialLeague.Client.UI.Components
                     child.Layout.Position = new DimensionUnit2(new DimensionUnit((int)currentPosition.X), new DimensionUnit((int)verticalOffset));
                     child.Layout.Anchor = Vector2.Zero;
 
-                    currentPosition.X += childSize.X + Padding.X;
+                    currentPosition.X += childSize.X / 2 + Padding.X;
                 }
 
                 child.InvalidateLayout();

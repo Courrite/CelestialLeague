@@ -18,10 +18,10 @@ namespace CelestialLeague.Client.UI.Components
             {
                 base.BackgroundColor = value;
 
-                PanelBorders.Top.Color = Color.Multiply(value, 1.1f);
-                PanelBorders.Left.Color = Color.Multiply(value, 0.9f);
-                PanelBorders.Right.Color = Color.Multiply(value, 0.9f);
-                PanelBorders.Bottom.Color = Color.Multiply(value, 0.8f);
+                PanelBorders.Top.Color = Color.Multiply(value, 1.25f);
+                PanelBorders.Left.Color = Color.Multiply(value, 0.75f);
+                PanelBorders.Right.Color = Color.Multiply(value, 0.75f);
+                PanelBorders.Bottom.Color = Color.Multiply(value, 0.5f);
 
                 var Title = FindChild<Text>("Title");
                 Title.TextColor = Color.Multiply(value, 1.15f);
@@ -67,7 +67,6 @@ namespace CelestialLeague.Client.UI.Components
                 {
                     Size = new DimensionUnit2(1, 0, 0.75f, 0),
                     Position = new DimensionUnit2(0, 0, 1, 0),
-                    Anchor = new Vector2(0, 1),
                 }
             };
             Add(DescriptionText);

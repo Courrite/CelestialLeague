@@ -9,7 +9,7 @@ namespace CelestialLeague.Client.UI.Components
         public Footer()
         {
             BackgroundColor = Color.White;
-        
+
             PanelBorders.Top.Width = 4;
             PanelBorders.Top.Color = new Color(100, 80, 110, 255);
 
@@ -17,16 +17,21 @@ namespace CelestialLeague.Client.UI.Components
             Layout.Size = new DimensionUnit2(1f, 0, 0, 80);
             Layout.Position = new DimensionUnit2(0, 0, 1f, 0);
 
-            var Motd = new Text();
-            Motd.UseRichText = true;
-            Motd.Content = "WELCOME TO [bold][scale=1.3]CELESTIAL LEAGUE[/scale][/bold]!";
-            Motd.AutoSize = true;
-            Motd.TextScale = 0.5f;
-            Motd.TextColor = new Color(188, 157, 215);
-            Motd.BackgroundColor = Color.Transparent;
-            Motd.Layout.Position = new DimensionUnit2(0.02f, 0, 0.5f, 0);
-            Motd.Layout.Anchor = new Vector2(0, 0.5f);
-            Motd.Font = Fonts.Get("Montserrat Regular");
+            var Motd = new Text
+            {
+                UseRichText = true,
+                Content = "WELCOME TO [bold][scale=1.3]CELESTIAL LEAGUE[/scale][/bold]!",
+                Font = Fonts.Get("Montserrat Regular"),
+                AutoSize = true,
+                TextScale = 0.5f,
+                TextColor = new Color(188, 157, 215),
+                BackgroundColor = Color.Transparent,
+                Layout = new()
+                {
+                    Position = new DimensionUnit2(0.02f, 0, 0.5f, 0),
+                    Anchor = new Vector2(0, 0.5f)
+                }
+            };
             Add(Motd);
 
             var Gradient = new Gradient();
@@ -36,8 +41,6 @@ namespace CelestialLeague.Client.UI.Components
             );
             Gradient.Rotation = 270f;
             Add(Gradient);
-            
-            LayoutHelper.DebugLayout(this);
         }
 
         protected override void UpdateSelf(InterfaceManager ui) { /* soon */ }

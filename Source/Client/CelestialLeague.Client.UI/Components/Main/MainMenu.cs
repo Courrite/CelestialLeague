@@ -49,21 +49,21 @@ namespace CelestialLeague.Client.UI.Components
             var Button1 = new SliderButton("TEST 1", "This is test button number 1")
             {
                 Name = "Button1",
-                BackgroundColor = Color.Salmon
+                BackgroundColor = new(122, 0, 0)
             };
             ButtonContainerPanel.Add(Button1);
 
             var Button2 = new SliderButton("TEST 2", "This is a test button numbered 2")
             {
                 Name = "Button2",
-                BackgroundColor = Color.Green
+                BackgroundColor = new(0, 122, 0)
             };
             ButtonContainerPanel.Add(Button2);
 
             var Button3 = new SliderButton("TEST 3", "This is Test button No. 3")
             {
                 Name = "Button3",
-                BackgroundColor = Color.Blue
+                BackgroundColor = new(0, 0, 122)
             };
             ButtonContainerPanel.Add(Button3);
         }

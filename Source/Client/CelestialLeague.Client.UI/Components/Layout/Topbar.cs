@@ -9,21 +9,26 @@ namespace CelestialLeague.Client.UI.Components
         public Topbar()
         {
             BackgroundColor = Color.White;
-            
+
             PanelBorders.Bottom.Width = 4;
             PanelBorders.Bottom.Color = new Color(100, 80, 110, 255);
 
             Layout.Anchor = Vector2.Zero;
             Layout.Size = new DimensionUnit2(1f, 0, 0, 80);
 
-            var ActiveMenu = new Text();
-            ActiveMenu.Content = "MAIN MENU";
-            ActiveMenu.TextColor = new Color(188, 157, 215);
-            ActiveMenu.AutoSize = true;
-            ActiveMenu.BackgroundColor = Color.Transparent;
-            ActiveMenu.Layout.Position = new DimensionUnit2(0.02f, 0, 0.5f, 0);
-            ActiveMenu.Layout.Anchor = new Vector2(0, 0.5f);
-            ActiveMenu.Font = Fonts.Get("Montserrat Regular");
+            var ActiveMenu = new Text
+            {
+                Content = "MAIN MENU",
+                TextColor = new Color(188, 157, 215),
+                AutoSize = true,
+                Font = Fonts.Get("Montserrat Regular"),
+                BackgroundColor = Color.Transparent,
+                Layout = new()
+                {
+                    Position = new DimensionUnit2(0.02f, 0, 0.5f, 0),
+                    Anchor = new Vector2(0, 0.5f)
+                }
+            };
             Add(ActiveMenu);
 
             var Gradient = new Gradient();
@@ -33,8 +38,6 @@ namespace CelestialLeague.Client.UI.Components
             );
             Gradient.Rotation = 90f;
             Add(Gradient);
-
-            LayoutHelper.DebugLayout(this);
         }
 
         protected override void UpdateSelf(InterfaceManager ui) { /* soon */ }

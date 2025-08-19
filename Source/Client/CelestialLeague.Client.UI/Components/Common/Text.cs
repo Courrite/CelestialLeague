@@ -19,24 +19,14 @@ namespace CelestialLeague.Client.UI.Components
         AllCaps
     }
 
-    public struct RichTextSegment
+    public struct RichTextSegment(string text, Color color = default, TextStyle style = TextStyle.Normal, float scale = 1.0f)
     {
-        public string Text;
-        public Color Color;
-        public TextStyle Style;
-        public float Scale;
-        public Vector2 Position;
-        public Vector2 Size;
-
-        public RichTextSegment(string text, Color color = default, TextStyle style = TextStyle.Normal, float scale = 1.0f)
-        {
-            Text = text ?? "";
-            Color = color == default ? Color.White : color;
-            Style = style;
-            Scale = scale;
-            Position = Vector2.Zero;
-            Size = Vector2.Zero;
-        }
+        public string Text = text ?? "";
+        public Color Color = color == default ? Color.White : color;
+        public TextStyle Style = style;
+        public float Scale = scale;
+        public Vector2 Position = Vector2.Zero;
+        public Vector2 Size = Vector2.Zero;
     }
 
     public class Text : Panel
@@ -49,7 +39,7 @@ namespace CelestialLeague.Client.UI.Components
         private PixelFontSize cachedPixelFontSize = null;
 
         // rich text properties
-        private List<RichTextSegment> segments = new List<RichTextSegment>();
+        private readonly List<RichTextSegment> segments = [];
         private bool segmentsDirty = true;
         private bool useRichText = false;
 
@@ -315,7 +305,7 @@ namespace CelestialLeague.Client.UI.Components
             return TextColor;
         }
 
-        private TextStyle ParseStyle(string styleStr)
+        private static TextStyle ParseStyle(string styleStr)
         {
             return styleStr.ToLower() switch
             {
@@ -326,7 +316,7 @@ namespace CelestialLeague.Client.UI.Components
             };
         }
 
-        private string ProcessTextStyle(string text, TextStyle style)
+        private static string ProcessTextStyle(string text, TextStyle style)
         {
             return style switch
             {
@@ -402,7 +392,7 @@ namespace CelestialLeague.Client.UI.Components
 
                 string processedText = ProcessTextStyle(segment.Text, segment.Style);
                 Color renderColor = segment.Color * (1.0f - TextTransparency);
-                Vector2 position = new Vector2(currentX, y);
+                Vector2 position = new(currentX, y);
 
                 DrawStyledText(ui, processedText, position, renderColor, segment.Style, segment.Scale * TextScale);
                 currentX += MeasureSegmentText(processedText, segment.Style, segment.Scale * TextScale).X;
@@ -428,7 +418,7 @@ namespace CelestialLeague.Client.UI.Components
                     if (currentLineWidth + wordWidth > maxWidth && currentLine.Count > 0)
                     {
                         lines.Add(currentLine);
-                        currentLine = new List<RichTextSegment>();
+                        currentLine = [];
                         currentLineWidth = 0f;
                     }
 
@@ -503,7 +493,7 @@ namespace CelestialLeague.Client.UI.Components
 
         private void DrawUnderline(InterfaceManager ui, Vector2 position, Vector2 textSize, Color color)
         {
-            Rectangle underlineRect = new Rectangle(
+            Rectangle underlineRect = new(
                 (int)position.X,
                 (int)(position.Y + textSize.Y + 2),
                 (int)textSize.X,
@@ -514,7 +504,7 @@ namespace CelestialLeague.Client.UI.Components
 
         private void DrawStrikethrough(InterfaceManager ui, Vector2 position, Vector2 textSize, Color color)
         {
-            Rectangle strikeRect = new Rectangle(
+            Rectangle strikeRect = new(
                 (int)position.X,
                 (int)(position.Y + textSize.Y * 0.5f),
                 (int)textSize.X,
@@ -543,7 +533,7 @@ namespace CelestialLeague.Client.UI.Components
                 if (string.IsNullOrEmpty(lines[i])) continue;
 
                 Vector2 lineSize = MeasureText(lines[i]) * TextScale;
-                Vector2 linePosition = new Vector2(
+                Vector2 linePosition = new(
                     CalculateHorizontalAlignment(contentBounds, lineSize.X),
                     contentBounds.Y + (i * lineHeight)
                 );
@@ -646,7 +636,7 @@ namespace CelestialLeague.Client.UI.Components
 
         private string[] WrapText(string text, int maxWidth)
         {
-            if (maxWidth <= 0) return new[] { text };
+            if (maxWidth <= 0) return [text];
 
             var lines = new List<string>();
             var words = text.Split(' ');

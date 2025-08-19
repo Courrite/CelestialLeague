@@ -18,16 +18,16 @@ namespace CelestialLeague.Client.UI.Components
             {
                 base.BackgroundColor = value;
 
-                PanelBorders.Top.Color = Color.Multiply(value, 1.25f);
-                PanelBorders.Left.Color = Color.Multiply(value, 0.75f);
-                PanelBorders.Right.Color = Color.Multiply(value, 0.75f);
+                PanelBorders.Top.Color = Color.Multiply(value, 1.3f);
+                PanelBorders.Left.Color = Color.Multiply(value, 1.15f);
+                PanelBorders.Right.Color = Color.Multiply(value, 1.15f);
                 PanelBorders.Bottom.Color = Color.Multiply(value, 0.5f);
 
                 var Title = FindChild<Text>("Title");
-                Title.TextColor = Color.Multiply(value, 1.15f);
+                Title.TextColor = Color.Multiply(value, 1.25f);
 
                 var Description = FindChild<Text>("Description");
-                Description.TextColor = Color.Multiply(value, 1.1f);
+                Description.TextColor = Color.Multiply(value, 1.2f);
             }
         }
 
@@ -42,15 +42,16 @@ namespace CelestialLeague.Client.UI.Components
 
         public SliderButton(string Title, string Description)
         {
-            Text TitleText = new(Description.ToUpper())
+            Text TitleText = new(Title.ToUpper())
             {
                 Name = "Title",
                 Font = Fonts.Get("Montserrat Bold"),
                 BackgroundColor = Color.Transparent,
                 Alignment = HorizontalAlignment.Center,
+                AutoSize = false,
                 Layout = new()
                 {
-                    Size = new DimensionUnit2(1, 0, 0.25f, 0),
+                    Size = new DimensionUnit2(1, 0, 0.5f, 0),
                 }
             };
             Add(TitleText);
@@ -62,20 +63,16 @@ namespace CelestialLeague.Client.UI.Components
                 BackgroundColor = Color.Transparent,
                 TextColor = BackgroundColor,
                 TextScale = 0.5f,
+                AutoSize = false,
                 Alignment = HorizontalAlignment.Center,
                 Layout = new()
                 {
-                    Size = new DimensionUnit2(1, 0, 0.75f, 0),
+                    Size = new DimensionUnit2(1, 0, 0.5f, 0),
                     Position = new DimensionUnit2(0, 0, 1, 0),
+                    Anchor = new Vector2(0, 1)
                 }
             };
             Add(DescriptionText);
-
-            ListLayout ListLayout = new()
-            {
-                Name = "ListLayout",
-            };
-            Add(ListLayout);
 
             DimensionUnit2 size = new(0.5f, 0, 0, 125);
 

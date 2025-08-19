@@ -1,4 +1,5 @@
 using CelestialLeague.Client.UI;
+using CelestialLeague.Client.UI.Types;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;

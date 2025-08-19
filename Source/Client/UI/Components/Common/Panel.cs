@@ -7,6 +7,7 @@ using Monocle;
 using CelestialLeague.Client.UI;
 using System.Linq;
 using System;
+using CelestialLeague.Client.UI.Types;
 
 namespace CelestialLeague.Client.UI.Components
 {

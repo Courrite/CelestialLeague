@@ -1,5 +1,6 @@
 using Celeste;
 using CelestialLeague.Client.UI;
+using CelestialLeague.Client.UI.Types;
 using Microsoft.Xna.Framework;
 
 namespace CelestialLeague.Client.UI.Components

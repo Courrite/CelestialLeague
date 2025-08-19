@@ -1,6 +1,7 @@
 using Celeste;
 using Celeste.Mod;
 using CelestialLeague.Client.UI.Components;
+using CelestialLeague.Client.UI.Types;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

@@ -1,11 +1,9 @@
-using Celeste.Mod;
-using CelestialLeague.Client.UI;
-using CelestialLeague.Client.Motion;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 using System;
 using Celeste;
+using CelestialLeague.Client.UI.Types;
+using Celeste.Mod;
 
 namespace CelestialLeague.Client.UI.Components
 {
@@ -24,10 +22,10 @@ namespace CelestialLeague.Client.UI.Components
                 PanelBorders.Bottom.Color = Color.Multiply(value, 0.5f);
 
                 var Title = FindChild<Text>("Title");
-                Title.TextColor = Color.Multiply(value, 1.25f);
+                Title.TextColor = Color.Multiply(value, 2);
 
                 var Description = FindChild<Text>("Description");
-                Description.TextColor = Color.Multiply(value, 1.2f);
+                Description.TextColor = Color.Multiply(value, 2);
             }
         }
 
@@ -40,18 +38,39 @@ namespace CelestialLeague.Client.UI.Components
         private Motion.Spring widthSpring = new(1f);
         private DimensionUnit2 originalSize;
 
-        public SliderButton(string Title, string Description)
+        public SliderButton(string Title, string Description, MTexture Image = null)
         {
+            Image ??= GFX.Gui["celestialleague/placeholder"];
+
+            Image ButtonImage = new(Image)
+            {
+                Name = "Image",
+                BackgroundColor = Color.Transparent,
+                Layout = new()
+                {
+                    Size = new DimensionUnit2(0, 125, 0, 125),
+                }
+            };
+            Add(ButtonImage);
+
+            AspectRatio ImageAspectRatio = new()
+            {
+                Name = "AspectRatio",
+                ConstrainAxis = ConstraintAxis.Height
+            };
+            ButtonImage.Add(ImageAspectRatio);
+
             Text TitleText = new(Title.ToUpper())
             {
                 Name = "Title",
                 Font = Fonts.Get("Montserrat Bold"),
                 BackgroundColor = Color.Transparent,
-                Alignment = HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
                 AutoSize = false,
                 Layout = new()
                 {
-                    Size = new DimensionUnit2(1, 0, 0.5f, 0),
+                    Size = new DimensionUnit2(0.5f, 0, 0.5f, 0),
+                    Position = new DimensionUnit2(0, 150, 0, 0)
                 }
             };
             Add(TitleText);
@@ -64,11 +83,12 @@ namespace CelestialLeague.Client.UI.Components
                 TextColor = BackgroundColor,
                 TextScale = 0.5f,
                 AutoSize = false,
-                Alignment = HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
                 Layout = new()
                 {
-                    Size = new DimensionUnit2(1, 0, 0.5f, 0),
-                    Position = new DimensionUnit2(0, 0, 1, 0),
+                    Size = new DimensionUnit2(0.5f, 0, 0.5f, 0),
+                    Position = new DimensionUnit2(0, 150, 1, 0),
                     Anchor = new Vector2(0, 1)
                 }
             };

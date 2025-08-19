@@ -6,7 +6,7 @@
         <RootNamespace>Celeste.Mod.CelestialLeague.Client</RootNamespace>
         <LangVersion>latest</LangVersion>
         <CelestePrefix Condition="'$(CelestePrefix)' == '' And Exists('..\..\..\Celeste.dll')">..\..\..</CelestePrefix>
-        <CelestePrefix Condition="'$(CelestePrefix)' == ''">..\lib-stripped</CelestePrefix>
+        <CelestePrefix Condition="'$(CelestePrefix)' == ''">lib-stripped</CelestePrefix>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     </PropertyGroup>
@@ -33,23 +33,22 @@
     <Target Name="CopyContent">
         <Message Text="Copying folders..." Importance="high" />
         <ItemGroup>
-            <ContentFiles Include="..\..\..\Dialog\**\*.*" />
-            <GraphicsFiles Include="..\..\..\Graphics\**\*.*" />
+            <ContentFiles Include="..\..\Dialog\**\*.*" />
+            <GraphicsFiles Include="..\..\Graphics\**\*.*" />
         </ItemGroup>
-        <Message Text="Found @(ContentFiles->Count()) content files" Importance="high" />
+        <Message Text="Found @(ContentFiles->Count()) mod files" Importance="high" />
         <Copy SourceFiles="@(ContentFiles)" 
               DestinationFolder="$(OutputPath)\Dialog\%(RecursiveDir)" 
+              SkipUnchangedFiles="false" />
+        <Copy SourceFiles="@(GraphicsFiles)" 
+              DestinationFolder="$(OutputPath)\Graphics\%(RecursiveDir)" 
               SkipUnchangedFiles="false" />
         <Message Text="Copy completed" Importance="high" />
     </Target>
 
     <!-- Project References -->
     <ItemGroup>
-       <ProjectReference Include="..\..\Shared\CelestialLeague.Shared.csproj" />
-       <ProjectReference Include="..\CelestialLeague.Client.UI\CelestialLeague.Client.UI.csproj" />
-       <ProjectReference Include="..\CelestialLeague.Client.Networking\CelestialLeague.Client.Networking.csproj" />
-       <ProjectReference Include="..\CelestialLeague.Client.Services\CelestialLeague.Client.Services.csproj" />
-       <ProjectReference Include="..\CelestialLeague.Client.Motion\CelestialLeague.Client.Motion.csproj" />
+       <ProjectReference Include="..\Shared\CelestialLeague.Shared.csproj" />
     </ItemGroup>
     
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

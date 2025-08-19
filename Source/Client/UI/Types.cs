@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace CelestialLeague.Client.UI
+namespace CelestialLeague.Client.UI.Types
 {
     public class LayoutInfo
     {
@@ -118,6 +118,47 @@ namespace CelestialLeague.Client.UI
         public bool IsSet => Scale != 0 || Offset != 0;
     }
 
+    public struct SpriteSheetConfig(int frameWidth, int frameHeight, int framesPerRow, int totalFrames, float frameDuration = 0.1f, Point startOffset = default)
+    {
+        public int FrameWidth = frameWidth;
+        public int FrameHeight = frameHeight;
+        public int FramesPerRow = framesPerRow;
+        public int TotalFrames = totalFrames;
+        public float FrameDuration = frameDuration; // duration per frame in seconds
+        public Point StartOffset = startOffset == default ? Point.Zero : startOffset; // starting position in the texture (default 0,0)
+
+        public static SpriteSheetConfig FromGrid(int frameWidth, int frameHeight, int framesPerRow, int totalFrames, float frameDuration = 0.1f)
+        {
+            return new SpriteSheetConfig(frameWidth, frameHeight, framesPerRow, totalFrames, frameDuration);
+        }
+
+        public static SpriteSheetConfig FromRow(int frameWidth, int frameHeight, int totalFrames, float frameDuration = 0.1f)
+        {
+            return new SpriteSheetConfig(frameWidth, frameHeight, totalFrames, totalFrames, frameDuration);
+        }
+    }
+
+    public enum ImageType
+    {
+        Static,
+        SpriteSheet
+    }
+
+    public enum ScaleType
+    {
+        Fit, // scale proportionally to fit within bounds
+        Stretch, // stretch to fill the entire bounds
+        Crop, // scale proportionally to fill bounds, cropping excess
+        Tile // repeat the image to fill the bounds
+    }
+
+    public enum ConstraintAxis
+    {
+        None,
+        Width,
+        Height
+    }
+
     public enum BorderStyle
     {
         None,
@@ -141,8 +182,16 @@ namespace CelestialLeague.Client.UI
     public enum VerticalAlignment
     {
         Top,
-        Middle,
+        Center,
         Bottom
+    }
+
+    public enum TextStyle
+    {
+        Normal,
+        Underline,
+        Strikethrough,
+        AllCaps
     }
 
     public enum SortOrder

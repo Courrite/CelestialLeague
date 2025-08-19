@@ -8,17 +8,10 @@ using System.Text.RegularExpressions;
 using CelestialLeague.Client.UI;
 using Celeste.Mod;
 using Celeste;
+using CelestialLeague.Client.UI.Types;
 
 namespace CelestialLeague.Client.UI.Components
 {
-    public enum TextStyle
-    {
-        Normal,
-        Underline,
-        Strikethrough,
-        AllCaps
-    }
-
     public struct RichTextSegment(string text, Color color = default, TextStyle style = TextStyle.Normal, float scale = 1.0f)
     {
         public string Text = text ?? "";
@@ -104,7 +97,8 @@ namespace CelestialLeague.Client.UI.Components
 
         public Color TextColor { get; set; } = Color.White;
         public float TextTransparency { get; set; } = 0.0f;
-        public HorizontalAlignment Alignment { get; set; } = HorizontalAlignment.Left;
+        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
         public bool WordWrap { get; set; } = false;
         public bool AutoSize { get; set; } = true;
         public float LineSpacing { get; set; } = 1.0f;
@@ -320,6 +314,7 @@ namespace CelestialLeague.Client.UI.Components
         {
             return style switch
             {
+
                 TextStyle.AllCaps => text.ToUpper(),
                 _ => text
             };
@@ -327,20 +322,12 @@ namespace CelestialLeague.Client.UI.Components
 
         private void RenderSingleLineRichText(InterfaceManager ui, Rectangle contentBounds)
         {
-            float currentX = contentBounds.X;
             float totalWidth = segments.Sum(s => MeasureSegmentText(s.Text, s.Style, s.Scale * TextScale).X);
+            float maxHeight = segments.Max(s => MeasureSegmentText(s.Text, s.Style, s.Scale * TextScale).Y);
+            Vector2 totalSize = new(totalWidth, maxHeight);
 
-            switch (Alignment)
-            {
-                case HorizontalAlignment.Center:
-                    currentX += (contentBounds.Width - totalWidth) * 0.5f;
-                    break;
-                case HorizontalAlignment.Right:
-                    currentX += contentBounds.Width - totalWidth;
-                    break;
-            }
-
-            float baselineY = contentBounds.Y + contentBounds.Height * 0.5f;
+            Vector2 startPosition = CalculateTextRenderPosition(contentBounds, totalSize);
+            float currentX = startPosition.X;
 
             foreach (var segment in segments)
             {
@@ -350,7 +337,8 @@ namespace CelestialLeague.Client.UI.Components
                 Vector2 segmentSize = MeasureSegmentText(processedText, segment.Style, segment.Scale * TextScale);
 
                 Color renderColor = segment.Color * (1.0f - TextTransparency);
-                Vector2 position = new Vector2(currentX, baselineY - segmentSize.Y * 0.5f);
+
+                Vector2 position = new Vector2(currentX, startPosition.Y);
 
                 DrawStyledText(ui, processedText, position, renderColor, segment.Style, segment.Scale * TextScale);
                 currentX += segmentSize.X;
@@ -361,10 +349,19 @@ namespace CelestialLeague.Client.UI.Components
         {
             var lines = WrapRichText(segments, contentBounds.Width);
             float lineHeight = GetLineHeight() * LineSpacing * TextScale;
+            float totalTextHeight = lines.Count * lineHeight;
+
+            float startY = VerticalAlignment switch
+            {
+                VerticalAlignment.Top => contentBounds.Y,
+                VerticalAlignment.Center => contentBounds.Y + (contentBounds.Height - totalTextHeight) * 0.5f,
+                VerticalAlignment.Bottom => contentBounds.Y + contentBounds.Height - totalTextHeight,
+                _ => contentBounds.Y
+            };
 
             for (int i = 0; i < lines.Count; i++)
             {
-                float currentY = contentBounds.Y + (i * lineHeight);
+                float currentY = startY + (i * lineHeight);
                 if (currentY + lineHeight > contentBounds.Bottom) break;
 
                 RenderRichTextLine(ui, lines[i], contentBounds, currentY);
@@ -374,17 +371,13 @@ namespace CelestialLeague.Client.UI.Components
         private void RenderRichTextLine(InterfaceManager ui, List<RichTextSegment> lineSegments, Rectangle contentBounds, float y)
         {
             float totalWidth = lineSegments.Sum(s => MeasureSegmentText(ProcessTextStyle(s.Text, s.Style), s.Style, s.Scale * TextScale).X);
-            float currentX = contentBounds.X;
-
-            switch (Alignment)
+            float currentX = HorizontalAlignment switch
             {
-                case HorizontalAlignment.Center:
-                    currentX += (contentBounds.Width - totalWidth) * 0.5f;
-                    break;
-                case HorizontalAlignment.Right:
-                    currentX += contentBounds.Width - totalWidth;
-                    break;
-            }
+                HorizontalAlignment.Left => contentBounds.X,
+                HorizontalAlignment.Center => contentBounds.X + (contentBounds.Width - totalWidth) * 0.5f,
+                HorizontalAlignment.Right => contentBounds.X + contentBounds.Width - totalWidth,
+                _ => contentBounds.X
+            };
 
             foreach (var segment in lineSegments)
             {
@@ -408,6 +401,7 @@ namespace CelestialLeague.Client.UI.Components
             foreach (var segment in segments)
             {
                 var words = segment.Text.Split(' ');
+                bool isFirstWord = true;
 
                 foreach (var word in words)
                 {
@@ -415,23 +409,37 @@ namespace CelestialLeague.Client.UI.Components
                     var wordSegment = new RichTextSegment(word, segment.Color, segment.Style, segment.Scale);
                     float wordWidth = MeasureSegmentText(processedWord, segment.Style, segment.Scale * TextScale).X;
 
-                    if (currentLineWidth + wordWidth > maxWidth && currentLine.Count > 0)
+                    if (currentLine.Count > 0 && !isFirstWord)
                     {
-                        lines.Add(currentLine);
-                        currentLine = [];
-                        currentLineWidth = 0f;
+                        var spaceWidth = MeasureSegmentText(" ", segment.Style, segment.Scale * TextScale).X;
+                        if (currentLineWidth + spaceWidth + wordWidth > maxWidth)
+                        {
+                            lines.Add(currentLine);
+                            currentLine = [wordSegment];
+                            currentLineWidth = wordWidth;
+                        }
+                        else
+                        {
+                            currentLine.Add(new RichTextSegment(" ", segment.Color, segment.Style, segment.Scale));
+                            currentLine.Add(wordSegment);
+                            currentLineWidth += spaceWidth + wordWidth;
+                        }
                     }
-
-                    currentLine.Add(wordSegment);
-                    currentLineWidth += wordWidth;
-
-                    if (word != words.Last())
+                    else
                     {
-                        var spaceSegment = new RichTextSegment(" ", segment.Color, segment.Style, segment.Scale);
-                        float spaceWidth = MeasureSegmentText(" ", segment.Style, segment.Scale * TextScale).X;
-                        currentLine.Add(spaceSegment);
-                        currentLineWidth += spaceWidth;
+                        if (currentLineWidth + wordWidth > maxWidth && currentLine.Count > 0)
+                        {
+                            lines.Add(currentLine);
+                            currentLine = [wordSegment];
+                            currentLineWidth = wordWidth;
+                        }
+                        else
+                        {
+                            currentLine.Add(wordSegment);
+                            currentLineWidth += wordWidth;
+                        }
                     }
+                    isFirstWord = false;
                 }
             }
 
@@ -471,17 +479,20 @@ namespace CelestialLeague.Client.UI.Components
                 var pixelFontSize = GetPixelFontSize();
                 if (pixelFontSize == null) return;
 
-                font.Draw(pixelFontSize.Size, text, position, Vector2.Zero, Vector2.One * scale, color);
+                Vector2 drawPosition = new(position.X, position.Y + (GetLineHeight() * scale * 0.5f));
+
+                font.Draw(pixelFontSize.Size, text, drawPosition, Vector2.Zero, Vector2.One * scale, color);
 
                 var textSize = pixelFontSize.Measure(text) * scale;
+                var textBaseline = textSize.Y * 0.5f;
 
                 switch (style)
                 {
                     case TextStyle.Underline:
-                        DrawUnderline(ui, position, textSize, color);
+                        DrawUnderline(ui, position, textSize, textBaseline, color);
                         break;
                     case TextStyle.Strikethrough:
-                        DrawStrikethrough(ui, position, textSize, color);
+                        DrawStrikethrough(ui, position, textSize, textBaseline, color);
                         break;
                 }
             }
@@ -491,22 +502,22 @@ namespace CelestialLeague.Client.UI.Components
             }
         }
 
-        private void DrawUnderline(InterfaceManager ui, Vector2 position, Vector2 textSize, Color color)
+        private void DrawUnderline(InterfaceManager ui, Vector2 position, Vector2 textSize, float baseline, Color color)
         {
             Rectangle underlineRect = new(
                 (int)position.X,
-                (int)(position.Y + textSize.Y + 2),
+                (int)(position.Y + baseline + 2),
                 (int)textSize.X,
                 1
             );
             ui.DrawRectangle(underlineRect, color);
         }
 
-        private void DrawStrikethrough(InterfaceManager ui, Vector2 position, Vector2 textSize, Color color)
+        private void DrawStrikethrough(InterfaceManager ui, Vector2 position, Vector2 textSize, float baseline, Color color)
         {
             Rectangle strikeRect = new(
                 (int)position.X,
-                (int)(position.Y + textSize.Y * 0.5f),
+                (int)(position.Y + baseline - textSize.Y * 0.35f),
                 (int)textSize.X,
                 1
             );
@@ -519,7 +530,7 @@ namespace CelestialLeague.Client.UI.Components
         private void RenderSingleLineText(InterfaceManager ui, Rectangle contentBounds, Color renderColor)
         {
             Vector2 textSize = MeasureText(text) * TextScale;
-            Vector2 position = CalculateTextPosition(contentBounds, textSize);
+            Vector2 position = CalculateTextRenderPosition(contentBounds, textSize);
             DrawText(ui, text, position, renderColor);
         }
 
@@ -527,6 +538,15 @@ namespace CelestialLeague.Client.UI.Components
         {
             var lines = WrapText(text, (int)(contentBounds.Width / TextScale));
             float lineHeight = GetLineHeight() * LineSpacing * TextScale;
+            float totalTextHeight = lines.Length * lineHeight;
+
+            float startY = VerticalAlignment switch
+            {
+                VerticalAlignment.Top => contentBounds.Y,
+                VerticalAlignment.Center => contentBounds.Y + (contentBounds.Height - totalTextHeight) * 0.5f,
+                VerticalAlignment.Bottom => contentBounds.Y + contentBounds.Height - totalTextHeight,
+                _ => contentBounds.Y
+            };
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -535,7 +555,7 @@ namespace CelestialLeague.Client.UI.Components
                 Vector2 lineSize = MeasureText(lines[i]) * TextScale;
                 Vector2 linePosition = new(
                     CalculateHorizontalAlignment(contentBounds, lineSize.X),
-                    contentBounds.Y + (i * lineHeight)
+                    startY + (i * lineHeight)
                 );
 
                 if (linePosition.Y + lineHeight <= contentBounds.Bottom)
@@ -607,7 +627,8 @@ namespace CelestialLeague.Client.UI.Components
                 var pixelFontSize = GetPixelFontSize();
                 if (pixelFontSize != null)
                 {
-                    font.Draw(pixelFontSize.Size, text, position, Vector2.Zero, Vector2.One * TextScale, color);
+                    Vector2 drawPosition = new(position.X, position.Y);
+                    font.Draw(pixelFontSize.Size, text, drawPosition, Vector2.Zero, Vector2.One * TextScale, color);
                 }
             }
             catch (Exception ex)
@@ -616,16 +637,30 @@ namespace CelestialLeague.Client.UI.Components
             }
         }
 
-        private Vector2 CalculateTextPosition(Rectangle bounds, Vector2 textSize)
+        private Vector2 CalculateTextRenderPosition(Rectangle bounds, Vector2 textSize)
         {
-            float x = CalculateHorizontalAlignment(bounds, textSize.X);
-            float y = bounds.Y + (bounds.Height - textSize.Y) * 0.5f;
+            float x = HorizontalAlignment switch
+            {
+                HorizontalAlignment.Left => bounds.X,
+                HorizontalAlignment.Center => bounds.X + (bounds.Width - textSize.X) * 0.5f,
+                HorizontalAlignment.Right => bounds.X + bounds.Width - textSize.X,
+                _ => bounds.X
+            };
+
+            float y = VerticalAlignment switch
+            {
+                VerticalAlignment.Top => bounds.Y,
+                VerticalAlignment.Center => bounds.Y + (bounds.Height - textSize.Y) * 0.5f,
+                VerticalAlignment.Bottom => bounds.Y + bounds.Height - textSize.Y,
+                _ => bounds.Y
+            };
+
             return new Vector2(x, y);
         }
 
         private float CalculateHorizontalAlignment(Rectangle bounds, float textWidth)
         {
-            return Alignment switch
+            return HorizontalAlignment switch
             {
                 HorizontalAlignment.Left => bounds.X,
                 HorizontalAlignment.Center => bounds.X + (bounds.Width - textWidth) * 0.5f,
@@ -647,7 +682,7 @@ namespace CelestialLeague.Client.UI.Components
                 var testLine = string.IsNullOrEmpty(currentLine) ? word : currentLine + " " + word;
                 var testSize = MeasureText(testLine);
 
-                if (testSize.X <= maxWidth)
+                if (testSize.X * TextScale <= maxWidth)
                 {
                     currentLine = testLine;
                 }
